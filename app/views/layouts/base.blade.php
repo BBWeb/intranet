@@ -12,5 +12,6 @@
 
   {{ HTML::script('/js/jquery-2.0.3.js') }}
   {{ HTML::script('/js/bootstrap.js') }}
+   @yield('footer-scripts')
 </body>
 </html>

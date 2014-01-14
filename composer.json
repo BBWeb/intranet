@@ -5,9 +5,13 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*",
-      "jasonlewis/basset": "dev-master"
+    "jasonlewis/basset": "dev-master",
+    "kriswallsmith/buzz": "dev-master"
 	},
 	"autoload": {
+		"psr-0": {
+			"Intranet": "app/"
+		},
 		"classmap": [
 			"app/commands",
 			"app/controllers",

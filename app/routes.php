@@ -13,10 +13,7 @@
 
 Route::group(array('before' => 'auth'), function() {
 
-	Route::get('/', function()
-	{
-		return View::make('user.start');
-	});
+   Route::controller('/', 'ProjectsController');
 
 	Route::controller('account', 'AccountController');
 
