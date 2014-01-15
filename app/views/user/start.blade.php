@@ -5,10 +5,10 @@
 <div class="container">
 
    <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-5">
          <form class="form-inline">
             <div class="form-group">
-               <label for="project-select">Hämta data för</label>
+               <label for="project-select" class="">Hämta data för</label>
                <select id="project-select" class="form-control">
                   <option value="all">Alla</option>
                   @foreach ($projects as $project)

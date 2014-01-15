@@ -17,10 +17,10 @@
 
 	<div class="row">
 		<div class="col-md-3">
-			<form role="form">
+			<form role="form" method="post" action="account/update-apikey">
 				<div class="form-group">
 		    		<label for="api-key">Api key</label>
-		    		<input type="email" class="form-control" id="api-key" placeholder="Enter api key" value="{{ Auth::User()->apikey }}">
+		    		<input type="text" class="form-control" id="api-key" name="api-key" placeholder="Enter api key" value="{{ Auth::User()->api_key }}">
 		  		</div>
 		  		<button type="submit" class="btn btn-default">Change key</button>
 			</form>
