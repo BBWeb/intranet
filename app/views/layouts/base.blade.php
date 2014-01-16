@@ -10,8 +10,9 @@
 <body>
   @yield('content')
 
-  {{ HTML::script('/js/jquery-2.0.3.js') }}
-  {{ HTML::script('/js/bootstrap.js') }}
+  {{ HTML::script('/js/libs/jquery-2.0.3.js') }}
+  {{ HTML::script('/js/libs/bootstrap.js') }}
+  {{ HTML::script('/js/libs/underscore-min.js') }}
    @yield('footer-scripts')
 </body>
 </html>

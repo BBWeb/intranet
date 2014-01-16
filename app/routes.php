@@ -13,9 +13,13 @@
 
 Route::group(array('before' => 'auth'), function() {
 
-   Route::controller('/', 'ProjectsController');
+   Route::get('/', 'ProjectsController@getIndex');
 
 	Route::controller('account', 'AccountController');
+
+   Route::resource('task', 'TaskController');
+
+   Route::resource('asana', 'AsanaController');
 
 });
 
