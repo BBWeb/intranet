@@ -13,13 +13,25 @@
 
 Route::group(array('before' => 'auth'), function() {
 
-   Route::get('/', 'ProjectsController@getIndex');
+   	Route::get('/', 'ProjectsController@getIndex');
 
 	Route::controller('account', 'AccountController');
 
-   Route::resource('task', 'TaskController');
+   	Route::resource('task', 'TaskController');
 
-   Route::resource('asana', 'AsanaController');
+   	Route::resource('asana', 'AsanaController');
+
+   	Route::post('testar', function() {
+   		$id = Input::get('id');
+
+   		$task = Task::find( $id );
+
+   		$task->time_worked = Input::get('timeWorked');
+
+   		$task->save();
+
+   		return Response::json( $task->toJson() );
+   	});
 
 });
 

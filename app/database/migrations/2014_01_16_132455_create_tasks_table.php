@@ -17,10 +17,13 @@ class CreateTasksTable extends Migration {
 			$table->increments('id');
          $table->integer('user_id');
          
+         $table->string('asana_id');
+
          $table->string('project');
          $table->string('task');
          $table->integer('time_worked')->default(0);
-         $table->enum('status', array('reported', 'invoiced', 'notreported'));
+
+         $table->enum('status', array('reported', 'invoiced', 'notreported'))->default('notreported');
 
 			$table->timestamps();
 		});

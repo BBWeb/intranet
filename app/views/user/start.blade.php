@@ -15,18 +15,18 @@
                   <th></th>
                </tr>
             </thead>
-            <tbody>
+            <tbody id="added-tasks-tbody">
             @foreach(Auth::user()->tasks as $task)
-               <tr>
+               <tr data-id="{{ $task->id }}">
                   <td>{{ $task->project }}</td>
                   <td>{{ $task->task }}</td>
-                  <td>{{ $task->time_worked }}</td>
-                  <td><button class="btn btn-primary">Rapportera</button></td>
+                  <td><input type="number" value="{{ $task->time_worked }}" class="time-worked" style="width: 60px" /></td>
+                  <td><button class="btn btn-primary report-button">Rapportera</button></td>
                </tr>
             @endforeach
             </tbody>
          </table>
-      </div> 
+      </div>
    </div>
 
    <div class="row">
@@ -55,7 +55,7 @@
                   <th>Uppgift</th>
                   <th>Tilldelad</th>
                   <th></th>
-               </tr> 
+               </tr>
             </thead>
             <tbody id="tasks-tbody">
             </tbody>
@@ -65,6 +65,15 @@
 </div> <!-- /container -->
 
 <script type="text/template" id="task-template">
+   <tr data-id="<%= id %>" data-project="<%= project %>" data-name="<%= task %>">
+      <td class="task-project"><%= project %></td>
+      <td class="task-name"><%= task %></td>
+      <td class="task-assigned"><%= assigned %></td>
+      <td><button class="btn btn-success add-task">Lägg till</button></td>
+   </tr>
+</script>
+
+<script type="text/template" id="added-task-template">
    <tr data-id="<%= id %>" data-project="<%= project %>" data-name="<%= task %>">
       <td class="task-project"><%= project %></td>
       <td class="task-name"><%= task %></td>

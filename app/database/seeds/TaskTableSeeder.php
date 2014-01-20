@@ -10,7 +10,7 @@ class TaskTableSeeder extends Seeder {
       $user = DB::table('users')->where('email', 'niklas@bbweb.se')->first(); 
 
       // create a task
-      Task::create( array( 'user_id' => $user->id, 'project' => 'RouteCare', 'task' => 'Fixat grafik', 'status' => 'notreported' ) );
+      Task::create( array( 'asana_id' => 0, 'user_id' => $user->id, 'project' => 'RouteCare', 'task' => 'Fixat grafik', 'status' => 'notreported' ) );
 
 	}
 }

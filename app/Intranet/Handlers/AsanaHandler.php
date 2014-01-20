@@ -26,10 +26,10 @@ class AsanaHandler {
    {
       $asana = new AsanaApi( $this->apiKey );
 
-      $userId = $asana->getUserId();
-      $tasks = json_decode( $asana->getTasks( self::WORKSPACE_ID ) );
+      $tasks = json_decode( $asana->getTasks( self::WORKSPACE_ID, $project ) );
 
       $responseCode = $asana->getResponseCode();
+
       if ( $responseCode != '200' ) return; 
 
       foreach ( $tasks->data as $task ) {
