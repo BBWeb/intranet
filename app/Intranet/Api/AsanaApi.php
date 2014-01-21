@@ -63,12 +63,14 @@ class AsanaApi {
        return $projects;
     }
 
-    public function getTasks($workspaceId, $projectId){
-       if ( $projectId == 'all' ) {
-          return $this->apiRequest($this->workspaceUri . '/' . $workspaceId . '/tasks?assignee=me');
-       } else {
-          return $this->apiRequest($this->projectUri . '/' . $projectId . '/tasks'); 
-       }
+    public function getTasks($workspaceId)
+    {
+       return $this->apiRequest($this->workspaceUri . '/' . $workspaceId . '/tasks?assignee=me');
+    }
+
+    public function getProjectTasks($projectId)
+    {
+          return $this->apiRequest($this->projectUri . '/' . $projectId . '/tasks?assignee=me'); 
     }
 
     public function getOneTask($taskId){

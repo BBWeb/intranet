@@ -19,4 +19,17 @@ class TaskController extends BaseController {
 
       return Response::json( $task->toJson() );
    }
+
+   public function update()
+   {
+      $id = Input::get('id');
+
+      $task = Task::find( $id );
+
+      $task->time_worked = Input::get('timeWorked');
+
+      $task->save();
+
+      return Response::json( $task->toJson() );
+   }
 }

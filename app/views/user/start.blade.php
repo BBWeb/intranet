@@ -20,7 +20,7 @@
                <tr data-id="{{ $task->id }}">
                   <td>{{ $task->project }}</td>
                   <td>{{ $task->task }}</td>
-                  <td><input type="number" value="{{ $task->time_worked }}" class="time-worked" style="width: 60px" /></td>
+                  <td><input type="number" value="{{ $task->time_worked }}" min="0" class="time-worked" style="width: 60px" /></td>
                   <td><button class="btn btn-primary report-button">Rapportera</button></td>
                </tr>
             @endforeach
@@ -53,7 +53,6 @@
                <tr>
                   <th>Projekt</th>
                   <th>Uppgift</th>
-                  <th>Tilldelad</th>
                   <th></th>
                </tr>
             </thead>
@@ -68,17 +67,16 @@
    <tr data-id="<%= id %>" data-project="<%= project %>" data-name="<%= task %>">
       <td class="task-project"><%= project %></td>
       <td class="task-name"><%= task %></td>
-      <td class="task-assigned"><%= assigned %></td>
       <td><button class="btn btn-success add-task">Lägg till</button></td>
    </tr>
 </script>
 
 <script type="text/template" id="added-task-template">
-   <tr data-id="<%= id %>" data-project="<%= project %>" data-name="<%= task %>">
+   <tr>
       <td class="task-project"><%= project %></td>
-      <td class="task-name"><%= task %></td>
-      <td class="task-assigned"><%= assigned %></td>
-      <td><button class="btn btn-success add-task">Lägg till</button></td>
+      <td class="task-name"><%= name %></td>
+      <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
+      <td><button class="btn btn-primary report-button">Rapportera</button></td>
    </tr>
 </script>
 @stop

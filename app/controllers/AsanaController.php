@@ -10,7 +10,13 @@ class AsanaController extends BaseController {
 
       $asana = new AsanaHandler( $user->api_key ); 
 
-      $projectTasks = $asana->getProjectTasks( $projectId );
+      $projectTasks; 
+
+      if ( $projectId == 'all' ) {
+         $projectTasks = $asana->getAllAssignedTasks();
+      } else {
+         $projectTasks = $asana->getProjectTasks( $projectId );
+      } 
       return Response::json( $projectTasks );
    }
 }

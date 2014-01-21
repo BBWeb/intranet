@@ -22,17 +22,37 @@ class AsanaHandler {
       return $projects;
    }
 
-   public function getProjectTasks($project)
+   public function getAllAssignedTasks()
    {
       $asana = new AsanaApi( $this->apiKey );
 
-      $tasks = json_decode( $asana->getTasks( self::WORKSPACE_ID, $project ) );
+      $tasks = json_decode( $asana->getTasks( self::WORKSPACE_ID ) );
 
       $responseCode = $asana->getResponseCode();
 
       if ( $responseCode != '200' ) return; 
 
       foreach ( $tasks->data as $task ) {
+         $taskState = $asana->getOneTask( $task->id );
+         $task->taskState = $taskState;
+      }
+
+      return $tasks;
+   }
+
+   public function getProjectTasks($projectId)
+   {
+      $asana = new AsanaApi( $this->apiKey );
+
+      $tasks = json_decode( $asana->getProjectTasks( $projectId ) );
+
+      $responseCode = $asana->getResponseCode();
+
+      if ( $responseCode != '200' ) return; 
+
+      foreach ( $tasks->data as $task ) {
+         // is the task already added to our db? 
+         // Skip it
          $taskState = $asana->getOneTask( $task->id );
          $task->taskState = $taskState;
       }

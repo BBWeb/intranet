@@ -9,11 +9,10 @@
         , id = $trParent.data('id')
         ;
 
-      $.post('testar', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
+      // TODO mock put request
+      $.post('task-update', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
          console.log('Post sent', arguments);
       });
-
-      // console.log('Report', $(this));
    }
 
    $('#project-data-btn').click(getProjectData);
@@ -23,10 +22,10 @@
 
       // get request to server fetching data
       $.get('asana/' + selectedProject, function(response, textStatus) {
-         var $tasksTbody = $('#tasks-tbody').html('');
-         var taskTemplate = _.template( $('#task-template').html() );
+         var $tasksTbody = $('#tasks-tbody').html('')
+           , taskTemplate = _.template( $('#task-template').html() )
+           ;
 
-         console.log('Arguments', arguments);
          if ( textStatus !== 'success' ) return;
 
          var tasks = response.data || [];
@@ -44,29 +43,33 @@
       return {
          id: task.id,
          project: task.taskState.projects.name,
-         task: task.name,
-         assigned: 'Niklas'
+         task: task.name
       };
    }
 
    function addTaskToDb(e) {
+      // get task data
       var $trParent = $(this).closest('tr')
-        , id = $trParent.data('id')
-        , project = $trParent.data('project')
-        , name = $trParent.data('name')
+        , taskData = getTaskDataFromTr( $trParent )
+        , taskTemplate = _.template( $('#added-task-template').html() )
         ;
 
-      console.log('Id', id);
-      $.post('task', { id: id, project: project, name: name}, function(data, textStatus, jqXhr) {
-         console.log('Post sent', arguments);
-
+      // send post req to server with data
+      $.post('task', { id: taskData.id, project: taskData.project, name: taskData.name}, function(data, textStatus, jqXhr) {
          if ( textStatus !== 'success' ) return;
 
+         // wait for answer, if positive hide
          $trParent.hide();
-         console.log('Sent to server', arguments);
+         $('#added-tasks-tbody').append( taskTemplate( taskData ) );
       });
-      // get task data
-      // send post req to server with data
-      // wait for answer, if positive hide
+   }
+
+   function getTaskDataFromTr($tr)
+   {
+      return {
+         id: $tr.data('id'),
+         project: $tr.data('project'),
+         name: $tr.data('name')
+      };
    }
 })();
