@@ -26,7 +26,7 @@
               <ul class="dropdown-menu">
                 <li><a href="/account">Account</a></li>
                 <li class="divider"></li>
-                <li><a href="#">Log out</a></li>
+                <li><a href="/logout">Log out</a></li>
               </ul>
             </li>
           </ul>

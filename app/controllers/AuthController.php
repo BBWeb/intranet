@@ -2,12 +2,12 @@
 
 class AuthController extends BaseController {
 
-	public function getIndex()
+	public function getLogin()
 	{
 		return View::make('login');
 	}
 
-	public function postIndex() {
+	public function postLogin() {
 		$userCredentials = Input::only('email', 'password');
 
 		if ( Auth::attempt( $userCredentials ) ) {
@@ -15,6 +15,13 @@ class AuthController extends BaseController {
 		}
 		return Redirect::to('/')->with('message', 'Your username/password combination was incorrect')->withInput();
 	}
+
+   public function getLogout()
+   {
+      Auth::logout();
+
+      return Redirect::to('login');
+   }
 
 
 }

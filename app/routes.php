@@ -24,4 +24,7 @@ Route::group(array('before' => 'auth'), function() {
 
 });
 
-Route::controller('login', 'AuthController');
+Route::get('login', 'AuthController@getLogin');
+Route::post('login', 'AuthController@postLogin');
+
+Route::get('logout', 'AuthController@getLogout');
