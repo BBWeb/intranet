@@ -55,10 +55,14 @@
         ;
 
       // send post req to server with data
-      $.post('task', { id: taskData.id, project: taskData.project, name: taskData.name}, function(data, textStatus, jqXhr) {
+      $.post('task', taskData, function(data, textStatus, jqXhr) {
          if ( textStatus !== 'success' ) return;
-
-         // wait for answer, if positive hide
+         
+         data = JSON.parse(data);
+         // the id we got from the server
+         taskData.id = data.id;
+         
+         // hide the tr we just added
          $trParent.hide();
          $('#added-tasks-tbody').append( taskTemplate( taskData ) );
       });
@@ -67,7 +71,7 @@
    function getTaskDataFromTr($tr)
    {
       return {
-         id: $tr.data('id'),
+         asana_id: $tr.data('id'),
          project: $tr.data('project'),
          name: $tr.data('name')
       };

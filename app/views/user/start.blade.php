@@ -72,7 +72,7 @@
 </script>
 
 <script type="text/template" id="added-task-template">
-   <tr>
+   <tr data-id="<%= id %>">
       <td class="task-project"><%= project %></td>
       <td class="task-name"><%= name %></td>
       <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
