@@ -12,9 +12,9 @@ class ProjectsController extends BaseController {
 
       // $asanaHandler = new AsanaHandler( $user->api_key );
       //	$projects = $asanaHandler->getProjects();
-      $projects = array();
+      $tasks = $user->tasks()->whereStatus('notreported')->get();
 
-      return View::make('user.start')->with('projects', $projects);
+      return View::make('user.start')->with('tasks', $tasks);
    }
 }
 

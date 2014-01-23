@@ -1,7 +1,7 @@
 <?php
 
 class TaskController extends BaseController {
-   
+
    public function store()
    {
       $input = Input::only('asana_id', 'project', 'name');
@@ -14,13 +14,13 @@ class TaskController extends BaseController {
 
       $task->project = $input['project'];
       $task->task = $input['name'];
-      
+
       $task->save();
 
       return Response::json( $task->toJson() );
    }
 
-   public function update()
+   public function updateTime()
    {
       $id = Input::get('id');
 
@@ -31,5 +31,25 @@ class TaskController extends BaseController {
       $task->save();
 
       return Response::json( $task->toJson() );
+   }
+
+   public function report()
+   {
+      $id = Input::get('id');
+
+      $task = Task::find( $id );
+
+      $task->status = 'reported';
+
+      $task->save();
+
+      return Response::json( $task->toJson() );
+   }
+
+   public function delete(){
+
+      $id = Input::get('id');
+
+      Task::destroy( $id );
    }
 }

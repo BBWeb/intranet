@@ -7,4 +7,8 @@ class Task extends Eloquent {
       return $this->belongsTo('User');
    }
 
+   public function notreported()
+   {
+   		return $query->where('status', '=', 'notreported');
+   }
 }

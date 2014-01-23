@@ -5,7 +5,7 @@
 <div class="container">
 
    <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-12">
          <table class="table table-bordered">
             <thead>
                <tr>
@@ -16,12 +16,15 @@
                </tr>
             </thead>
             <tbody id="added-tasks-tbody">
-            @foreach(Auth::user()->tasks as $task)
+            @foreach($tasks as $task)
                <tr data-id="{{ $task->id }}">
                   <td>{{ $task->project }}</td>
                   <td>{{ $task->task }}</td>
                   <td><input type="number" value="{{ $task->time_worked }}" min="0" class="time-worked" style="width: 60px" /></td>
-                  <td><button class="btn btn-primary report-button">Rapportera</button></td>
+                  <td>
+                     <button class="btn btn-primary report-button">Rapportera</button>
+                     <button class="btn btn-danger remove-button">Ta bort</button>
+                  </td>
                </tr>
             @endforeach
             </tbody>
@@ -36,9 +39,6 @@
                <label for="project-select" class="">Hämta data för</label>
                <select id="project-select" class="form-control">
                   <option value="all">Alla</option>
-                  @foreach ($projects as $project)
-                  <option value="{{ $project->id }}">{{ $project->name }}</option>
-                  @endforeach
                </select>
             </div>
             <button type="submit" id="project-data-btn" class="btn btn-primary">Hämta</button>
@@ -76,7 +76,10 @@
       <td class="task-project"><%= project %></td>
       <td class="task-name"><%= name %></td>
       <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
-      <td><button class="btn btn-primary report-button">Rapportera</button></td>
+      <td>
+         <button class="btn btn-primary report-button">Rapportera</button>
+         <button class="btn btn-danger remove-button">Ta bort</button>
+      </td>
    </tr>
 </script>
 @stop

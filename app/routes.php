@@ -14,11 +14,13 @@
 Route::group(array('before' => 'auth'), function() {
 
    Route::get('/', 'ProjectsController@getIndex');
+   Route::controller('account', 'AccountController');
 
-	Route::controller('account', 'AccountController');
+   Route::post('task-remove', 'TaskController@delete');
 
    Route::resource('task', 'TaskController');
-   Route::post('task-update', 'TaskController@update');
+   Route::post('task-update-time', 'TaskController@updateTime');
+   Route::post('task-report', 'TaskController@report');
 
    Route::resource('asana', 'AsanaController');
 

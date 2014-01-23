@@ -1,16 +1,45 @@
 ;(function() {
    $('#tasks-tbody').on('click', 'button.add-task', addTaskToDb);
 
-   $('#added-tasks-tbody').on('click', 'button.report-button', reportTime);
+   $('#added-tasks-tbody').on('click', 'button.report-button', reportTask);
 
-   function reportTime() {
+   $('#added-tasks-tbody').on('blur', 'input.time-worked', updateWorkedTime);
+
+   $('#added-tasks-tbody').on("click",".remove-button", removeTask);
+
+   function reportTask() {
+    var $trParent = $(this).closest('tr')
+       , id = $trParent.data('id')
+       ;
+
+       $.post("task-report", { id: id }, function(data,textStatus) {
+
+        if(textStatus!=="success")return;
+          $trParent.hide();
+       });
+   }
+
+   function removeTask(){
       var $trParent = $(this).closest('tr')
-        , timeWorked = $trParent.find('.time-worked').eq(0).val()
-        , id = $trParent.data('id')
-        ;
+       , id = $trParent.data('id')
+       ;
+
+        $.post('task-remove', { id: id }, function(data, textStatus, jqXhr) {
+
+         if( textStatus !== "success" )return;
+
+         $trParent.hide();
+       });
+   }
+
+   function updateWorkedTime() {
+      var $trParent = $(this).closest('tr')
+       , id = $trParent.data('id')
+      , timeWorked = $trParent.find('.time-worked').eq(0).val()
+       ;
 
       // TODO mock put request
-      $.post('task-update', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
+      $.post('task-update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
          console.log('Post sent', arguments);
       });
    }
@@ -57,11 +86,11 @@
       // send post req to server with data
       $.post('task', taskData, function(data, textStatus, jqXhr) {
          if ( textStatus !== 'success' ) return;
-         
+
          data = JSON.parse(data);
          // the id we got from the server
          taskData.id = data.id;
-         
+
          // hide the tr we just added
          $trParent.hide();
          $('#added-tasks-tbody').append( taskTemplate( taskData ) );
