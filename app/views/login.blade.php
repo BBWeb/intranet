@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('content')
+@section('base-content')
 
 <div class="container">
 

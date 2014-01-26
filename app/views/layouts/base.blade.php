@@ -8,7 +8,7 @@
     {{ HTML::style('css/main.css') }}
 </head>
 <body>
-  @yield('content')
+  @yield('base-content')
 
   {{ HTML::script('/js/libs/jquery-2.0.3.js') }}
   {{ HTML::script('/js/libs/bootstrap.js') }}

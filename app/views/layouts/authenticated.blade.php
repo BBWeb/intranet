@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('content')
+@section('base-content')
     <div class="container">
 
       <!-- Static navbar -->
@@ -17,8 +17,14 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Projects</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Personal <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/staff">Hantera</a></li>
+                <li><a href="/staff/create">Lägg till</a></li>
+              </ul>
+            </li>
+
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -35,7 +41,7 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       <div class="container">
-		@section('content')
+		  @yield('content')
       </div>
 
     </div> <!-- /container -->
