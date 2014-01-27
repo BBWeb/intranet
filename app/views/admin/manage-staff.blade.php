@@ -15,7 +15,7 @@
             </thead>
             <tbody id="staff-members">
 			@foreach($staff as $staffMember)
-			<tr>
+			<tr data-id="{{ $staffMember->id }}">
 				<td>{{ $staffMember->email }}</td>
 				<td>
 				@if( $staffMember->admin )
@@ -44,7 +44,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
-        <button type="button" class="btn btn-danger">Bekräfta</button>
+        <button type="button" class="btn btn-danger sucess-button">Bekräfta</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

@@ -47,4 +47,10 @@ class ManageStaffController extends BaseController {
 
 		return Redirect::to('/staff');
 	}
+
+	public function destroy($id)
+	{
+		User::destroy($id);
+	}
+
 }

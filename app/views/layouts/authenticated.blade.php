@@ -17,6 +17,8 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Projekt</a></li>
+
+            @if ( Auth::user()->admin )
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Personal <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -24,6 +26,7 @@
                 <li><a href="/staff/create">Lägg till</a></li>
               </ul>
             </li>
+            @endif
 
           </ul>
           <ul class="nav navbar-nav navbar-right">

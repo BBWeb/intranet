@@ -24,6 +24,9 @@ Route::group(array('before' => 'auth'), function() {
 
    Route::resource('asana', 'AsanaController');
 
+});
+
+Route::group(array('before' => 'admin'), function() {
    Route::resource('staff', 'ManageStaffController');
 });
 
