@@ -28,6 +28,8 @@ Route::group(array('before' => 'auth'), function() {
 
 Route::group(array('before' => 'admin'), function() {
    Route::resource('staff', 'ManageStaffController');
+
+   Route::resource('time', 'ReportedTimeController');
 });
 
 Route::get('login', 'AuthController@getLogin');

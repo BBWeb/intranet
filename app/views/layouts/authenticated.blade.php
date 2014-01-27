@@ -26,6 +26,8 @@
                 <li><a href="/staff/create">Lägg till</a></li>
               </ul>
             </li>
+
+            <li><a href="/time">Rapporterad tid</a></li>
             @endif
 
           </ul>
