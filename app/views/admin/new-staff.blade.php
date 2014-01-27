@@ -7,7 +7,7 @@
       <div class="col-md-6">
          <form role="form" method="POST" action="/staff">
            <div class="form-group">
-             <label for="exampleInputEmail1">Email address</label>
+             <label for="email">Email address</label>
              <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
            </div>
            <div class="form-group">
@@ -19,7 +19,7 @@
                <input type="checkbox" name="admin" value="admin"> Admin
              </label>
            </div>
-           <button type="submit" class="btn btn-default">Submit</button>
+           <button type="submit" class="btn btn-success">Lägg till</button>
          </form>
 
       </div>

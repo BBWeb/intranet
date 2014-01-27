@@ -24,13 +24,7 @@ Route::group(array('before' => 'auth'), function() {
 
    Route::resource('asana', 'AsanaController');
 
-   Route::get('staff', 'ManageStaffController@getIndex');
-   Route::get('staff/{id}', 'ManageStaffController@edit');
-   Route::put('staff/{id}', 'ManageStaffController@update');
-
-   Route::post('staff', 'ManageStaffController@store');
-   Route::get('staff/create', 'ManageStaffController@create');
-
+   Route::resource('staff', 'ManageStaffController');
 });
 
 Route::get('login', 'AuthController@getLogin');

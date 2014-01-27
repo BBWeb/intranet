@@ -2,7 +2,7 @@
 
 class ManageStaffController extends BaseController {
 
-	public function getIndex()
+	public function index()
 	{
 		$users = User::all();
 
@@ -20,8 +20,7 @@ class ManageStaffController extends BaseController {
 
 		$user->email = Input::get('email');
 		$user->password = Hash::make( Input::get('password') );
-
-		if ( Input::get('admin') == 'admin' )
+		if ( Input::has('admin') )
 		{
 			$user->admin = true;
 		}

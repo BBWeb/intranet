@@ -21,7 +21,7 @@
 				@if( $staffMember->admin )
 					X
 				@endif </td>
-				<td><a href="/staff/{{ $staffMember->id }}" class="btn btn-primary">Hantera</a>
+				<td><a href="/staff/{{ $staffMember->id }}/edit" class="btn btn-primary">Hantera</a>
 					<button class="btn btn-danger remove-button">Ta bort</button>
 				</td>
 			</tr>
