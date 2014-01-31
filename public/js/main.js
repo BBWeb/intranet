@@ -2,33 +2,42 @@
    $('#tasks-tbody').on('click', 'button.add-task', addTaskToDb);
 
    $('#added-tasks-tbody').on('click', 'button.report-button', reportTask);
+   $('#added-tasks-tbody').on('click', 'button.remove-button' , showRemoveTaskModal);
 
    $('#added-tasks-tbody').on('blur', 'input.time-worked', updateWorkedTime);
+   $('.confirm-remove-button').click(removeTask);
 
-   $('#added-tasks-tbody').on("click",".remove-button", removeTask);
+   $('#project-data-btn').click(getProjectData);
+
+   var $trParent;
+   function showRemoveTaskModal() {
+      $trParent = $(this).closest('tr');
+
+      $('#remove-added-task-modal').modal();
+   }
 
    function reportTask() {
     var $trParent = $(this).closest('tr')
        , id = $trParent.data('id')
        ;
 
-       $.post("task-report", { id: id }, function(data,textStatus) {
+       $.post('task-report', { id: id }, function(data,textStatus) {
 
-        if(textStatus!=="success")return;
+          if( textStatus !== 'success' ) return;
+
           $trParent.hide();
        });
    }
 
-   function removeTask(){
-      var $trParent = $(this).closest('tr')
-       , id = $trParent.data('id')
-       ;
+   function removeTask() {
+      var id = $trParent.data('id');
 
         $.post('task-remove', { id: id }, function(data, textStatus, jqXhr) {
 
-         if( textStatus !== "success" )return;
+         if( textStatus !== 'success' )return;
 
          $trParent.hide();
+         $('#remove-added-task-modal').modal('hide');
        });
    }
 
@@ -44,7 +53,6 @@
       });
    }
 
-   $('#project-data-btn').click(getProjectData);
 
    function getProjectData(e) {
       var selectedProject = $('#project-select').val();

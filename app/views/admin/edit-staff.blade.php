@@ -7,6 +7,10 @@
       <div class="col-md-6">
       {{ Form::open(array('method' => 'put', 'url' => array('/staff', $staff->id) )) }}
            <div class="form-group">
+             <label for="name">Namn</label>
+             <input type="text" class="form-control" name="name" id="name" placeholder="Enter name" value="{{ $staff->name }}" >
+           </div>
+           <div class="form-group">
              <label for="email">E-mail</label>
              <input type="email" class="form-control" id="email" placeholder="Enter email" value="{{ $staff->email }}" disabled>
            </div>

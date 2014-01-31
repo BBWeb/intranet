@@ -2,13 +2,13 @@
 
   var $trParent;
 
-   $('#staff-members').on("click", ".remove-button", function() {
+   $('#staff-members').on('click', '.remove-button', function() {
       $trParent = $(this).closest('tr');
 
      $('#remove-staff-modal').modal();
    });
 
-    $(".sucess-button").click(function(){
+    $('.sucess-button').click(function() {
 
       $('#remove-staff-modal').modal('hide');
 
@@ -19,7 +19,7 @@
         type: 'DELETE',
 
         success: function(data, textStatus) {
-          if(textStatus !== "success") return;
+          if( textStatus !== 'success' ) return;
 
           $trParent.hide();
          }

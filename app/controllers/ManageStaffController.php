@@ -19,6 +19,8 @@ class ManageStaffController extends BaseController {
 		$user = new User();
 
 		$user->email = Input::get('email');
+      $user->name = Input::get('name');
+
 		$user->password = Hash::make( Input::get('password') );
 		if ( Input::has('admin') )
 		{

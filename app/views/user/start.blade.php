@@ -63,6 +63,25 @@
    </div>
 </div> <!-- /container -->
 
+<!-- Modal -->
+<div class="modal fade" id="remove-added-task-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Bekräfta borttagning</h4>
+      </div>
+      <div class="modal-body">
+       <p>Är du säker?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+        <button type="button" class="btn btn-danger confirm-remove-button">Bekräfta</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script type="text/template" id="task-template">
    <tr data-id="<%= id %>" data-project="<%= project %>" data-name="<%= task %>">
       <td class="task-project"><%= project %></td>

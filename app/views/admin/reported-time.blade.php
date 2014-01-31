@@ -5,22 +5,24 @@
 
    <div class="row">
       <div class="col-md-12">
-         <table class="table table-bordered">
+         <table id="reported-tasks-table" class="table table-bordered">
             <thead>
                <tr>
                   <th>Projekt</th>
                   <th>Uppgift</th>
                   <th>Person</th>
                   <th>Tid (min)</th>
+                  <th>Datum (rapporterat)</th>
                </tr>
             </thead>
-            <tbody id="staff-members">
+            <tbody id="reported-tasks">
             @foreach($tasks as $task)
               <tr>
                 <td>{{ $task->project }}</td>
                 <td>{{ $task->task }}</td>
-                <td>{{ $task->user->email }}</td>
+                <td>{{ $task->user->name }}</td>
                 <td>{{ $task->time_worked }}</td>
+                <td>{{ $task->reported_date }}</td>
               </tr>
             @endforeach
             </tbody>
@@ -51,5 +53,6 @@
 @stop
 
 @section('footer-scripts')
-   <script src="js/manage-staff.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/reported-time.js"></script>
 @stop

@@ -6,6 +6,7 @@
 
     {{ HTML::style('css/bootstrap.css') }}
     {{ HTML::style('css/main.css') }}
+    {{ HTML::style('css/jquery.dataTables.css') }}
 </head>
 <body>
   @yield('base-content')

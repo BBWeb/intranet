@@ -39,6 +39,7 @@ class TaskController extends BaseController {
 
       $task = Task::find( $id );
 
+      $task->reported_date = date('Y-m-d');
       $task->status = 'reported';
 
       $task->save();
