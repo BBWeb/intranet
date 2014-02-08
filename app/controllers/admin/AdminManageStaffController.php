@@ -1,6 +1,6 @@
-<?php
+<?php 
 
-class ManageStaffController extends BaseController {
+class AdminManageStaffController extends BaseController {
 
 	public function index()
 	{

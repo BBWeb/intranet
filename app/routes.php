@@ -24,12 +24,14 @@ Route::group(array('before' => 'auth'), function() {
 
    Route::resource('asana', 'AsanaController');
 
+   Route::get('/reported-time', 'ReportedTimeController@getIndex');
+
 });
 
 Route::group(array('before' => 'admin'), function() {
-   Route::resource('staff', 'ManageStaffController');
+   Route::resource('staff', 'AdminManageStaffController');
 
-   Route::resource('time', 'ReportedTimeController');
+   Route::resource('time', 'AdminReportedTimeController');
 });
 
 Route::get('login', 'AuthController@getLogin');
