@@ -16,8 +16,8 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Projekt</a></li>
-            <li class=""><a href="/reported-time">Rapporterad tid</a></li>
+            <li {{ (Request::is('/') ? ' class="active"' : '') }}><a href="/">Projekt</a></li>
+            <li {{ (Request::is('reported-time') ? ' class="active"' : '') }}><a href="/reported-time">Rapporterad tid</a></li>
 
             @if ( Auth::user()->admin )
             <li class="dropdown">
@@ -28,7 +28,7 @@
               </ul>
             </li>
 
-            <li><a href="/time">Rapporterad tid (admin)</a></li>
+            <li {{ (Request::is('time') ? ' class="active"' : '') }}><a href="/time">Rapporterad tid (admin)</a></li>
             @endif
 
           </ul>
