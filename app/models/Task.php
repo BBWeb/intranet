@@ -3,7 +3,7 @@
 class Task extends Eloquent {
 
    public static $rules = array(
-      'time_worked' => 'integer'
+      'time_worked' => 'integer|min:0'
    );
 
    public function user()
