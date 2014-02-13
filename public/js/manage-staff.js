@@ -1,6 +1,5 @@
 ;(function() {
 
-   var 
    var $trParent;
 
    $('#staff-members').on('click', '.remove-button', function() {
