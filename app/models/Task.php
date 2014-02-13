@@ -6,6 +6,13 @@ class Task extends Eloquent {
       'time_worked' => 'integer|min:0'
    );
 
+   public function validate()
+   {
+      $validator = Validator::make($this->attributes, static::$rules);
+   
+      return $validator->passes();
+   }
+
    public function user()
    {
       return $this->belongsTo('User');
