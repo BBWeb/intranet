@@ -45,16 +45,18 @@
    }
 
    function updateWorkedTime() {
-      var $trParent = $(this).closest('tr')
-       , id = $trParent.data('id')
-      , timeWorked = $trParent.find('.time-worked').eq(0).val()
-       ;
+      var $timeWorkedInput = $(this)
+        , $trParent = $timeWorkedInput.closest('tr')
+        , id = $trParent.data('id')
+        , timeWorked = $timeWorkedInput.val()
+        ;
 
+      $timeWorkedInput.after('<span class="spinner"></span>');
       // TODO mock put request
       $.post('task-update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
          if (textStatus !== 'success') return;
          
-         console.log('Post sent', arguments);
+         $timeWorkedInput.siblings('.spinner').remove();
       });
    }
 

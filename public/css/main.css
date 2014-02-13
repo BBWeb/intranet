@@ -3,3 +3,10 @@
 	padding: 15px;
 	margin: 0 auto;
 }
+
+.spinner {
+   display: inline-block;
+   background: url('../images/ajax-loader.gif');
+   width: 28px;
+   height: 28px;
+}
