@@ -1,10 +1,13 @@
 ;(function() {
+   
+   var $addedTasksTBody = $('#added-tasks-tbody');
+
    $('#tasks-tbody').on('click', 'button.add-task', addTaskToDb);
 
-   $('#added-tasks-tbody').on('click', 'button.report-button', reportTask);
-   $('#added-tasks-tbody').on('click', 'button.remove-button' , showRemoveTaskModal);
+   $addedTasksTBody.on('click', 'button.report-button', reportTask);
+   $addedTasksTBody.on('click', 'button.remove-button' , showRemoveTaskModal);
+   $addedTasksTBody.on('blur', 'input.time-worked', updateWorkedTime);
 
-   $('#added-tasks-tbody').on('blur', 'input.time-worked', updateWorkedTime);
    $('.confirm-remove-button').click(removeTask);
 
    $('#project-data-btn').click(getProjectData);
@@ -49,6 +52,8 @@
 
       // TODO mock put request
       $.post('task-update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
+         if (textStatus !== 'success') return;
+         
          console.log('Post sent', arguments);
       });
    }
@@ -101,7 +106,7 @@
 
          // hide the tr we just added
          $trParent.hide();
-         $('#added-tasks-tbody').append( taskTemplate( taskData ) );
+         $addedTasksTBody.append( taskTemplate( taskData ) );
       });
    }
 
