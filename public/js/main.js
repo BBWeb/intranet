@@ -66,7 +66,7 @@
 
       // get request to server fetching data
       $.get('asana/' + selectedProject, function(response, textStatus) {
-         console.log('Args', arguments);
+         console.log('Arguments', arguments);
          var $tasksTbody = $('#tasks-tbody').html('')
            , taskTemplate = _.template( $('#task-template').html() )
            ;

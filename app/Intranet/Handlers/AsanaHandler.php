@@ -34,9 +34,6 @@ class AsanaHandler {
 
       if ( $responseCode != '200' ) return; 
 
-      // get all added tasks for the current user
-      //    $user->tasks()->whereAsanaId('')
-      // if the task is already added to the db, skip request
       foreach ( $tasks->data as $key => $task ) {
          // if the tasks is found already, remove it etc
          if ( $this->user->tasks()->where('asana_id', '=', $task->id)->first() ) {
