@@ -20,14 +20,12 @@ class AdminManageStaffController extends BaseController {
 
 		$user->email = Input::get('email');
       $user->name = Input::get('name');
+		$user->password = Input::get('password');
+      $user->password_confirmation = Input::get('password');
 
-		$user->password = Hash::make( Input::get('password') );
-		if ( Input::has('admin') )
-		{
-			$user->admin = true;
-		}
-
-		$user->save();
+		if ( Input::has('admin') ) $user->admin = true;
+      
+      if ( !$user->save() ) return Redirect::to('/staff/create')->with('errors', $user->errors()->all());
 
 		return Redirect::to('/staff');
 	}
@@ -42,8 +40,10 @@ class AdminManageStaffController extends BaseController {
 	public function update($id)
 	{
 		$user = User::find( $id );
-
-		$user->password = Hash::make( Input::get('password') );
+      
+      $password = Input::get('password');
+		$user->password = $password;
+      $user->password_confirmation = $password;
 
 		$user->save();
 

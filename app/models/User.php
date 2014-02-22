@@ -2,8 +2,9 @@
 
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use LaravelBook\Ardent\Ardent;
 
-class User extends Eloquent implements UserInterface, RemindableInterface {
+class User extends Ardent implements UserInterface, RemindableInterface {
 
 	/**
 	 * The database table used by the model.
@@ -13,17 +14,19 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $table = 'users';
 
    public static $rules = array(
-      'email' => 'required|email',
-      'password' => 'required|unique:users'
+      'email' => 'required|email|unique:users',
+      'password' => 'required|min:6|confirmed',
+      'password_confirmation' => 'required|min:6'
    );
 
-   public function validate()
+   public $autoPurgeRedundantAttributes = true;
+
+   public function beforeSave()
    {
-      $validator = Validator::make($this->attributes, static::$rules);
-
-      return $validator->passes();
+      if ( $this->isDirty('password') ) {
+         $this->password = Hash::make($this->password);
+      }
    }
-
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
