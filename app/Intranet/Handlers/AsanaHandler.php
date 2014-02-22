@@ -7,11 +7,13 @@ class AsanaHandler {
    // B&B Web WorkspaceID (hardcoded for now)
    const WORKSPACE_ID = '5021327445263';
 
+   private $user;
    private $apiKey;
 
-   public function __construct($apiKey)
+   public function __construct($user)
    {
-      $this->apiKey = $apiKey;
+      $this->user = $user;
+      $this->apiKey = $user->api_key;
    }
 
    public function getProjects() 
@@ -32,7 +34,12 @@ class AsanaHandler {
 
       if ( $responseCode != '200' ) return; 
 
-      foreach ( $tasks->data as $task ) {
+      foreach ( $tasks->data as $key => $task ) {
+         // if the tasks is found already, remove it etc
+         if ( $this->user->tasks()->where('asana_id', '=', $task->id)->first() ) {
+            unset($tasks->data[$key]);
+            continue;
+         }
          $taskState = $asana->getOneTask( $task->id );
          $task->taskState = $taskState;
       }

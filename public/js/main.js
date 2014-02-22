@@ -66,18 +66,20 @@
 
       // get request to server fetching data
       $.get('asana/' + selectedProject, function(response, textStatus) {
+         console.log('Arguments', arguments);
          var $tasksTbody = $('#tasks-tbody').html('')
            , taskTemplate = _.template( $('#task-template').html() )
            ;
 
          if ( textStatus !== 'success' ) return;
 
-         var tasks = response.data || [];
+         var tasks = response.data || {};
 
-         tasks.forEach(function(task) {
+         for (var taskKey in tasks) {
+            var task = tasks[ taskKey ];
             var taskObject = getTaskObject( task );
             $tasksTbody.append( taskTemplate( taskObject ) );
-         });
+         }
       });
 
       e.preventDefault();
