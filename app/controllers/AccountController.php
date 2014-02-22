@@ -19,5 +19,16 @@ class AccountController extends BaseController {
 
       return Redirect::to('account'); 
    }
-   
+
+   public function postUpdatePassword()
+   {
+      $user = Auth::user();
+
+      $user->password = Input::get('password');
+      $user->password_confirmation = Input::get('password_confirmation');
+
+      $user->updateUniques();
+      
+      return Redirect::to('account');
+   }   
 }
