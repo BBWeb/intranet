@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class AdminManageStaffController extends BaseController {
 
@@ -24,8 +24,8 @@ class AdminManageStaffController extends BaseController {
       $user->password_confirmation = Input::get('password');
 
 		if ( Input::has('admin') ) $user->admin = true;
-      
-      if ( !$user->save() ) return Redirect::to('/staff/create')->with('errors', $user->errors()->all());
+
+	    if ( !$user->save() ) return Redirect::to('/staff/create')->with('errors', $user->errors()->all());
 
 		return Redirect::to('/staff');
 	}
@@ -40,12 +40,12 @@ class AdminManageStaffController extends BaseController {
 	public function update($id)
 	{
 		$user = User::find( $id );
-      
-      $password = Input::get('password');
-		$user->password = $password;
-      $user->password_confirmation = $password;
 
-		$user->save();
+      	$password = Input::get('password');
+		$user->password = $password;
+      	$user->password_confirmation = $password;
+
+		if ( !$user->updateUniques() ) return Redirect::to('/staff/' . $id . '/edit')->with('errors', $user->errors()->all());
 
 		return Redirect::to('/staff');
 	}

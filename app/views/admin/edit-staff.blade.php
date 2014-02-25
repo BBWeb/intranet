@@ -2,7 +2,11 @@
 
 @section('content')
 <div class="container">
-
+   @if($errors)
+      @foreach($errors as $error)
+         <p>{{ $error }}</p>
+      @endforeach
+   @endif
    <div class="row">
       <div class="col-md-6">
       {{ Form::open(array('method' => 'put', 'url' => array('/staff', $staff->id) )) }}
