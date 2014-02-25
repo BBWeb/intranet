@@ -53,6 +53,4 @@
 
 @stop
 
-@section('footer-scripts')
-   <script src="js/manage-staff.js"></script>
-@stop
+     

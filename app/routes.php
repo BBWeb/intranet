@@ -32,6 +32,7 @@ Route::group(array('before' => 'admin'), function() {
    Route::resource('staff', 'AdminManageStaffController');
 
    Route::resource('time', 'AdminReportedTimeController');
+   Route::get("customer-report","CustomerViewController@getIndex");
 });
 
 Route::get('login', 'AuthController@getLogin');
