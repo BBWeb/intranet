@@ -8,7 +8,7 @@
 <select class="form-control">
 	@foreach($tasks as $task)
   <option>$task</option>
-endforeach
+@endforeach
 </select>
 </div>
 <div class="col-md-2">

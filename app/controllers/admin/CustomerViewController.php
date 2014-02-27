@@ -6,7 +6,7 @@ public function getIndex()
    {
    		 $user = Auth::user();
 
-      if ( $user->api_key == '2RJRtMFW.BrCLhhlyqymhV2VYgB2kWbF' ) return Redirect::to('account');
+      if ( $user->api_key == '' ) return Redirect::to('account');
 
       // $asanaHandler = new AsanaHandler( $user->api_key );
       //	$projects = $asanaHandler->getProjects();
