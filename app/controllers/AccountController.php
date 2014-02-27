@@ -7,17 +7,17 @@ class AccountController extends BaseController {
 		return View::make('user.account');
 	}
 
-   public function postUpdateApikey() 
+   public function postUpdateApikey()
    {
       $apiKey = Input::get('api-key');
 
-      $user = Auth::user(); 
+      $user = Auth::user();
 
       $user->api_key = $apiKey;
 
-      $user->save();
+      if ( !$user->forceSave() ) return Redirect::to('account')->with('errors', $user->errors()->all());
 
-      return Redirect::to('account'); 
+      return Redirect::to('account');
    }
 
    public function postUpdatePassword()
@@ -28,7 +28,7 @@ class AccountController extends BaseController {
       $user->password_confirmation = Input::get('password_confirmation');
 
       $user->updateUniques();
-      
+
       return Redirect::to('account');
-   }   
+   }
 }

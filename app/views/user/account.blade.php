@@ -3,6 +3,11 @@
 @section('content')
 
 <div class="container">
+   @if($errors)
+      @foreach($errors as $error)
+         <p>{{ $error }}</p>
+      @endforeach
+   @endif
 	<h1>Account</h1>
 	<div class="row">
 		<div class="col-md-3">
