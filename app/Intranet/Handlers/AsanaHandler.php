@@ -1,24 +1,22 @@
 <?php namespace Intranet\Handlers;
 
 use Intranet\Api\AsanaApi;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 
 class AsanaHandler {
 
    // B&B Web WorkspaceID (hardcoded for now)
    const WORKSPACE_ID = '5021327445263';
-   // Ten days cache time
-   const CACHE_TIME = 864000;
+   // Ten days cache time (minutes)
+   const CACHE_TIME = 14400;
 
    private $user;
    private $apiKey;
-   private $redis;
 
    public function __construct($user)
    {
       $this->user = $user;
       $this->apiKey = $user->api_key;
-      $this->redis = Redis::connection();
    }
 
    public function getProjects()
@@ -47,15 +45,15 @@ class AsanaHandler {
          }
 
          // if exists in redis?
-         $cachedTaskState = $this->redis->get( $task->id );
-         if ($cachedTaskState) {
+         if ( Cache::has( $task->id ) ) {
+            $cachedTaskState = Cache::get( $task->id );
             $task->taskState = unserialize( $cachedTaskState );
          } else {
             $taskState = $asana->getOneTask( $task->id );
             $task->taskState = $taskState;
 
             // cache in redis for the set time
-            $this->redis->set( $task->id, serialize( $taskState ), self::CACHE_TIME );
+            Cache::put( $task->id, serialize( $taskState ), self::CACHE_TIME );
          }
       }
 
