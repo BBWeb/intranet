@@ -1,11 +1,14 @@
 <?php namespace Intranet\Handlers;
 
 use Intranet\Api\AsanaApi;
+use Illuminate\Support\Facades\Cache;
 
 class AsanaHandler {
-   
+
    // B&B Web WorkspaceID (hardcoded for now)
    const WORKSPACE_ID = '5021327445263';
+   // Ten days cache time (minutes)
+   const CACHE_TIME = 14400;
 
    private $user;
    private $apiKey;
@@ -16,7 +19,7 @@ class AsanaHandler {
       $this->apiKey = $user->api_key;
    }
 
-   public function getProjects() 
+   public function getProjects()
    {
       $asana = new AsanaApi( $this->apiKey );
 
@@ -32,7 +35,7 @@ class AsanaHandler {
 
       $responseCode = $asana->getResponseCode();
 
-      if ( $responseCode != '200' ) return; 
+      if ( $responseCode != '200' ) return;
 
       foreach ( $tasks->data as $key => $task ) {
          // if the tasks is found already, remove it etc
@@ -40,8 +43,18 @@ class AsanaHandler {
             unset($tasks->data[$key]);
             continue;
          }
-         $taskState = $asana->getOneTask( $task->id );
-         $task->taskState = $taskState;
+
+         // if exists in redis?
+         if ( Cache::has( $task->id ) ) {
+            $cachedTaskState = Cache::get( $task->id );
+            $task->taskState = unserialize( $cachedTaskState );
+         } else {
+            $taskState = $asana->getOneTask( $task->id );
+            $task->taskState = $taskState;
+
+            // cache in redis for the set time
+            Cache::put( $task->id, serialize( $taskState ), self::CACHE_TIME );
+         }
       }
 
       return $tasks;
@@ -55,10 +68,10 @@ class AsanaHandler {
 
       $responseCode = $asana->getResponseCode();
 
-      if ( $responseCode != '200' ) return; 
+      if ( $responseCode != '200' ) return;
 
       foreach ( $tasks->data as $task ) {
-         // is the task already added to our db? 
+         // is the task already added to our db?
          // Skip it
          $taskState = $asana->getOneTask( $task->id );
          $task->taskState = $taskState;
