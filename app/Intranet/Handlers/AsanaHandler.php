@@ -2,6 +2,7 @@
 
 use Intranet\Api\AsanaApi;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class AsanaHandler {
 
@@ -38,6 +39,7 @@ class AsanaHandler {
       if ( $responseCode != '200' ) return;
 
       foreach ( $tasks->data as $key => $task ) {
+
          // if the tasks is found already, remove it etc
          if ( $this->user->tasks()->where('asana_id', '=', $task->id)->first() ) {
             unset($tasks->data[$key]);
@@ -46,15 +48,20 @@ class AsanaHandler {
 
          // if exists in redis?
          if ( Cache::has( $task->id ) ) {
-            $cachedTaskState = Cache::get( $task->id );
-            $task->taskState = unserialize( $cachedTaskState );
+            $cachedTaskState = unserialize( Cache::get( $task->id ) );
+            $task->taskState = $cachedTaskState;
+
+            if ( $cachedTaskState['completed'] ) unset($tasks->data[$key]);
          } else {
+            // get additional info about the tasks (extra HTTP req)
             $taskState = $asana->getOneTask( $task->id );
             $task->taskState = $taskState;
-
-            // cache in redis for the set time
+            // cache in redis for set time
             Cache::put( $task->id, serialize( $taskState ), self::CACHE_TIME );
+
+            if ( $taskState['completed'] ) unset($tasks->data[$key]);
          }
+
       }
 
       return $tasks;
