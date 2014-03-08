@@ -3,13 +3,14 @@
 @section('content')
 
  <div class="row">
-      <div class="col-md-4">
-  <p>Projekt</p>
-<select class="form-control">
-	@foreach($tasks as $task)
-  <option>$task</option>
-@endforeach
-</select>
+	<div class="col-md-4">
+  	<p>Projekt</p>
+
+	<select class="form-control">
+	@foreach($projects as $project)
+  		<option>{{ $project->project }}</option>
+	@endforeach
+	</select>
 </div>
 <div class="col-md-2">
  <p>Från</p>
