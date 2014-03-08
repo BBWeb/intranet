@@ -114,8 +114,7 @@
       });
    }
 
-   function getTaskDataFromTr($tr)
-   {
+   function getTaskDataFromTr($tr) {
       return {
          asana_id: $tr.data('id'),
          project: $tr.data('project'),
