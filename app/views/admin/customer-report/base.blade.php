@@ -7,7 +7,7 @@
 	<div class="col-md-3">
 		<select name="project" id="project" class="form-control">
 			@foreach($projects as $project)
-		  		<option value="{{ $project->project }}">{{ $project->project }}</option>
+		  		<option value="{{ $project->id }}">{{ $project->name }}</option>
 			@endforeach
 		</select>
 	</div>

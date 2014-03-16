@@ -5,7 +5,7 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<h2>{{ $project }} <small>{{ $from }} - {{ $to }}</small></h2>
+			<h2>{{ $project->name }} <small>{{ $from }} - {{ $to }}</small></h2>
 			<p>Total tid {{ $totalTime }} minuter</p>
 		</div>
 	</div>
