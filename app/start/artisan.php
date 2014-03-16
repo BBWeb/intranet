@@ -11,3 +11,4 @@
 |
 */
 Artisan::add(new GetProjectsCommand);
+Artisan::add(new UpdateTaskRefToProjectsCommand);
