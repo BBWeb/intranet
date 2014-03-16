@@ -4,17 +4,20 @@ class CustomerViewController extends BaseController {
 
 	public function getIndex()
 	{
-	    $projects = DB::table('tasks')->select('project')->distinct()->get();
+	    $projects = Project::all();
 
 	    return View::make('admin.customer-report.base')->with('projects', $projects);
 	}
 
-	public function getProjectOverview($project, $from, $to)
+	public function getProjectOverview($projectId, $fromStr, $toStr)
 	{
-	    $projects = DB::table('tasks')->select('project')->distinct()->get();
+		$projects = Project::all();
 
-	    // get all the tasks for the project, reported between $from and $to?
-	    $projectTasks = DB::table('tasks')->whereBetween('reported_date', array($from, $to))->get();
+		$project = Project::find($projectId);
+
+	    $from = date('Y-m-d', strtotime($fromStr));
+  		$to = date('Y-m-d', strtotime($toStr));
+	    $projectTasks = $project->tasks()->whereBetween('reported_date', array($from, $to))->get();
 
 	    $totalTime = 0;
 	    foreach ($projectTasks as $task) {
