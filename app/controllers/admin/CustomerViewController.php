@@ -16,9 +16,20 @@ class CustomerViewController extends BaseController {
 	    // get all the tasks for the project, reported between $from and $to?
 	    $projectTasks = DB::table('tasks')->whereBetween('reported_date', array($from, $to))->get();
 
-		return View::make('admin.customer-report.project', array(
-			'projects' => $projects,
-			'tasks' => $projectTasks)
+	    $totalTime = 0;
+	    foreach ($projectTasks as $task) {
+	    	$totalTime += $task->time_worked;
+	    }
+
+		return View::make('admin.customer-report.project',
+			array(
+				'from' => $from,
+				'to' => $to,
+				'projects' => $projects,
+				'project' => $project,
+				'totalTime' => $totalTime,
+				'tasks' => $projectTasks
+			)
 		);
 	}
 
