@@ -17,6 +17,7 @@
 					<tr>
 						<th>Uppgift</th>
 						<th>Tid (minuter)</th>
+						<th>Datum rapporterat</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -24,6 +25,7 @@
 					<tr>
 						<td>{{ $task->task }}</td>
 						<td>{{ $task->time_worked }}</td>
+						<td>{{ $task->reported_date }}</td>
 					</tr>
 					@endforeach
 				</tbody>
