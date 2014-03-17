@@ -16,7 +16,7 @@
            <tbody>
             @foreach($tasks as $task)
                <tr data-id="{{ $task->id }}">
-                  <td>{{ $task->project }}</td>
+                  <td>{{ $task->theproject->name }}</td>
                   <td>{{ $task->task }}</td>
                   <td>{{ $task->time_worked }}</td>
                   <td>{{ $task->reported_date }}</td>

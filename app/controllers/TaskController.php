@@ -4,15 +4,15 @@ class TaskController extends BaseController {
 
    public function store()
    {
-      $input = Input::only('asana_id', 'project', 'name');
+      $input = Input::only('asana_id', 'project_id', 'name');
 
       // check if id already exists
       $task = new Task();
 
       $task->user_id = Auth::user()->id;
-      $task->asana_id = $input['asana_id'];
 
-      $task->project = $input['project'];
+      $task->asana_id = $input['asana_id'];
+      $task->project_id = $input['project_id'];
       $task->task = $input['name'];
 
       $task->save();

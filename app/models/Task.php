@@ -9,13 +9,18 @@ class Task extends Eloquent {
    public function validate()
    {
       $validator = Validator::make($this->attributes, static::$rules);
-   
+
       return $validator->passes();
    }
 
    public function user()
    {
       return $this->belongsTo('User');
+   }
+
+   public function theproject()
+   {
+      return $this->belongsTo('Project', 'project_id', 'id');
    }
 
    public function notreported()

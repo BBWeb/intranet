@@ -1,5 +1,5 @@
 ;(function() {
-   
+
    var $addedTasksTBody = $('#added-tasks-tbody');
 
    $('#tasks-tbody').on('click', 'button.add-task', addTaskToDb);
@@ -55,7 +55,7 @@
       // TODO mock put request
       $.post('task-update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
          if (textStatus !== 'success') return;
-         
+
          $timeWorkedInput.siblings('.spinner').remove();
       });
    }
@@ -74,6 +74,8 @@
 
          var tasks = response.data || [];
 
+          console.log('Tasks', tasks);
+
          tasks.forEach(function(task) {
             var taskObject = getTaskObject( task );
             $tasksTbody.append( taskTemplate( taskObject ) );
@@ -86,8 +88,9 @@
    function getTaskObject(task) {
       return {
          id: task.id,
-         project: task.taskState.projects.name,
-         task: task.name
+         task: task.name,
+         project_name: task.taskState.projects.name,
+         project_id: task.taskState.projects.id
       };
    }
 
@@ -116,7 +119,8 @@
    {
       return {
          asana_id: $tr.data('id'),
-         project: $tr.data('project'),
+         project_name: $tr.data('project-name'),
+         project_id: $tr.data('project-id'),
          name: $tr.data('name')
       };
    }
