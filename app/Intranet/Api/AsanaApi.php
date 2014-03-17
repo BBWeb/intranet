@@ -70,7 +70,7 @@ class AsanaApi {
 
     public function getProjectTasks($projectId)
     {
-          return $this->apiRequest($this->projectUri . '/' . $projectId . '/tasks?assignee=me'); 
+          return $this->apiRequest($this->projectUri . '/' . $projectId . '/tasks?assignee=me');
     }
 
     public function getOneTask($taskId){

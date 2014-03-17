@@ -8,8 +8,6 @@ class ProjectsController extends BaseController {
    {
       $user = Auth::user();
 
-      // $asanaHandler = new AsanaHandler( $user->api_key );
-      //	$projects = $asanaHandler->getProjects();
       $tasks = $user->tasks()->whereStatus('notreported')->get();
 
       return View::make('user.start')->with('tasks', $tasks);
