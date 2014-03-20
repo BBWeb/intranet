@@ -24,8 +24,7 @@
        , id = $trParent.data('id')
        ;
 
-       $.post('task-report', { id: id }, function(data,textStatus) {
-
+       $.post('task/report', { id: id }, function(data,textStatus) {
           if( textStatus !== 'success' ) return;
 
           $trParent.hide();
@@ -35,12 +34,11 @@
    function removeTask() {
       var id = $trParent.data('id');
 
-        $.post('task-remove', { id: id }, function(data, textStatus, jqXhr) {
+        $.post('task/remove', { id: id }, function(data, textStatus, jqXhr) {
+          if( textStatus !== 'success' )return;
 
-         if( textStatus !== 'success' )return;
-
-         $trParent.hide();
-         $('#remove-added-task-modal').modal('hide');
+          $trParent.hide();
+          $('#remove-added-task-modal').modal('hide');
        });
    }
 
@@ -53,7 +51,7 @@
 
       $timeWorkedInput.after('<span class="spinner"></span>');
       // TODO mock put request
-      $.post('task-update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
+      $.post('task/update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
          if (textStatus !== 'success') return;
 
          $timeWorkedInput.siblings('.spinner').remove();
@@ -102,16 +100,16 @@
         ;
 
       // send post req to server with data
-      $.post('task', taskData, function(data, textStatus, jqXhr) {
-         if ( textStatus !== 'success' ) return;
+      $.post('task/create', taskData, function(data, textStatus, jqXhr) {
+        if ( textStatus !== 'success' ) return;
 
-         data = JSON.parse(data);
-         // the id we got from the server
-         taskData.id = data.id;
+        data = JSON.parse(data);
+        // the id we got from the server
+        taskData.id = data.id;
 
-         // hide the tr we just added
-         $trParent.hide();
-         $addedTasksTBody.append( taskTemplate( taskData ) );
+        // hide the tr we just added
+        $trParent.hide();
+        $addedTasksTBody.append( taskTemplate( taskData ) );
       });
    }
 
