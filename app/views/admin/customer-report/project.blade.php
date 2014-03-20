@@ -12,19 +12,21 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<table class="table">
+			<table class="table" id="project-tasks">
 				<thead>
 					<tr>
 						<th>Uppgift</th>
+						<th>Rapporterad tid (minuter)</th>
 						<th>Tid (minuter)</th>
 						<th>Datum rapporterat</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach($tasks as $task)
-					<tr>
+					<tr data-id="{{ $task->id }}">
 						<td>{{ $task->task }}</td>
 						<td>{{ $task->time_worked }}</td>
+						<td><input type="number" min="0" name="adjusted-time" class="adjusted-time" value="{{ $task->time_worked }}" style="width: 60px"></td>
 						<td>{{ $task->reported_date }}</td>
 					</tr>
 					@endforeach
@@ -32,7 +34,10 @@
 			</table>
 		</div>
 	</div>
-	<ul>
-	</ul>
+	<div class="row">
+		<div class="col-md-12">
+			<a class="btn btn-primary" href="{{ Request::url() }}/print">Generera</a>
+		</div>
+	</div>
 @stop
 

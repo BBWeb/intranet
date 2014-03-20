@@ -30,10 +30,7 @@
 	</div>
 	{{ Form::close() }}
 </div>
-
-
 @stop
-
 
 @section('footer-scripts')
    <script src="/js/customer-report.js"></script>
