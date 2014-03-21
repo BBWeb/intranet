@@ -83,17 +83,17 @@
 </div><!-- /.modal -->
 
 <script type="text/template" id="task-template">
-   <tr data-id="<%= id %>" data-project-name="<%= project_name %>" data-project-id="<%= project_id %>" data-name="<%= task %>">
-      <td class="task-project"><%= project_name %></td>
-      <td class="task-name"><%= task %></td>
+   <tr data-id="<%- id %>" data-project-name="<%- project_name %>" data-project-id="<%- project_id %>" data-name="<%- task %>">
+      <td class="task-project"><%- project_name %></td>
+      <td class="task-name"><%- task %></td>
       <td><button class="btn btn-success add-task">Lägg till</button></td>
    </tr>
 </script>
 
 <script type="text/template" id="added-task-template">
-   <tr data-id="<%= id %>">
-      <td class="task-project"><%= project_name %></td>
-      <td class="task-name"><%= name %></td>
+   <tr data-id="<%- id %>">
+      <td class="task-project"><%- project_name %></td>
+      <td class="task-name"><%- name %></td>
       <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
       <td>
          <button class="btn btn-primary report-button">Rapportera</button>
