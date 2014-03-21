@@ -12,6 +12,30 @@
 
    $('#project-data-btn').click(getProjectData);
 
+   // timer click (if not started)
+    //start counting
+  // if started
+  //  stop and reset
+  $('.timer').stopwatch().click(function() {
+    var $timerBadge = $(this)
+      , elapsedTime = $timerBadge.stopwatch('getTime')
+      ;
+
+    if ( elapsedTime > 0) {
+      $timerBadge.stopwatch('stop');
+
+      // get the current time, incr the input field
+      // report to server etc
+
+
+      $timerBadge.stopwatch('reset');
+      return;
+    }
+    $timerBadge.stopwatch('start');
+
+    console.log('Time', $timerBadge.stopwatch('getTime'));
+   });
+
    var $trParent;
    function showRemoveTaskModal() {
       $trParent = $(this).closest('tr');
