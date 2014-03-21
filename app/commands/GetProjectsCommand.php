@@ -3,7 +3,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Intranet\Handlers\AsanaHandler;
+use Intranet\Api\AsanaApi;
 
 class GetProjectsCommand extends Command {
 
@@ -39,9 +39,9 @@ class GetProjectsCommand extends Command {
 	public function fire()
 	{
 		$apikey = $this->argument('apikey');
-		$asana = new AsanaHandler($apikey);
+		$asana = new AsanaApi( $apikey );
 
-		$asanaProjects = $asana->getProjects();
+      	$asanaProjects = $asana->getProjects('5021327445263');
 		foreach ($asanaProjects as $asanaProject) {
 			$project = new Project();
 
