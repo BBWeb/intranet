@@ -18,7 +18,7 @@
             <tbody id="added-tasks-tbody">
             @foreach($tasks as $task)
                <tr data-id="{{ $task->id }}">
-                  <td>{{ $task->project }}</td>
+                  <td>{{ $task->theproject->name }}</td>
                   <td>{{ $task->task }}</td>
                   <td><input type="number" value="{{ $task->time_worked }}" min="0" class="time-worked" style="width: 60px" /></td>
                   <td>
@@ -83,8 +83,8 @@
 </div><!-- /.modal -->
 
 <script type="text/template" id="task-template">
-   <tr data-id="<%= id %>" data-project="<%= project %>" data-name="<%= task %>">
-      <td class="task-project"><%= project %></td>
+   <tr data-id="<%= id %>" data-project-name="<%= project_name %>" data-project-id="<%= project_id %>" data-name="<%= task %>">
+      <td class="task-project"><%= project_name %></td>
       <td class="task-name"><%= task %></td>
       <td><button class="btn btn-success add-task">Lägg till</button></td>
    </tr>
@@ -92,7 +92,7 @@
 
 <script type="text/template" id="added-task-template">
    <tr data-id="<%= id %>">
-      <td class="task-project"><%= project %></td>
+      <td class="task-project"><%= project_name %></td>
       <td class="task-name"><%= name %></td>
       <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
       <td>

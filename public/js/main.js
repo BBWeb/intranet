@@ -1,5 +1,5 @@
 ;(function() {
-   
+
    var $addedTasksTBody = $('#added-tasks-tbody');
 
    $('#tasks-tbody').on('click', 'button.add-task', addTaskToDb);
@@ -24,8 +24,7 @@
        , id = $trParent.data('id')
        ;
 
-       $.post('task-report', { id: id }, function(data,textStatus) {
-
+       $.post('task/report', { id: id }, function(data,textStatus) {
           if( textStatus !== 'success' ) return;
 
           $trParent.hide();
@@ -35,12 +34,11 @@
    function removeTask() {
       var id = $trParent.data('id');
 
-        $.post('task-remove', { id: id }, function(data, textStatus, jqXhr) {
+        $.post('task/remove', { id: id }, function(data, textStatus, jqXhr) {
+          if( textStatus !== 'success' )return;
 
-         if( textStatus !== 'success' )return;
-
-         $trParent.hide();
-         $('#remove-added-task-modal').modal('hide');
+          $trParent.hide();
+          $('#remove-added-task-modal').modal('hide');
        });
    }
 
@@ -53,9 +51,9 @@
 
       $timeWorkedInput.after('<span class="spinner"></span>');
       // TODO mock put request
-      $.post('task-update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
+      $.post('task/update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
          if (textStatus !== 'success') return;
-         
+
          $timeWorkedInput.siblings('.spinner').remove();
       });
    }
@@ -73,10 +71,9 @@
 
          if ( textStatus !== 'success' ) return;
 
-         var tasks = response.data || {};
+         var tasks = response.data || [];
 
-         for (var taskKey in tasks) {
-            var task = tasks[ taskKey ];
+         tasks.forEach(function(task) {
             var taskObject = getTaskObject( task );
             $tasksTbody.append( taskTemplate( taskObject ) );
          }
@@ -88,8 +85,9 @@
    function getTaskObject(task) {
       return {
          id: task.id,
-         project: task.taskState.projects.name,
-         task: task.name
+         task: task.name,
+         project_name: task.taskState.projects.name,
+         project_id: task.taskState.projects.id
       };
    }
 
@@ -101,23 +99,24 @@
         ;
 
       // send post req to server with data
-      $.post('task', taskData, function(data, textStatus, jqXhr) {
-         if ( textStatus !== 'success' ) return;
+      $.post('task/create', taskData, function(data, textStatus, jqXhr) {
+        if ( textStatus !== 'success' ) return;
 
-         data = JSON.parse(data);
-         // the id we got from the server
-         taskData.id = data.id;
+        data = JSON.parse(data);
+        // the id we got from the server
+        taskData.id = data.id;
 
-         // hide the tr we just added
-         $trParent.hide();
-         $addedTasksTBody.append( taskTemplate( taskData ) );
+        // hide the tr we just added
+        $trParent.hide();
+        $addedTasksTBody.append( taskTemplate( taskData ) );
       });
    }
 
    function getTaskDataFromTr($tr) {
       return {
          asana_id: $tr.data('id'),
-         project: $tr.data('project'),
+         project_name: $tr.data('project-name'),
+         project_id: $tr.data('project-id'),
          name: $tr.data('name')
       };
    }

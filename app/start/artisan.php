@@ -11,3 +11,5 @@
 |
 */
 Artisan::add(new CacheAsanaCommand);
+Artisan::add(new GetProjectsCommand);
+Artisan::add(new UpdateTaskRefToProjectsCommand);

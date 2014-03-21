@@ -70,7 +70,7 @@ class AsanaApi {
 
     public function getProjectTasks($projectId)
     {
-          return $this->apiRequest($this->projectUri . '/' . $projectId . '/tasks?assignee=me'); 
+          return $this->apiRequest($this->projectUri . '/' . $projectId . '/tasks?assignee=me');
     }
 
     public function getOneTask($taskId){
@@ -82,10 +82,16 @@ class AsanaApi {
             $castIntoArray = (array)$resultJson->data->projects[0];
         }
         elseif(is_object($resultJson->data->parent)){
-            $castIntoArray = array(
-                                'id' => $resultJson->data->parent->id,
-                                'name' => 'PARENT TASK: '.$resultJson->data->parent->name
-                             );
+            // TODO we really need to integrate this more with redis cache
+            //  In some cases we may already have the parent, and in others we want to cache it
+            //  For now this should do the trick though
+            $parentTask = $this->getOneTask($resultJson->data->parent->id);
+
+            $castIntoArray = $parentTask['projects'];
+            // $castIntoArray = array(
+            //                     'id' => $resultJson->data->parent->id,
+            //                     'name' => 'PARENT TASK: '.$resultJson->data->parent->name
+            //                  );
         }
         else{
             $castIntoArray = array(

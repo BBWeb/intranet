@@ -45,6 +45,13 @@ Route::filter('admin', function()
 	if ( !Auth::user()->admin ) return Redirect::to('/');
 });
 
+Route::filter('apikey', function()
+{
+	if (Auth::guest()) return Redirect::guest('login');
+
+	if ( Auth::user()->api_key == '') return Redirect::to('account');
+});
+
 
 Route::filter('auth.basic', function()
 {

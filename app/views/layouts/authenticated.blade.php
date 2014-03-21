@@ -29,6 +29,7 @@
             </li>
 
             <li {{ (Request::is('time') ? ' class="active"' : '') }}><a href="/time">Rapporterad tid (admin)</a></li>
+            <li><a href="/customer-report">Kundvy</a></li>
             @endif
 
           </ul>

@@ -12,26 +12,26 @@
 */
 
 Route::group(array('before' => 'auth'), function() {
-
-   Route::get('/', 'ProjectsController@getIndex');
    Route::controller('account', 'AccountController');
+   Route::get('reported-time', 'ReportedTimeController@getIndex');
 
-   Route::post('task-remove', 'TaskController@delete');
+   Route::group(array('before' => 'apikey'), function() {
+      Route::get('/', 'ProjectsController@getIndex');
 
-   Route::resource('task', 'TaskController');
-   Route::post('task-update-time', 'TaskController@updateTime');
-   Route::post('task-report', 'TaskController@report');
+      Route::controller('task', 'TaskController');
 
-   Route::resource('asana', 'AsanaController');
-
-   Route::get('/reported-time', 'ReportedTimeController@getIndex');
-
+      Route::resource('asana', 'AsanaController');
+   });
 });
 
 Route::group(array('before' => 'admin'), function() {
    Route::resource('staff', 'AdminManageStaffController');
 
    Route::resource('time', 'AdminReportedTimeController');
+
+   Route::get('customer-report','CustomerViewController@getIndex');
+   Route::get('customer-report/{project}/{from}/{to}', 'CustomerViewController@getProjectOverview');
+   Route::get('customer-report/{project}/{from}/{to}/print', 'CustomerViewController@printProjectOverview');
 });
 
 Route::get('login', 'AuthController@getLogin');
