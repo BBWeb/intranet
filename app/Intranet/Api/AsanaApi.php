@@ -73,6 +73,19 @@ class AsanaApi {
           return $this->apiRequest($this->projectUri . '/' . $projectId . '/tasks?assignee=me');
     }
 
+    public function getParentProject($taskId)
+    {
+        $resultJson = json_decode($this->apiRequest($this->taskUri.'/'.$taskId));
+
+        // check if this one has a project, then return it
+        if (array_key_exists(0, $resultJson->data->projects)) {
+            return $resultJson->data->projects[0];
+        }
+
+        // otherwise we assume that the task has a parent
+        return $this->getParentProject($resultJson->data->parent->id);
+    }
+
     public function getOneTask($taskId){
         $resultJson = json_decode($this->apiRequest($this->taskUri.'/'.$taskId));
 
@@ -85,9 +98,9 @@ class AsanaApi {
             // TODO we really need to integrate this more with redis cache
             //  In some cases we may already have the parent, and in others we want to cache it
             //  For now this should do the trick though
-            $parentTask = $this->getOneTask($resultJson->data->parent->id);
+            $parentProject = $this->getParentProject($resultJson->data->parent->id);
 
-            $castIntoArray = $parentTask['projects'];
+            $castIntoArray = $parentProject;
             // $castIntoArray = array(
             //                     'id' => $resultJson->data->parent->id,
             //                     'name' => 'PARENT TASK: '.$resultJson->data->parent->name
