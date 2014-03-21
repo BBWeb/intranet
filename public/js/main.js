@@ -8,32 +8,36 @@
    $addedTasksTBody.on('click', 'button.remove-button' , showRemoveTaskModal);
    $addedTasksTBody.on('blur', 'input.time-worked', updateWorkedTime);
 
-   $('.confirm-remove-button').click(removeTask);
+  $('.confirm-remove-button').click(removeTask);
 
-   $('#project-data-btn').click(getProjectData);
+  $('#project-data-btn').click(getProjectData);
 
-   // timer click (if not started)
-    //start counting
-  // if started
-  //  stop and reset
   $('.timer').stopwatch().click(function() {
     var $timerBadge = $(this)
-      , elapsedTime = $timerBadge.stopwatch('getTime')
+      , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
       ;
 
-    if ( elapsedTime > 0) {
+    if ( elapsedTimeInMs > 0) {
       $timerBadge.stopwatch('stop');
+      // convert to minutes, elapsedTime is number of ms
+      var elapsedTimeInS = elapsedTimeInMs / 1000
+        , minutesWorked = Math.round( elapsedTimeInS / 60 )
+        ;
 
-      // get the current time, incr the input field
+      // update input field
+      var $timeWorkedInput = $timerBadge.closest('tr').find('input.time-worked')
+        , timeAlreadyWorked = parseInt( $timeWorkedInput.val(), 10 )
+        ;
+      $timeWorkedInput.val( timeAlreadyWorked + minutesWorked );
+
       // report to server etc
-
+      updateWorkedTime.call(this);
 
       $timerBadge.stopwatch('reset');
-      return;
+    } else {
+      $timerBadge.stopwatch('start');
     }
-    $timerBadge.stopwatch('start');
 
-    console.log('Time', $timerBadge.stopwatch('getTime'));
    });
 
    var $trParent;
@@ -66,12 +70,12 @@
        });
    }
 
-   function updateWorkedTime() {
-      var $timeWorkedInput = $(this)
-        , $trParent = $timeWorkedInput.closest('tr')
-        , id = $trParent.data('id')
-        , timeWorked = $timeWorkedInput.val()
-        ;
+  function updateWorkedTime() {
+    var $trParent = $(this).closest('tr')
+      , $timeWorkedInput = $trParent.find('input.time-worked')
+      , id = $trParent.data('id')
+      , timeWorked = $timeWorkedInput.val()
+      ;
 
       $timeWorkedInput.after('<span class="spinner"></span>');
       // TODO mock put request
