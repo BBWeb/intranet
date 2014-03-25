@@ -14,6 +14,7 @@
 
   $('.timer').stopwatch().click(function() {
     var $timerBadge = $(this)
+      , $timeWorkedInput = $timerBadge.closest('tr').find('input.time-worked')
       , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
       ;
 
@@ -25,17 +26,17 @@
         ;
 
       // update input field
-      var $timeWorkedInput = $timerBadge.closest('tr').find('input.time-worked')
-        , timeAlreadyWorked = parseInt( $timeWorkedInput.val(), 10 )
-        ;
+      var timeAlreadyWorked = parseInt( $timeWorkedInput.val(), 10 );
       $timeWorkedInput.val( timeAlreadyWorked + minutesWorked );
 
       // report to server etc
       updateWorkedTime.call(this);
+      $timeWorkedInput.prop( 'disabled', false );
 
       $timerBadge.stopwatch('reset');
     } else {
       $timerBadge.stopwatch('start');
+      $timeWorkedInput.prop( 'disabled', true );
     }
 
    });
