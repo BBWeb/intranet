@@ -50,16 +50,12 @@ class AsanaHandler {
          if ( Cache::has( $task->id ) ) {
             $cachedTaskState = unserialize( Cache::get( $task->id ) );
             $task->taskState = $cachedTaskState;
-
-            if ( $cachedTaskState['completed'] ) unset($tasks->data[$key]);
          } else {
             // get additional info about the tasks (extra HTTP req)
             $taskState = $asana->getOneTask( $task->id );
             $task->taskState = $taskState;
             // cache in redis for set time
             Cache::put( $task->id, serialize( $taskState ), self::CACHE_TIME );
-
-            if ( $taskState['completed'] ) unset($tasks->data[$key]);
          }
 
       }
