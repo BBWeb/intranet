@@ -8,9 +8,38 @@
    $addedTasksTBody.on('click', 'button.remove-button' , showRemoveTaskModal);
    $addedTasksTBody.on('blur', 'input.time-worked', updateWorkedTime);
 
-   $('.confirm-remove-button').click(removeTask);
+  $('.confirm-remove-button').click(removeTask);
 
-   $('#project-data-btn').click(getProjectData);
+  $('#project-data-btn').click(getProjectData);
+
+  $('.timer').stopwatch().click(function() {
+    var $timerBadge = $(this)
+      , $timeWorkedInput = $timerBadge.closest('tr').find('input.time-worked')
+      , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
+      ;
+
+    if ( elapsedTimeInMs > 0) {
+      $timerBadge.stopwatch('stop');
+      // convert to minutes, elapsedTime is number of ms
+      var elapsedTimeInS = elapsedTimeInMs / 1000
+        , minutesWorked = Math.round( elapsedTimeInS / 60 )
+        ;
+
+      // update input field
+      var timeAlreadyWorked = parseInt( $timeWorkedInput.val(), 10 );
+      $timeWorkedInput.val( timeAlreadyWorked + minutesWorked );
+
+      // report to server etc
+      updateWorkedTime.call(this);
+      $timeWorkedInput.prop( 'disabled', false );
+
+      $timerBadge.stopwatch('reset');
+    } else {
+      $timerBadge.stopwatch('start');
+      $timeWorkedInput.prop( 'disabled', true );
+    }
+
+   });
 
    var $trParent;
    function showRemoveTaskModal() {
@@ -42,12 +71,12 @@
        });
    }
 
-   function updateWorkedTime() {
-      var $timeWorkedInput = $(this)
-        , $trParent = $timeWorkedInput.closest('tr')
-        , id = $trParent.data('id')
-        , timeWorked = $timeWorkedInput.val()
-        ;
+  function updateWorkedTime() {
+    var $trParent = $(this).closest('tr')
+      , $timeWorkedInput = $trParent.find('input.time-worked')
+      , id = $trParent.data('id')
+      , timeWorked = $timeWorkedInput.val()
+      ;
 
       $timeWorkedInput.after('<span class="spinner"></span>');
       // TODO mock put request
