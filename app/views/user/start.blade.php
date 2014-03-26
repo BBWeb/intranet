@@ -116,6 +116,7 @@
       <td class="task-project"><%- project_name %></td>
       <td class="task-name"><%- name %></td>
       <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
+      <td><div class="badge timer">00:00:00</div></td>
       <td>
          <button class="btn btn-primary report-button">Rapportera</button>
          <button class="btn btn-danger remove-button">Ta bort</button>

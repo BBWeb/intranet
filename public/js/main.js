@@ -12,7 +12,9 @@
 
   $('#project-data-btn').click(getProjectData);
 
-  $('.timer').stopwatch().click(function() {
+  $('body').on('click', '.timer', function() {
+    $(this).stopwatch();
+
     var $timerBadge = $(this)
       , $timeWorkedInput = $timerBadge.closest('tr').find('input.time-worked')
       , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
@@ -38,8 +40,7 @@
       $timerBadge.stopwatch('start');
       $timeWorkedInput.prop( 'disabled', true );
     }
-
-   });
+  });
 
    var $trParent;
    function showRemoveTaskModal() {
