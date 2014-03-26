@@ -4,7 +4,7 @@
 
    $('#tasks-tbody').on('click', 'button.add-task', addTaskToDb);
 
-   $addedTasksTBody.on('click', 'button.report-button', reportTask);
+   $addedTasksTBody.on('click', 'button.report-button', showReportModal);
    $addedTasksTBody.on('click', 'button.remove-button' , showRemoveTaskModal);
    $addedTasksTBody.on('blur', 'input.time-worked', updateWorkedTime);
 
@@ -46,6 +46,10 @@
       $trParent = $(this).closest('tr');
 
       $('#remove-added-task-modal').modal();
+   }
+
+   function showReportModal() {
+      $('#report-tasks-modal').modal();
    }
 
    function reportTask() {
