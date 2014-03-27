@@ -27,4 +27,35 @@ class Task extends Eloquent {
    {
    		return $query->where('status', '=', 'notreported');
    }
+
+   public function subreports()
+   {
+      return $this->hasMany('Subreport');
+   }
+
+   public function timeToday()
+   {
+      $todaysDate = date('Y-m-d');
+
+      $subreport = $this->hasMany('Subreport')->whereReportedDate($todaysDate)->first();
+
+      $timeWorkedToday = 0;
+
+      if ( $subreport ) $timeWorkedToday = $subreport->time;
+
+      return $timeWorkedToday;
+   }
+
+   public function totaltime()
+   {
+      // get subreports and calculate
+      $subReports = $this->hasMany('Subreport')->get();
+
+      $totalTime = 0;
+      foreach ($subReports as $subReport) {
+         $totalTime += $subReport->time;
+      }
+
+      return $totalTime;
+   }
 }
