@@ -30,14 +30,24 @@ class TaskController extends BaseController {
    public function postUpdateTime()
    {
       $id = Input::get('id');
+      $timeWorked = Input::get('timeWorked');
 
       $task = Task::find( $id );
 
-      $task->time_worked = Input::get('timeWorked');
+      // check if we already have a subreport for this day
+      $todaysDate = date('Y-m-d');
 
-      $task->save();
+      $subreport = $task->subreports()->where('reported_date', '=', $todaysDate)->first();
+      if ( !$subreport ) {
+         $subreport = new Subreport();
+         $subreport->task_id = $task->id;
+         $subreport->reported_date = $todaysDate;
+      }
 
-      return Response::json( $task->toJson() );
+      $subreport->time = $timeWorked;
+      $subreport->save();
+
+      return Response::json( $subreport->toJson() );
    }
 
    public function postUpdateAdjustedTime()
