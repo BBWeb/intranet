@@ -13,6 +13,7 @@
                   <th>Uppgift</th>
                   <th>Tid (minuter)</th>
                   <th>Timer</th>
+                  <th>Total tid (minuter)</th>
                   <th></th>
                </tr>
             </thead>
@@ -21,8 +22,9 @@
                <tr data-id="{{ $task->id }}">
                   <td>{{ $task->theproject->name }}</td>
                   <td>{{ $task->task }}</td>
-                  <td><input type="number" value="{{ $task->time_worked }}" min="0" class="time-worked" style="width: 60px" /></td>
+                  <td><input type="number" value="{{ $task->timeToday() }}" min="0" class="time-worked" style="width: 60px" /></td>
                   <td><div class="badge timer">00:00:00</div></td>
+                  <td>{{ $task->totaltime() }}</td>
                   <td>
                      <button class="btn btn-primary report-button">Rapportera</button>
                      <button class="btn btn-danger remove-button">Ta bort</button>
