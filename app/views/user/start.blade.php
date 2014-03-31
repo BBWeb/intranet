@@ -95,7 +95,18 @@
         <h4 class="modal-title" id="myModalLabel">Rapportera</h4>
       </div>
       <div class="modal-body">
-       <p>Är du säker?</p>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Datum rapporterat</th>
+                <th>Tid (minuter)</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
@@ -125,6 +136,17 @@
       </td>
    </tr>
 </script>
+
+<script type="text/template" id="subreport-template">
+  <% _.each(subreports, function(subreport) { %>
+    <tr>
+      <td><%- subreport.reported_date %></td>
+      <td><%- subreport.time %></td>
+    </tr>
+  <% }); %>
+</script>
+
+
 @stop
 
 @section('footer-scripts')

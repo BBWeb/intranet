@@ -50,7 +50,23 @@
    }
 
    function showReportModal() {
-      $('#report-tasks-modal').modal();
+      var $trParent = $(this).closest('tr');
+      var taskId = $trParent.data('id');
+      var $reportTasksModal = $('#report-tasks-modal');
+      var subreportTemplate = _.template( $('#subreport-template').html() );
+
+      // get tasks for a certain task id
+      $.get('/task/index/' + taskId, function(data, textStatus) {
+        // if not success return
+        if ( textStatus !== 'success' ) return;
+
+        // go through underscore template and add
+        var subreports = JSON.parse( data );
+        console.log('Subreports', subreports);
+        $reportTasksModal.find('tbody').append( subreportTemplate({ subreports: subreports }) );
+
+        $('#report-tasks-modal').modal();
+      });
    }
 
    function reportTask() {
