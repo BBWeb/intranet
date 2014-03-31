@@ -2,6 +2,14 @@
 
 class TaskController extends BaseController {
 
+   public function getIndex($taskId)
+   {
+      $task = Task::find($taskId);
+      $subreports = $task->subreports;
+
+      return Response::json( $subreports->toJson() );
+   }
+
    public function postCreate()
    {
       $input = Input::only('asana_id', 'project_id', 'project_name', 'name');
