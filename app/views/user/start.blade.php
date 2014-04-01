@@ -101,6 +101,7 @@
               <tr>
                 <th>Datum rapporterat</th>
                 <th>Tid (minuter)</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -142,6 +143,7 @@
     <tr>
       <td><%- subreport.reported_date %></td>
       <td><%- subreport.time %></td>
+      <td><button class="btn btn-danger">Ta bort</button></td>
     </tr>
   <% }); %>
 </script>
