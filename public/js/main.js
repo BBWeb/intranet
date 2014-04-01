@@ -63,7 +63,7 @@
         // go through underscore template and add
         var subreports = JSON.parse( data );
         console.log('Subreports', subreports);
-        $reportTasksModal.find('tbody').append( subreportTemplate({ subreports: subreports }) );
+        $reportTasksModal.find('tbody').html( subreportTemplate({ subreports: subreports }) );
 
         $('#report-tasks-modal').modal();
       });
