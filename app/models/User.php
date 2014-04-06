@@ -13,7 +13,7 @@ class User extends Ardent implements UserInterface, RemindableInterface {
 	 */
 	protected $table = 'users';
 
-   public static $rules = array(
+   	public static $rules = array(
       'email' => 'required|email|unique:users',
       'password' => 'required|min:6|confirmed',
       'password_confirmation' => 'required|min:6'
@@ -68,4 +68,21 @@ class User extends Ardent implements UserInterface, RemindableInterface {
    {
       return $this->hasMany('Task');
    }
+
+   public function unpayedTasks()
+   {
+   		$tasks = $this->hasMany('Task')->get();
+
+   		foreach ($tasks as $key => $task) {
+   			$unpayedSubreports = $task->unpayedSubreports;
+
+   			// if there are unpayed subreports, continue
+   			if ( !$unpayedSubreports->isEmpty() ) continue;
+   			// no unpayed subreports, remove from array
+   			unset( $tasks[$key] );
+   		}
+
+   		return $tasks;
+   }
+
 }
