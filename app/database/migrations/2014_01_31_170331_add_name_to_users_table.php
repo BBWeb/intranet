@@ -14,7 +14,7 @@ class AddNameToUsersTable extends Migration {
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-         $table->string('name', 100);
+      $table->string('name', 100);
 		});
 	}
 
