@@ -45,7 +45,7 @@ class TaskController extends BaseController {
       // check if we already have a subreport for this day
       $todaysDate = date('Y-m-d');
 
-      $subreport = $task->subreports()->where('reported_date', '=', $todaysDate)->first();
+      $subreport = $task->subreports()->where('reported_date', '=', $todaysDate)->wherePayed(false)->first();
       if ( !$subreport ) {
          $subreport = new Subreport();
          $subreport->task_id = $task->id;
@@ -87,5 +87,19 @@ class TaskController extends BaseController {
       $id = Input::get('id');
 
       Task::destroy( $id );
+   }
+
+   public function postPay()
+   {
+      $taskIds = Input::get('tasks');
+
+      // find unpayed subreports for these tasks and check them of as payed
+      foreach ($taskIds as $taskId) {
+         $task = Task::find($taskId);
+         $task->payUnpayedSubreports();
+         // $unpayedSubreports = $task->unpayedSubreports;
+      }
+      // $subreports = $tasks->u
+
    }
 }
