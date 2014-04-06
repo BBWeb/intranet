@@ -27,7 +27,12 @@ Route::group(array('before' => 'auth'), function() {
 Route::group(array('before' => 'admin'), function() {
    Route::resource('staff', 'AdminManageStaffController');
 
-   Route::resource('time', 'AdminReportedTimeController');
+   // Route::resource('time', 'AdminReportedTimeController');
+   Route::get('staff-report','AdminReportedTimeController@getIndex');
+   Route::get('staff-report/{user}', 'AdminReportedTimeController@getTimeReport');
+
+   Route::get('staff-report/payed', 'AdminReportedTimeController@getPayedIndex');
+   // Route::get('staff-report/{user}/{from}/{to}/print', 'AdminReportedTimeController@printProjectOverview');
 
    Route::get('customer-report','CustomerViewController@getIndex');
    Route::get('customer-report/{project}/{from}/{to}', 'CustomerViewController@getProjectOverview');
