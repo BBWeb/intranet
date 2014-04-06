@@ -33,6 +33,34 @@ class Task extends Eloquent {
       return $this->hasMany('Subreport');
    }
 
+   public function unpayedSubreports()
+   {
+      return $this->hasMany('Subreport')->wherePayed(false);
+   }
+
+   public function payUnpayedSubreports()
+   {
+      $unpayedSubreports = $this->hasMany('Subreport')->wherePayed(false)->get();
+
+      foreach ($unpayedSubreports as $unpayedSubreport) {
+         $unpayedSubreport->payed = true;
+         $unpayedSubreport->save();
+      }
+   }
+
+   public function unpayedTimeToday()
+   {
+      $todaysDate = date('Y-m-d');
+
+      $subreport = $this->hasMany('Subreport')->whereReportedDate($todaysDate)->wherePayed(false)->first();
+
+      $timeWorkedToday = 0;
+
+      if ( $subreport ) $timeWorkedToday = $subreport->time;
+
+      return $timeWorkedToday;
+   }
+
    public function timeToday()
    {
       $todaysDate = date('Y-m-d');
@@ -44,6 +72,19 @@ class Task extends Eloquent {
       if ( $subreport ) $timeWorkedToday = $subreport->time;
 
       return $timeWorkedToday;
+   }
+
+   public function totalUnpayedTime()
+   {
+      // get subreports and calculate
+      $subReports = $this->hasMany('Subreport')->wherePayed(false)->get();
+
+      $totalTime = 0;
+      foreach ($subReports as $subReport) {
+         $totalTime += $subReport->time;
+      }
+
+      return $totalTime;
    }
 
    public function totaltime()
