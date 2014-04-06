@@ -22,7 +22,7 @@
                <tr data-id="{{ $task->id }}">
                   <td>{{ $task->theproject->name }}</td>
                   <td>{{ $task->task }}</td>
-                  <td><input type="number" value="{{ $task->timeToday() }}" min="0" class="time-worked" style="width: 60px" /></td>
+                  <td><input type="number" value="{{ $task->unpayedTimeToday() }}" min="0" class="time-worked" style="width: 60px" /></td>
                   <td><div class="badge timer">00:00:00</div></td>
                   <td>{{ $task->totaltime() }}</td>
                   <td>
@@ -131,6 +131,7 @@
       <td class="task-name"><%- name %></td>
       <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
       <td><div class="badge timer">00:00:00</div></td>
+      <td>0</td>
       <td>
          <button class="btn btn-primary report-button">Rapportera</button>
          <button class="btn btn-danger remove-button">Ta bort</button>
@@ -142,8 +143,16 @@
   <% _.each(subreports, function(subreport) { %>
     <tr>
       <td><%- subreport.reported_date %></td>
-      <td><%- subreport.time %></td>
-      <td><button class="btn btn-danger">Ta bort</button></td>
+      <td>
+        <input type="number" value="<%- subreport.time %>" style="width: 70px" <% if (subreport.payed == 1) { %> disabled <% } %> />
+      </td>
+      <td>
+        <% if (subreport.payed == 1) { %>
+          Redan betald
+        <% } else { %>
+          <button class="btn btn-danger">Ta bort</button>
+        <% } %>
+      </td>
     </tr>
   <% }); %>
 </script>
