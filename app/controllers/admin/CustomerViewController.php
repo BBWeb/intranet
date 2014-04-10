@@ -17,6 +17,7 @@ class CustomerViewController extends BaseController {
 
 	    $from = date('Y-m-d', strtotime($fromStr));
   		$to = date('Y-m-d', strtotime($toStr));
+
 	    $projectTasks = $project->tasks()->whereBetween('reported_date', array($from, $to))->get();
 
 	    $totalTime = 0;
