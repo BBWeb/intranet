@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddNameToUsersTable extends Migration {
+class AddSoftdeletesToSubreport extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,9 +12,8 @@ class AddNameToUsersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('users', function(Blueprint $table)
-		{
-      $table->string('name', 100);
+		Schema::table('subreports', function($table) {
+			$table->softDeletes();
 		});
 	}
 
@@ -25,9 +24,8 @@ class AddNameToUsersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('users', function(Blueprint $table)
-		{
-         $table->dropColumn('name');
+		Schema::table('subreports', function($table) {
+			$table->dropColumn('deleted_at');
 		});
 	}
 

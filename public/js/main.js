@@ -4,15 +4,23 @@
 
    $('#tasks-tbody').on('click', 'button.add-task', addTaskToDb);
 
-   $addedTasksTBody.on('click', 'button.report-button', reportTask);
+   $addedTasksTBody.on('click', 'button.report-button', showReportModal);
    $addedTasksTBody.on('click', 'button.remove-button' , showRemoveTaskModal);
    $addedTasksTBody.on('blur', 'input.time-worked', updateWorkedTime);
+
+   $('#report-tasks-modal').on('blur', 'input', updateSubreportTime);
 
   $('.confirm-remove-button').click(removeTask);
 
   $('#project-data-btn').click(getProjectData);
 
-  $('.timer').stopwatch().click(function() {
+  $('#report-tasks-modal').on('click', 'button.remove-button', removeSubreport);
+
+  $('#finish-task-btn').click(finishTask);
+
+  $('body').on('click', '.timer', function() {
+    $(this).stopwatch();
+
     var $timerBadge = $(this)
       , $timeWorkedInput = $timerBadge.closest('tr').find('input.time-worked')
       , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
@@ -38,14 +46,32 @@
       $timerBadge.stopwatch('start');
       $timeWorkedInput.prop( 'disabled', true );
     }
-
-   });
+  });
 
    var $trParent;
    function showRemoveTaskModal() {
       $trParent = $(this).closest('tr');
 
       $('#remove-added-task-modal').modal();
+   }
+
+   function showReportModal() {
+      $trParent = $(this).closest('tr');
+      var taskId = $trParent.data('id');
+      var $reportTasksModal = $('#report-tasks-modal');
+      var subreportTemplate = _.template( $('#subreport-template').html() );
+
+      // get tasks for a certain task id
+      $.get('/task/index/' + taskId, function(data, textStatus) {
+        // if not success return
+        if ( textStatus !== 'success' ) return;
+
+        // go through underscore template and add
+        var subreports = JSON.parse( data );
+        $reportTasksModal.find('tbody').html( subreportTemplate({ subreports: subreports }) );
+
+        $('#report-tasks-modal').modal();
+      });
    }
 
    function reportTask() {
@@ -150,4 +176,84 @@
          name: $tr.data('name')
       };
    }
+
+  function removeSubreport() {
+    var $trParent = $(this).closest('tr');
+    var id = $trParent.data('id');
+
+    $.post('/task/remove-subreport', { id: id }, function(data, textStatus) {
+      if ( textStatus !== 'success' ) return;
+
+      $trParent.hide();
+
+      var n = noty({
+        text: 'Du tog bort en delrapport',
+        layout: 'topCenter',
+        type: 'information',
+        template: '<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>',
+        buttons: [
+          {
+            addClass: 'btn btn-primary', text: 'Ångra', onClick: function($noty) {
+              $.post('/task/undo-subreport-remove', { id: id }, function(data, textStatus) {
+                if ( textStatus !== 'success' ) return;
+
+                $trParent.show();
+                $noty.close();
+              // send post req to that server, undoing the action
+              // show the row again
+
+              });
+            }
+          },
+        ]
+      });
+    });
+
+  }
+
+  function finishTask() {
+    var taskId = $trParent.data('id');
+
+    var n = noty({
+      text: 'Är du säker på att du vill "avsluta task?"',
+      layout: 'topCenter',
+      buttons: [
+        {
+          addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
+            $.post('/task/report', { id: taskId }, function(data, textStatus, jqXhr) {
+              if ( textStatus !== 'sucess' )
+
+              // if success, hide modal and tr
+              $trParent.hide();
+              $('#report-tasks-modal').modal('hide');
+            });
+            $noty.close();
+          }
+        },
+        {
+          addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {
+            $noty.close();
+          }
+        }
+      ]
+    });
+  }
+
+  function updateSubreportTime() {
+    var $this = $(this);
+    var $trParent = $this.closest('tr');
+    var id = $trParent.data('id');
+    var timeWorked = $this.val();
+
+    if ( !Number(timeWorked) ) return;
+
+    $this.after('<span class="spinner"></span>');
+      // TODO mock put request
+      $.post('task/update-subreport-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
+         if (textStatus !== 'success') return;
+
+         $this.siblings('.spinner').remove();
+      });
+  }
+
 })();

@@ -28,7 +28,15 @@
               </ul>
             </li>
 
-            <li {{ (Request::is('time') ? ' class="active"' : '') }}><a href="/time">Rapporterad tid (admin)</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lönevy <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/staff-report">Obetalt</a></li>
+                <li><a href="/staff-report/payed">Utbetalt</a></li>
+              </ul>
+            </li>
+<!--             <li {{ (Request::is('time') ? ' class="active"' : '') }}><a href="/staff-report">Lönevy</a></li>
+ -->
             <li><a href="/customer-report">Kundvy</a></li>
             @endif
 

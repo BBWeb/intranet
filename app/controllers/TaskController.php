@@ -2,6 +2,14 @@
 
 class TaskController extends BaseController {
 
+   public function getIndex($taskId)
+   {
+      $task = Task::find($taskId);
+      $subreports = $task->subreports;
+
+      return Response::json( $subreports->toJson() );
+   }
+
    public function postCreate()
    {
       $input = Input::only('asana_id', 'project_id', 'project_name', 'name');
@@ -30,14 +38,37 @@ class TaskController extends BaseController {
    public function postUpdateTime()
    {
       $id = Input::get('id');
+      $timeWorked = Input::get('timeWorked');
 
       $task = Task::find( $id );
 
-      $task->time_worked = Input::get('timeWorked');
+      // check if we already have a subreport for this day
+      $todaysDate = date('Y-m-d');
 
-      $task->save();
+      $subreport = $task->subreports()->where('reported_date', '=', $todaysDate)->wherePayed(false)->first();
+      if ( !$subreport ) {
+         $subreport = new Subreport();
+         $subreport->task_id = $task->id;
+         $subreport->reported_date = $todaysDate;
+      }
 
-      return Response::json( $task->toJson() );
+      $subreport->time = $timeWorked;
+      $subreport->save();
+
+      return Response::json( $subreport->toJson() );
+   }
+
+   public function postUpdateSubreportTime()
+   {
+      $id = Input::get('id');
+      $timeWorked = Input::get('timeWorked');
+
+      $subreport = Subreport::find($id);
+
+      if ($subreport && !$subreport->payed) {
+         $subreport->time = $timeWorked;
+         $subreport->save();
+      }
    }
 
    public function postUpdateAdjustedTime()
@@ -69,5 +100,39 @@ class TaskController extends BaseController {
       $id = Input::get('id');
 
       Task::destroy( $id );
+   }
+
+   public function postRemoveSubreport()
+   {
+      $id = Input::get('id');
+      $subreport = Subreport::find($id);
+
+      if ( $subreport && !$subreport->payed ) $subreport->delete();
+
+      return Response::json();
+   }
+
+   public function postUndoSubreportRemove()
+   {
+      $id = Input::get('id');
+
+      $subreport = Subreport::withTrashed()->find($id);
+      $subreport->restore();
+   }
+
+   public function postPay()
+   {
+      $tasks = Input::get('tasks');
+
+      // // find unpayed subreports for these tasks and check them of as payed
+      foreach ($tasks as $taskId => $task) {
+         $subreports = $task['subreports'];
+
+         foreach ($subreports as $subreportId) {
+            $subreport = Subreport::find($subreportId);
+            $subreport->payed = true;
+            $subreport->save();
+         }
+      }
    }
 }

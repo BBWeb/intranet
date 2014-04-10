@@ -14,3 +14,13 @@
 .timer {
 	cursor: pointer;
 }
+
+a.undo-remove {
+	color: #fff;
+	text-decoration: underline;
+}
+
+span.total-time {
+	text-decoration: underline;
+	cursor: pointer;
+}
