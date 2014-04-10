@@ -69,9 +69,24 @@ class User extends Ardent implements UserInterface, RemindableInterface {
       return $this->hasMany('Task');
    }
 
+   public function payedTasks()
+   {
+      $tasks = $this->hasMany('Task')->with('subreports')->get();
+
+      foreach ($tasks as $key => $task) {
+         $payedSubreports = $task->payedSubreports;
+
+         // if there are no payed subreports for this task, remove
+         if ( $payedSubreports->isEmpty() ) unset( $tasks[$key] );
+      }
+
+      return $tasks;
+   }
+
    public function unpayedTasks()
    {
-   		$tasks = $this->hasMany('Task')->get();
+   		// load subreprots aswell
+   		$tasks = $this->hasMany('Task')->with('subreports')->get();
 
    		foreach ($tasks as $key => $task) {
    			$unpayedSubreports = $task->unpayedSubreports;
@@ -83,6 +98,22 @@ class User extends Ardent implements UserInterface, RemindableInterface {
    		}
 
    		return $tasks;
+   }
+
+   public function unpayedTasksBetween($fromDate, $toDate)
+   {
+      // get tasks that have subreports between dates
+   		// get subreports which has been created between dates..
+      $tasks = $this->hasMany('Task')->with('subreports')->get();
+
+      foreach ($tasks as $key => $task) {
+        $unpayedSubreports = $task->unpayedSubreportsBetween($fromDate, $toDate);
+
+        // no unpayed subreports, remove tasks
+        if ( $unpayedSubreports->isEmpty() ) unset( $tasks[$key] );
+      }
+
+      return $tasks;
    }
 
 }

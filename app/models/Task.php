@@ -33,9 +33,23 @@ class Task extends Eloquent {
       return $this->hasMany('Subreport');
    }
 
+   public function payedSubreports()
+   {
+      return $this->hasMany('Subreport')->wherePayed(true);
+   }
+
    public function unpayedSubreports()
    {
       return $this->hasMany('Subreport')->wherePayed(false);
+   }
+
+   public function unpayedSubreportsBetween($fromDate, $toDate)
+   {
+      $subreports = $this->hasMany('Subreport')->wherePayed(false)
+                     ->whereBetween('reported_date', array( $fromDate, $toDate ))
+                     ->get();
+
+      return $subreports;
    }
 
    public function payUnpayedSubreports()
@@ -74,10 +88,36 @@ class Task extends Eloquent {
       return $timeWorkedToday;
    }
 
+   public function totalPayedTime()
+   {
+      $subReports = $this->hasMany('Subreport')->wherePayed(true)->get();
+
+      $totalTime = 0;
+      foreach ($subReports as $subReport) {
+         $totalTime += $subReport->time;
+      }
+
+      return $totalTime;
+   }
+
    public function totalUnpayedTime()
    {
       // get subreports and calculate
       $subReports = $this->hasMany('Subreport')->wherePayed(false)->get();
+
+      $totalTime = 0;
+      foreach ($subReports as $subReport) {
+         $totalTime += $subReport->time;
+      }
+
+      return $totalTime;
+   }
+
+
+   public function totalUnpayedTimeBetween($from, $to)
+   {
+      // get subreports and calculate
+      $subReports = $this->hasMany('Subreport')->wherePayed(false)->whereBetween('reported_date', array($from, $to))->get();
 
       $totalTime = 0;
       foreach ($subReports as $subReport) {
