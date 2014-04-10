@@ -10,7 +10,7 @@
           <tr>
             <th>Projekt</th>
             <th>Uppgift</th>
-            <th>Rapporterad tid (minuter)</th>
+            <th>Betald tid (minuter)</th>
             <th>Datum rapporterat</th>
           </tr>
         </thead>
@@ -19,7 +19,7 @@
           <tr data-id="{{ $task->id }}">
             <td>{{ $task->theproject->name }}</td>
             <td>{{ $task->task }}</td>
-            <td>{{ $task->totaltime() }}</td>
+            <td>{{ $task->totalPayedTime() }}</td>
             <td>
               @if ($task->reported_date == '0000-00-00')
                 Icke avslutad
@@ -27,17 +27,10 @@
                 {{$task->reported_date }}
               @endif
             </td>
-            <td><input type="checkbox"></td>
           </tr>
           @endforeach
         </tbody>
       </table>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-2">
-      <button class="btn btn-primary">Utbetalning</button>
     </div>
   </div>
 

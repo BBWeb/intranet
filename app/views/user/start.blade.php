@@ -111,7 +111,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
-        <button type="button" class="btn btn-primary">Avsluta task</button>
+        <button type="button" id="finish-task-btn" class="btn btn-primary">Avsluta task</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -141,7 +141,7 @@
 
 <script type="text/template" id="subreport-template">
   <% _.each(subreports, function(subreport) { %>
-    <tr>
+    <tr data-id="<%- subreport.id %>">
       <td><%- subreport.reported_date %></td>
       <td>
         <input type="number" value="<%- subreport.time %>" style="width: 70px" <% if (subreport.payed == 1) { %> disabled <% } %> />
@@ -150,7 +150,7 @@
         <% if (subreport.payed == 1) { %>
           Redan betald
         <% } else { %>
-          <button class="btn btn-danger">Ta bort</button>
+          <button class="btn btn-danger remove-button">Ta bort</button>
         <% } %>
       </td>
     </tr>
@@ -162,4 +162,5 @@
 
 @section('footer-scripts')
    <script src="js/main.js"></script>
+   <script src="js/libs/jquery.noty.packaged.min.js"></script>
 @stop
