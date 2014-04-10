@@ -41,7 +41,16 @@ class AsanaHandler {
       foreach ( $tasks->data as $key => $task ) {
 
          // if the tasks is found already, remove it etc
-         if ( $this->user->tasks()->where('asana_id', '=', $task->id)->first() ) {
+         $existingTask = $this->user->tasks()->where('asana_id', '=', $task->id)->first();
+
+         if ( $existingTask ) {
+            // have the name been changed?
+            if ( $existingTask->task != $task->name ) {
+               // update the task in our db
+               $existingTask->task = $task->name;
+               $existingTask->save();
+            }
+
             unset($tasks->data[$key]);
             continue;
          }
