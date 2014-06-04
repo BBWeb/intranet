@@ -25,7 +25,7 @@ class AdminReportedTimeController extends BaseController {
 
 		$totalTime = 0;
 		foreach ($unpayedTasks as $unpayedTask) {
-			$totalTime += $unpayedTask->totalUnpayedTime();
+			$totalTime += $unpayedTask->totalUnpayedTimeBetween($from, $to);
 		}
 
 		return View::make('admin.staff-report.index',
