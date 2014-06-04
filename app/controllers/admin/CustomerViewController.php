@@ -22,7 +22,7 @@ class CustomerViewController extends BaseController {
 
 	    $totalTime = 0;
 	    foreach ($projectTasks as $task) {
-	    	$totalTime += $task->time_worked;
+	    	$totalTime += $task->totaltime();
 	    }
 
 		return View::make('admin.customer-report.project',
@@ -50,7 +50,7 @@ class CustomerViewController extends BaseController {
 	    foreach ($projectTasks as $projectTask) {
 
 	    	if ( $projectTask->adjusted_time == 0) {
-	    		$projectTask->adjusted_time = $projectTask->time_worked;
+	    		$projectTask->adjusted_time = $projectTask->totaltime();
 	    		$projectTask->save();
 	    	}
 	    	$totalTime += $projectTask->adjusted_time;
