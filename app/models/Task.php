@@ -2,6 +2,8 @@
 
 class Task extends Eloquent {
 
+   protected $fillable = array('user_id', 'asana_id', 'project_id', 'task');
+
    public static $rules = array(
       'time_worked' => 'integer|min:0'
    );

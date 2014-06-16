@@ -2,21 +2,28 @@
 
 class AdminReportedTimeController extends BaseController {
 
+	private $user;
+
+	public function __construct(User $user)
+	{
+		$this->user = $user;
+	}
+
 	public function getIndex()
 	{
-		$users = User::all();
+		$users = $this->user->all();
 
 		return \View::make('admin.staff-report.base')->with(array('users' => $users));
 	}
 
 	public function getTimeReport($userId, $fromStr, $toStr)
 	{
-		$users = User::all();
+		$users = $this->user->all();
 
-		$user = User::find($userId);
+		$user = $this->user->find( $userId );
 
-	    $from = date('Y-m-d', strtotime($fromStr));
-  		$to = date('Y-m-d', strtotime($toStr));
+	    $from = date('Y-m-d', strtotime( $fromStr ));
+  		$to = date('Y-m-d', strtotime( $toStr ));
 
 		// add option for admin to mark tasks as "payed"
     	// TODO we should only get tasks with "unpayed" subreports
@@ -25,7 +32,7 @@ class AdminReportedTimeController extends BaseController {
 
 		$totalTime = 0;
 		foreach ($unpayedTasks as $unpayedTask) {
-			$totalTime += $unpayedTask->totalUnpayedTimeBetween($from, $to);
+			$totalTime += $unpayedTask->totalUnpayedTimeBetween( $from, $to );
 		}
 
 		return View::make('admin.staff-report.index',
@@ -41,15 +48,15 @@ class AdminReportedTimeController extends BaseController {
 
   public function getPayedIndex()
   {
-    $users = User::all();
+    $users = $this->user->all();
 
     return View::make('admin.staff-report.payed', array('users' => $users));
   }
 
   public function getPayedUser($userId)
   {
-    $users = User::all();
-  	$user = User::find($userId);
+    $users = $this->user->all();
+  	$user = $this->user->find($userId);
 
   	$payedTasks = $user->payedTasks();
 

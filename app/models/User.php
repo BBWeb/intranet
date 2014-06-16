@@ -13,7 +13,9 @@ class User extends Ardent implements UserInterface, RemindableInterface {
 	 */
 	protected $table = 'users';
 
-   	public static $rules = array(
+   protected $fillable = array('email', 'name', 'password', 'password_confirmation');
+
+  public static $rules = array(
       'email' => 'required|email|unique:users',
       'password' => 'required|min:6|confirmed',
       'password_confirmation' => 'required|min:6'

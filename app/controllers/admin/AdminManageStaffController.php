@@ -2,9 +2,16 @@
 
 class AdminManageStaffController extends BaseController {
 
+	private $user;
+
+	public function __construct($user)
+	{
+		$this->user = $user;
+	}
+
 	public function index()
 	{
-		$users = User::all();
+		$users = $this->user->all();
 
 		return View::make('admin.manage-staff')->with('staff', $users);
 	}
@@ -16,12 +23,12 @@ class AdminManageStaffController extends BaseController {
 
 	public function store()
 	{
-		$user = new User();
-
-		$user->email = Input::get('email');
-      $user->name = Input::get('name');
-		$user->password = Input::get('password');
-      $user->password_confirmation = Input::get('password');
+		$user = $this->user->create(array(
+			'email' => Input::get('email'),
+			'name' => Input::get('name'),
+			'password' = Input::get('password'),
+			'password_confirmation' => Input::get('password')
+		));
 
 		if ( Input::has('admin') ) $user->admin = true;
 
@@ -32,14 +39,14 @@ class AdminManageStaffController extends BaseController {
 
 	public function edit($id)
 	{
-		$user = User::find( $id );
+		$user = $this->user->find( $id );
 
 		return View::make('admin.edit-staff')->with('staff', $user);
 	}
 
 	public function update($id)
 	{
-		$user = User::find( $id );
+		$user = $this->user->find( $id );
 
       	$password = Input::get('password');
 		$user->password = $password;
