@@ -2,9 +2,20 @@
 
 class TaskController extends BaseController {
 
+   private $task;
+   private $project;
+   private $subreport;
+
+   public function __construct(Task $task, Project $project, Subreport $subreport)
+   {
+      $this->task = $task;
+      $this->project = $project;
+      $this->subreport = $subreport;
+   }
+
    public function getIndex($taskId)
    {
-      $task = Task::find($taskId);
+      $task = $this->task->find( $taskId );
       $subreports = $task->subreports;
 
       return Response::json( $subreports->toJson() );
@@ -15,22 +26,21 @@ class TaskController extends BaseController {
       $input = Input::only('asana_id', 'project_id', 'project_name', 'name');
 
       $projectId = $input['project_id'];
-      $project = Project::find($projectId);
+      $project = $this->project->find( $projectId );
 
       if ( !$project ) {
-         $project = new Project();
-         $project->id = $projectId;
-         $project->name = $input['project_name'];
-         $project->save();
+         $project = $this->project->create(array(
+            'id' => $projectId,
+            'name' => $input['project_name']
+         ));
       }
 
-      // check if id already exists
-      $task = new Task();
-      $task->user_id = Auth::user()->id;
-      $task->asana_id = $input['asana_id'];
-      $task->project_id = $input['project_id'];
-      $task->task = $input['name'];
-      $task->save();
+      $task = $this->task->create(array(
+         'user_id' => Auth::user()->id,
+         'asana_id' => $input['asana_id'],
+         'project_id' => $input['project_id'],
+         'task' => $input['name']
+      ));
 
       return Response::json( $task->toJson() );
    }
@@ -40,16 +50,16 @@ class TaskController extends BaseController {
       $id = Input::get('id');
       $timeWorked = Input::get('timeWorked');
 
-      $task = Task::find( $id );
-
+      $task = $this->task->find( $id );
       // check if we already have a subreport for this day
       $todaysDate = date('Y-m-d');
 
       $subreport = $task->subreports()->where('reported_date', '=', $todaysDate)->wherePayed(false)->first();
       if ( !$subreport ) {
-         $subreport = new Subreport();
-         $subreport->task_id = $task->id;
-         $subreport->reported_date = $todaysDate;
+         $subreport = $this->subreport->create(array(
+            'task_id' $task->id,
+            'reported_date' => $todaysDate
+         ));
       }
 
       $subreport->time = $timeWorked;
@@ -63,7 +73,7 @@ class TaskController extends BaseController {
       $id = Input::get('id');
       $timeWorked = Input::get('timeWorked');
 
-      $subreport = Subreport::find($id);
+      $subreport = $this->subreport->find( $id );
 
       if ($subreport && !$subreport->payed) {
          $subreport->time = $timeWorked;
@@ -74,7 +84,7 @@ class TaskController extends BaseController {
    public function postUpdateAdjustedTime()
    {
       $id = Input::get('id');
-      $task = Task::find( $id );
+      $task = $this->task->find( $id );
       $task->adjusted_time = Input::get('adjusted-time');
       $task->save();
 
@@ -85,7 +95,7 @@ class TaskController extends BaseController {
    {
       $id = Input::get('id');
 
-      $task = Task::find( $id );
+      $task = $this->task->find( $id );
 
       $task->reported_date = date('Y-m-d');
       $task->status = 'reported';
@@ -99,13 +109,13 @@ class TaskController extends BaseController {
    {
       $id = Input::get('id');
 
-      Task::destroy( $id );
+      $this->task->destroy( $id );
    }
 
    public function postRemoveSubreport()
    {
       $id = Input::get('id');
-      $subreport = Subreport::find($id);
+      $subreport = $this->subreport->find( $id );
 
       if ( $subreport && !$subreport->payed ) $subreport->delete();
 
@@ -116,7 +126,7 @@ class TaskController extends BaseController {
    {
       $id = Input::get('id');
 
-      $subreport = Subreport::withTrashed()->find($id);
+      $subreport = $this->subreport->withTrashed()->find($id);
       $subreport->restore();
    }
 
@@ -129,7 +139,7 @@ class TaskController extends BaseController {
          $subreports = $task['subreports'];
 
          foreach ($subreports as $subreportId) {
-            $subreport = Subreport::find($subreportId);
+            $subreport = $this->subreport->find($subreportId);
             $subreport->payed = true;
             $subreport->save();
          }
