@@ -8,7 +8,7 @@ class ProjectsController extends BaseController {
    {
       $user = Auth::user();
 
-      $tasks = $user->tasks()->whereStatus('notreported')->get();
+      $tasks = $user->notreportedTasks;
 
       return View::make('user.start')->with('tasks', $tasks);
    }
