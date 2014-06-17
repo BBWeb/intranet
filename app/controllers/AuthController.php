@@ -16,7 +16,7 @@ class AuthController extends BaseController {
 		{
 			return Redirect::intended('/');
 		}
-		return Redirect::to('/')->with('message', 'Your username/password combination was incorrect')->withInput();
+		return Redirect::to('login')->with('message', 'Your username/password combination was incorrect')->withInput();
 	}
 
    public function getLogout()

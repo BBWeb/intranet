@@ -86,6 +86,11 @@ class User extends Ardent implements UserInterface, RemindableInterface {
       return $this->hasMany('Task');
    }
 
+   public function notreportedTasks()
+   {
+      return $this->tasks()->whereStatus('notreported')->orderBy('created_at', 'DESC');
+   }
+
    public function payedTasks()
    {
       $tasks = $this->hasMany('Task')->with('subreports')->get();

@@ -57,7 +57,7 @@ class TaskController extends BaseController {
       $subreport = $task->subreports()->where('reported_date', '=', $todaysDate)->wherePayed(false)->first();
       if ( !$subreport ) {
          $subreport = $this->subreport->create(array(
-            'task_id' $task->id,
+            'task_id' => $task->id,
             'reported_date' => $todaysDate
          ));
       }
