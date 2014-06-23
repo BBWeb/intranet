@@ -6,20 +6,20 @@
  	{{ Form::open(array('url' => 'staff-report/filter')) }}
 
 	<div class="col-md-2">
-	{{ Form::select('user', $users, null, array('class' => 'form-control', 'id' => 'user')) }}
+	{{ Form::select('user', $users, Session::get('userId'), array('class' => 'form-control', 'id' => 'user')) }}
 	</div>
 
 	<div class="col-md-2">
 		 <div class="input-group date">
 		 	<span class="input-group-addon">Från</span>
-		 	{{ Form::text('from', null, array('class' => 'form-control', 'id' => 'from-date')) }}
+		 	{{ Form::text('from', Session::get('from'), array('class' => 'form-control', 'id' => 'from-date')) }}
 		 </div>
 	</div>
 
 	<div class="col-md-2">
 		<div class="input-group date">
 	 		<span class="input-group-addon">Till</span>
-	 		{{ Form::text('to', null, array('id' => 'to-date', 'class' => 'form-control')) }}
+	 		{{ Form::text('to', Session::get('to'), array('id' => 'to-date', 'class' => 'form-control')) }}
 	 	</div>
 	</div>
 

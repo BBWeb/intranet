@@ -13,16 +13,34 @@ class AdminReportedTimeController extends BaseController {
 	{
 		$users = $this->user->lists('name', 'id');
 
-		return \View::make('admin.staff-report.base')->with(array('users' => $users));
+		// define in helper functions 
+		$lastMonthTimeStamp = mktime(0, 0, 0, date('m') - 1, 1, date('Y'));
+
+		// first day of last month 
+		$defaultFromDate =  date('d-m-Y', $lastMonthTimeStamp);
+		Session::flash('from', $defaultFromDate);
+
+		// last date in last month
+		$defaultToDate = date('t-m-Y', $lastMonthTimeStamp);
+		Session::flash('to', $defaultToDate);
+
+		return \View::make('admin.staff-report.base', array(
+				'users' => $users
+			)
+		);
 	}
 
 	public function getTimeReport($userId, $fromStr, $toStr)
 	{
 		$users = $this->user->lists('name', 'id');
 
+		Session::flash('userId', $userId);
 		$user = $this->user->find( $userId );
 
+		Session::flash('from', $fromStr);
 	    $from = date('Y-m-d', strtotime( $fromStr ));
+
+	    Session::flash('to', $toStr);
   		$to = date('Y-m-d', strtotime( $toStr ));
 
 		// add option for admin to mark tasks as "payed"
