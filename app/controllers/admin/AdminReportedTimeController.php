@@ -11,14 +11,14 @@ class AdminReportedTimeController extends BaseController {
 
 	public function getIndex()
 	{
-		$users = $this->user->all();
+		$users = $this->user->lists('name', 'id');
 
 		return \View::make('admin.staff-report.base')->with(array('users' => $users));
 	}
 
 	public function getTimeReport($userId, $fromStr, $toStr)
 	{
-		$users = $this->user->all();
+		$users = $this->user->lists('name', 'id');
 
 		$user = $this->user->find( $userId );
 
@@ -44,6 +44,17 @@ class AdminReportedTimeController extends BaseController {
 				'totaltime' => $totalTime
 			)
 		);
+	}
+
+
+	// take input options user, dateinterval and create a route from em
+	public function filterTimeReport()
+	{
+		// get input user, from, to	
+		$input = Input::only('user', 'from', 'to');
+
+		$url = route('getTimeReport', $input);
+		return Redirect::to( $url );
 	}
 
   public function getPayedIndex()
