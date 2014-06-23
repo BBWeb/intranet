@@ -164,7 +164,7 @@
 
         // hide the tr we just added
         $trParent.hide();
-        $addedTasksTBody.append( taskTemplate( taskData ) );
+        $addedTasksTBody.prepend( taskTemplate( taskData ) );
       });
    }
 
