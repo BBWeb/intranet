@@ -106,8 +106,11 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-      'Rocketeer\RocketeerServiceProvider', 
-      'Basset\BassetServiceProvider'
+
+		'Rocketeer\RocketeerServiceProvider', 
+		'Basset\BassetServiceProvider',
+
+		'Intranet\Providers\UserServiceProvider'
 	),
 
 	/*
