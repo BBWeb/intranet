@@ -114,7 +114,6 @@ class AsanaApi {
         }
 
         $array = array ( 'completed' => $resultJson->data->completed,
-                         'assignee' => $resultJson->data->assignee->id,
                          'projects' => $castIntoArray
                        );
 
@@ -128,44 +127,6 @@ class AsanaApi {
         $data = json_encode($data);
 
         return $this->apiRequest($this->taskUri.'/'.$taskId , $data, self::PUT_METHOD);
-    }
-
-    public function getEstimatedAndWorkedTime($taskName){
-        $estimatedTimeHours = 0;
-        $estimatedTimeMinutes = 0;
-        $workedTimeHours = 0;
-        $workedTimeMinutes = 0;
-        $workedTime = 0;
-
-        $pattern = "/\[ET\: (\d+)h (\d+)m\] \[WT\: (\d+)h (\d+)m\]$/";
-
-        if(preg_match($pattern, $taskName, $matches)) {
-
-            // estimated time
-            $estimatedTimeHours = $matches[1];
-            $estimatedTimeMinutes = $matches[2];
-
-            // worked time
-            $workedTimeHours = $matches[3];
-            $workedTimeMinutes = $matches[4];
-
-            // worked time in sec
-            $workedTime = $workedTimeHours * 60 * 60 * 1000;
-            $workedTime += $workedTimeMinutes * 60 * 1000;
-
-            $taskName = preg_replace($pattern, "", $taskName);
-        }
-
-        $array = array ( 'taskName' => $taskName,
-                         'estimatedHours' => $estimatedTimeHours,
-                         'estimatedMinutes' => $estimatedTimeMinutes,
-                         'workedHours' => $workedTimeHours,
-                         'workedMinutes' => $workedTimeMinutes,
-                         'workedTimeSec' => $workedTime
-                       );
-
-        return $array;
-
     }
 
     // ##############################################################################################
