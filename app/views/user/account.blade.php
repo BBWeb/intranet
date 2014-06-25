@@ -3,18 +3,16 @@
 @section('content')
 
 <div class="container">
-   @if($errors)
-      @foreach($errors as $error)
-         <p>{{ $error }}</p>
-      @endforeach
-   @endif
+	@if ( Session::has('message') )
+	<p class="alert alert-success">{{ Session::get('message') }}</p> 
+	@endif
 	<h1>Account</h1>
 	<div class="row">
 		<div class="col-md-3">
 			<form role="form">
 				<div class="form-group">
 		    		<label for="email">Email</label>
-		    		<input type="email" class="form-control" value="{{ Auth::User()->email }}" disabled>
+		    		<input type="email" class="form-control" value="{{ Auth::user()->email }}" disabled>
 		  		</div>
 			</form>
 		</div>
@@ -22,28 +20,31 @@
 
 	<div class="row">
 		<div class="col-md-3">
-			<form role="form" method="post" action="account/update-apikey">
+			{{ Form::open(array('url' => 'account/update-apikey')) }}
 				<div class="form-group">
 		    		<label for="api-key">Api-nyckel</label>
-		    		<input type="text" class="form-control" id="api-key" name="api-key" placeholder="Enter api key" value="{{ Auth::User()->api_key }}">
+		    		{{ Form::text('api-key', Auth::user()->api_key, array('placeholder' => 'Enter api key', 'class' => 'form-control', 'id' => 'api-key')) }}
 		  		</div>
 		  		<button type="submit" class="btn btn-default">Uppdatera</button>
-			</form>
+		  	{{ Form::close() }}
 		</div>
 	</div>
 
    <div class="row" style="margin-top: 30px">
       <div class="col-md-3">
-         <form role="form" method="post" action="account/update-password">
+         {{ Form::open(array('url' => 'account/update-password')) }}
             <div class="form-group">
                <label for="password">Lösenord</label>
-               <input type="password" class="form-control" id="password" name="password" placeholder="Lösenord" >
+               {{ Form::password('password', array('class' => 'form-control', 'id' => 'password', 'placeholder' => 'Lösenord' ))}}
+               {{ $errors->first('password', '<span class="text-danger">:message</span>') }}
             </div>
             <div class="form-group">
-               <label for="password">Verifiera lösenord</label>
-               <input type="password" class="form-control" id="password-confirmation" name="password_confirmation" placeholder="Lösenord" >
+               <label for="password_confirmation">Verifiera lösenord</label>
+               {{ Form::password('password_confirmation', array('class' => 'form-control', 'id' => 'password-confirmation', 'placeholder' => 'Lösenord' ))}}
+               {{ $errors->first('password_confirmation', '<span class="text-danger">:message</span>') }}
             </div>
-            <button type="submit" class="btn btn-default">Uppdatera lösenord</button>
+            {{ Form::submit('Uppdatera lösenord', array('class' => 'btn btn-default')) }}
+          {{ Form::close() }}
          </form>
       </div>
    </div>
