@@ -31,7 +31,7 @@ class UserUpdateService {
 		}
 
 		$user = $this->user->find( $attributes['id'] ); 
-		$user->save( $attributes );
+		$user->update( $attributes );
 	}
 
 	public function errors()
