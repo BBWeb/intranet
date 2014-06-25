@@ -3,6 +3,7 @@
 use Intranet\Service\Validation\ValidableInterface;
 use Intranet\Service\User\UserValidator;
 use Intranet\Repositories\User\UserInterface;
+use Illuminate\Support\Facades\Hash;
 
 class UserCreatorService {
 
@@ -22,6 +23,11 @@ class UserCreatorService {
 		if ( !$this->valid( $attributes ) )
 		{
 			return false;
+		}
+
+		if ( array_key_exists('password', $attributes) ) 
+		{
+			$attributes['password'] = Hash::make( $attributes['password'] );
 		}
 
 		return $this->user->create( $attributes );

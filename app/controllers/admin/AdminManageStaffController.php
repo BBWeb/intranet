@@ -50,7 +50,7 @@ class AdminManageStaffController extends BaseController {
 
 	public function edit($id)
 	{
-		$user = $this->user->find( $id );
+		$user = $this->user->findOrFail( $id );
 
 		return View::make('admin.edit-staff')->with('staff', $user);
 	}
