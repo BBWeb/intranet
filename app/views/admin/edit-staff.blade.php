@@ -12,15 +12,18 @@
       {{ Form::open(array('method' => 'put', 'url' => array('/staff', $staff->id) )) }}
            <div class="form-group">
              <label for="name">Namn</label>
-             <input type="text" class="form-control" name="name" id="name" placeholder="Enter name" value="{{ $staff->name }}" >
+             {{ Form::text('name', $staff->name, array('class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name')) }}
+             {{ $errors->first('name', '<span class="text-danger">:message</span>') }}
            </div>
            <div class="form-group">
              <label for="email">E-mail</label>
-             <input type="email" class="form-control" id="email" placeholder="Enter email" value="{{ $staff->email }}" disabled>
+             {{ Form::email('email', $staff->email, array('class' => 'form-control', 'id' => 'email', 'placeholder' => 'Enter email', 'disabled' => true)) }}
+             {{ $errors->first('email', '<span class="text-danger">:message</span>') }}
            </div>
            <div class="form-group">
              <label for="exampleInputPassword1">Password</label>
-             <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+             {{ Form::password('password', array('class' => 'form-control', 'id' => 'password',  'placeholder' => 'Password')) }}
+             {{ $errors->first('password', '<span class="text-danger">:message</span>') }}
            </div>
            <div class="checkbox">
              <label>
