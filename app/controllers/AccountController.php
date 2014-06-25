@@ -38,11 +38,12 @@ class AccountController extends BaseController {
 
       $input = array_merge( Input::all(), array('id' => $user->id) );
 
-      if ( !$this->userUpdateService->update( $input ) )
-      {
-         return Redirect::to('account')->withErrors( $this->userUpdateService->errors() );
+      $updateSuccess = $this->userUpdateService->update( $input );
+
+      if ( !$updateSuccess ) {
+         return Redirect::to('/account')->withErrors( $this->userUpdateService->errors() );
       }
 
-      return Redirect::to('account')->with('message', 'Success!');
+      return Redirect::to('/account')->with('message', 'Lösenord uppdaterat!');
    }
 }
