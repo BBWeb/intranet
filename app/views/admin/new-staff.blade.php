@@ -2,34 +2,31 @@
 
 @section('content')
 <div class="container">
-   @if($errors)
-      @foreach($errors as $error)
-         <p>{{ $error }}</p>
-      @endforeach
-   @endif
-   <div class="row">
+  <div class="row">
       <div class="col-md-6">
-         <form role="form" method="POST" action="/staff">
+        {{ Form::open(array('url' => '/staff'))}}
            <div class="form-group">
              <label for="email">Email address</label>
-             <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+             {{ Form::email('email', null, array('class' => 'form-control', 'id' => 'email', 'placeholder' => 'Enter email')) }}
+             {{ $errors->first('email', '<span class="text-danger">:message</span>') }}
            </div>
            <div class="form-group">
              <label for="name">Name</label>
-             <input type="text" class="form-control" name="name" id="name" placeholder="Enter name">
+             {{ Form::text('name', null, array('class' => 'form-control', 'id' => 'name', 'placeholder' => 'Enter name')) }}
+             {{ $errors->first('name', '<span class="text-danger">:message</span>') }}
            </div>
            <div class="form-group">
-             <label for="exampleInputPassword1">Password</label>
-             <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+             <label for="password">Password</label>
+             {{ Form::password('password', array('class' => 'form-control', 'id' => 'password', 'placeholder' => 'Password')) }}
+             {{ $errors->first('password', '<span class="text-danger">:message</span>') }}
            </div>
            <div class="checkbox">
              <label>
                <input type="checkbox" name="admin" value="admin"> Admin
              </label>
            </div>
-           <button type="submit" class="btn btn-success">Lägg till</button>
-         </form>
-
+          {{ Form::submit('Lägg till', array('class' => 'btn btn-success')) }}
+        {{ Form::close() }}
       </div>
    </div>
 @stop
