@@ -1,6 +1,15 @@
 <?php
 
+use Intranet\Service\User\UserUpdateService;
+
 class AccountController extends BaseController {
+
+   private $userUpdateService;
+
+   public function __construct(UserUpdateService $userUpdateService)
+   {
+      $this->userUpdateService = $userUpdateService;
+   }
 
 	public function getIndex()
 	{
@@ -15,7 +24,7 @@ class AccountController extends BaseController {
 
       $user->api_key = $apiKey;
 
-      if ( !$user->forceSave() ) return Redirect::to('account')->with('errors', $user->errors()->all());
+      $user->update();
 
       return Redirect::to('account');
    }
@@ -27,8 +36,13 @@ class AccountController extends BaseController {
       $user->password = Input::get('password');
       $user->password_confirmation = Input::get('password_confirmation');
 
-      $user->updateUniques();
+      $input = array_merge( Input::all(), array('id' => $user->id) );
 
-      return Redirect::to('account');
+      if ( !$this->userUpdateService->update( $input ) )
+      {
+         return Redirect::to('account')->withErrors( $this->userUpdateService->errors() );
+      }
+
+      return Redirect::to('account')->with('message', 'Success!');
    }
 }
