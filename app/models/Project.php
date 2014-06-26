@@ -7,4 +7,9 @@ class Project extends Eloquent {
 	public function tasks() {
 		return $this->hasMany('Task');
 	}
+
+	public function orderedTasks()
+	{
+		return $this->hasMany('Task')->orderBy('created_at');
+	}
 }
