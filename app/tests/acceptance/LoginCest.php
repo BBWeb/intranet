@@ -26,6 +26,6 @@ class LoginCest
    		$I->click('Sign in');
 
    		$I->seeCurrentUrlEquals('');
-    }
+   }
 
 }
