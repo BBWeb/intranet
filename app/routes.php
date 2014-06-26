@@ -46,6 +46,14 @@ Route::group(array('before' => 'admin'), function() {
    Route::get('customer-report/{project}/{from}/{to}/print', 'CustomerViewController@printProjectOverview');
 
    Route::get('changes', 'ChangesController@getIndex');
+   Route::post('changes', 'ChangesController@postIndex');
+
+   Route::get('changes/{project}', array(
+      'as' => 'changes.project',
+      'uses' => 'ChangesController@getProject'
+      )
+   );
+
 });
 
 Route::get('login', 'AuthController@getLogin');
