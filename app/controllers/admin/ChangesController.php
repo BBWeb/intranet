@@ -2,9 +2,16 @@
 
 class ChangesController extends \BaseController {
 
+	private $project;
+
+	public function __construct(Project $project)
+	{
+		$this->project = $project;
+	}
+
 	public function getIndex()
 	{
-		$projects = Project::lists('name', 'id');
+		$projects = $this->project->lists('name', 'id');
 		// we want a list of projects
 		return \View::make('admin.changes.base', array(
 			'projects' => $projects
@@ -14,8 +21,23 @@ class ChangesController extends \BaseController {
 
 	public function postIndex()
 	{
-		// get project	
+		$projectId = Input::get('project');		
 
-		// construct a route
+		$url = route('changes.project', array( $projectId ));
+
+		return Redirect::to( $url );
+	}
+
+	public function getProject($id)
+	{
+		$projects = $this->project->lists('name', 'id');
+		$project = $this->project->find( $id )->with('orderedTasks')->first();
+
+		return View::make('admin.changes.project', array(
+			'projects' => $projects	,
+			'project' => $project
+			)
+		);
+
 	}
 }
