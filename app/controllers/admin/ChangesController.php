@@ -4,6 +4,18 @@ class ChangesController extends \BaseController {
 
 	public function getIndex()
 	{
-		return \View::make('admin.changes.base');	
+		$projects = Project::lists('name', 'id');
+		// we want a list of projects
+		return \View::make('admin.changes.base', array(
+			'projects' => $projects
+			)
+		);	
 	}	
+
+	public function postIndex()
+	{
+		// get project	
+
+		// construct a route
+	}
 }

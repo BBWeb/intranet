@@ -3,8 +3,16 @@
 @section('content')
 
  <div class="row">
- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam nulla itaque facilis architecto odio voluptate optio, quae cupiditate sed quis ipsum, veritatis sunt dolorum doloribus eius id maiores earum aliquam.
-</div>
+ 	{{ Form::open(array('url' => 'changes')) }}
+ 	<div class="col-md-3">
+		{{ Form::select('project', $projects, null, array('class' => 'form-control')) }}
+	</div>
+
+ 	<div class="col-md-2">
+ 		<button type="submit" id="search-project-tasks" class="btn btn-primary">Sök</button>
+ 	</div>
+ 	{{ Form::close() }}
+ 	</div>
 @stop
 
 @section('footer-scripts')
