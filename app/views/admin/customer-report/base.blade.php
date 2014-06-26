@@ -14,14 +14,14 @@
 	<div class="col-md-2">
 		 <div class="input-group date">
 		 	<span class="input-group-addon">Från</span>
-		 	<input type="text" name="from" id="from-date" class="form-control">
+		 	{{ Form::text('from', Session::get('from'), array('id' => 'from-date', 'class' => 'form-control')) }}
 		 </div>
 	</div>
 
 	<div class="col-md-2">
 		<div class="input-group date">
 	 		<span class="input-group-addon">Till</span>
-	 		<input type="text" name="to" id="to-date" class="form-control" >
+	 		{{ Form::text('to', Session::get('to'), array('id' => 'to-date', 'class' => 'form-control')) }}
 	 	</div>
 	</div>
 
