@@ -38,6 +38,8 @@
 <!--             <li {{ (Request::is('time') ? ' class="active"' : '') }}><a href="/staff-report">Lönevy</a></li>
  -->
             <li><a href="/customer-report">Kundvy</a></li>
+
+            <li class="@if (Request::is('changes*')) active @endif"><a href="#">Förändringar</a></li>
             @endif
 
           </ul>

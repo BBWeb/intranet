@@ -44,6 +44,8 @@ Route::group(array('before' => 'admin'), function() {
    Route::get('customer-report','CustomerViewController@getIndex');
    Route::get('customer-report/{project}/{from}/{to}', 'CustomerViewController@getProjectOverview');
    Route::get('customer-report/{project}/{from}/{to}/print', 'CustomerViewController@printProjectOverview');
+
+   Route::get('changes', 'ChangesController@getIndex');
 });
 
 Route::get('login', 'AuthController@getLogin');
