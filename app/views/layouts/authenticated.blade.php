@@ -39,7 +39,7 @@
  -->
             <li><a href="/customer-report">Kundvy</a></li>
 
-            <li class="@if (Request::is('changes*')) active @endif"><a href="#">Förändringar</a></li>
+            <li class="@if (Request::is('changes*')) active @endif"><a href="/changes">Förändringar</a></li>
             @endif
 
           </ul>
