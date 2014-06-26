@@ -14,6 +14,7 @@ class TaskTableSeeder extends Seeder {
 			'user_id' => $user->id,
 			'asana_id' => '1',
 			'project_id' => 1,
+			'task' => 'Task 1'
 		));
 
 		// date
