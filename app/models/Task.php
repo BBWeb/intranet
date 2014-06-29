@@ -30,6 +30,44 @@ class Task extends Eloquent {
    		return $query->where('status', '=', 'notreported');
    }
 
+   public function modifiedNameIfAny()
+   {
+      $title = $this->task;
+
+      $modifiedNameTask = $this->modifiedTaskName;
+
+      if ( $modifiedNameTask )
+      {
+         $title = $modifiedNameTask->modified_title;
+      }
+
+      return $title;
+   }
+
+   public function modifiedDateIfAny()
+   {
+      $date = $this->reported_date;
+
+      $modifiedDateTask = $this->modifiedTaskDate;
+
+      if ( $modifiedDateTask )
+      {
+         $date = $modifiedDateTask->modified_date;
+      }
+
+      return $date;
+   }
+
+   public function modifiedTaskDate()
+   {
+      return $this->hasOne('ModifiedDateTask');
+   }
+
+   public function modifiedTaskName()
+   {
+      return $this->hasOne('ModifiedNameTask');
+   }
+
    public function subreports()
    {
       return $this->hasMany('Subreport');
