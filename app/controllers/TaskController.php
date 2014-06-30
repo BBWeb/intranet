@@ -1,16 +1,20 @@
 <?php
 
+use Intranet\Service\Task\TaskModifierService;
+
 class TaskController extends BaseController {
 
    private $task;
    private $project;
    private $subreport;
+   private $taskModifier;
 
-   public function __construct(Task $task, Project $project, Subreport $subreport)
+   public function __construct(Task $task, Project $project, Subreport $subreport, TaskModifierService $taskModifier)
    {
       $this->task = $task;
       $this->project = $project;
       $this->subreport = $subreport;
+      $this->taskModifier = $taskModifier;
    }
 
    public function getIndex($taskId)
@@ -19,6 +23,35 @@ class TaskController extends BaseController {
       $subreports = $task->subreports;
 
       return Response::json( $subreports->toJson() );
+   }
+   
+   /**
+    * Returns name and date, if modified data exists then returns that
+    * @param  [integer] $id 
+    * @return [json] id, title, date
+    */
+   public function getModifiedTaskData($id)
+   {
+      $task = $this->task->find( $id );
+
+      $taskTitle = $task->modifiedNameIfAny();
+      $taskDate = $task->modifiedDateIfAny();
+
+      // return json
+      return Response::json(array(
+         'id' => $task->id,
+         'title' => $taskTitle,
+         'date' => $taskDate
+         )
+      );
+
+   }
+
+   public function putModifyTask($id)
+   {
+      $this->taskModifier->modifyTask( $id, Input::all() );
+
+      return Response::json(array('id' => $id)); 
    }
 
    public function postCreate()
