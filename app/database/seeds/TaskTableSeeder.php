@@ -6,10 +6,14 @@ class TaskTableSeeder extends Seeder {
 	{
 		DB::table('tasks')->delete();
 
-      // find niklas
+    	 // find niklas
 		$user = DB::table('users')->where('email', 'niklas@bbweb.se')->first();
 
-		// add a task
+		// ADD some tasks for Niklas under different projects
+		// NOTE that these are used in acceptance testing 
+		// Total time for these should equal 66 minutes
+
+		// Test project
 		$task = Task::create(array(
 			'user_id' => $user->id,
 			'asana_id' => '1',
@@ -17,16 +21,31 @@ class TaskTableSeeder extends Seeder {
 			'task' => 'Task 1'
 		));
 
-		// date
-		$dateTimestamp = mktime(0, 0, 0, 6, 11, 2014);
-		$date = date('Y-m-d', $dateTimestamp);	
+		$this->createSubreport($task, 31, '2014-06-11');
+		// create an already payed subreport
+		$this->createSubreport($task, 60, '2014-06-05', true);
 
-		$subreport = Subreport::create(array(
+		$this->createSubreport($task, 10, '2014-07-14');
+
+		// add another task to Test project for Niklas
+		$task2 = Task::create(array(
+			'user_id' => $user->id,
+			'asana_id' => '2',
+			'project_id' => 1,
+			'task' => 'Task 2'
+		));
+
+		$this->createSubreport($task2, 25, '2014-05-01');
+	}
+
+	private function createSubreport($task, $time, $date, $payed = false)
+	{
+		Subreport::create(array(
 			'task_id' => $task->id,
-			'time' => 31,
-			'reported_date' => $date
+			'time' => $time,
+			'reported_date' => $date,
+			'payed' => $payed
 			)
-		); 
-
+		);	
 	}
 }

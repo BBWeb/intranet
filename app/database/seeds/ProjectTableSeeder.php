@@ -10,6 +10,12 @@ class ProjectTableSeeder extends Seeder {
 			'id' => 1,
 			'name' => 'Test project'	
 			)
-		);		
+		);
+
+		Project::create(array(
+			'id' => 2,
+			'name' => 'Second test project'
+			)
+		);
 	}
 }
