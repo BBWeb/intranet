@@ -32,8 +32,8 @@ class UserCest
 	}
 
 	/**
-	* @before loginWithProperCredentials
-	*/ 
+     * @before loginWithProperCredentials
+     */
 	public function changePasswordWithProperCredentials(WebGuy $I)
 	{
 		$I->fillField('password', '123user');
