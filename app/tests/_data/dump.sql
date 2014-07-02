@@ -34,8 +34,62 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES ('2014_01_12_164147_create_users_table',1),('2014_01_12_191729_add_apikey_to_user_table',1),('2014_01_16_132455_create_tasks_table',1),('2014_01_31_162100_add_reported_date_to_tasks_table',1),('2014_01_31_170331_add_name_to_users_table',1),('2014_03_16_141059_create_projects_table',1),('2014_03_16_152116_add_ref_to_projects_for_tasks_table',1),('2014_03_20_193908_add_adjusted_time_to_tasks',1),('2014_03_26_170441_create_timereport_table',1),('2014_04_04_133619_add_payed_attr_to_subreports',1),('2014_04_07_135130_add_softdeletes_to_subreport',1),('2014_06_04_173851_add_remember_token_to_users_table',1);
+INSERT INTO `migrations` VALUES ('2014_01_12_164147_create_users_table',1),('2014_01_12_191729_add_apikey_to_user_table',1),('2014_01_16_132455_create_tasks_table',1),('2014_01_31_162100_add_reported_date_to_tasks_table',1),('2014_01_31_170331_add_name_to_users_table',1),('2014_03_16_141059_create_projects_table',1),('2014_03_16_152116_add_ref_to_projects_for_tasks_table',1),('2014_03_20_193908_add_adjusted_time_to_tasks',1),('2014_03_26_170441_create_timereport_table',1),('2014_04_04_133619_add_payed_attr_to_subreports',1),('2014_04_07_135130_add_softdeletes_to_subreport',1),('2014_06_04_173851_add_remember_token_to_users_table',1),('2014_06_26_131131_create_modified_date_tasks_table',1),('2014_06_27_132600_create_modified_name_tasks_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `modified_date_tasks`
+--
+
+DROP TABLE IF EXISTS `modified_date_tasks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `modified_date_tasks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) NOT NULL,
+  `modified_date` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `modified_date_tasks_task_id_index` (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `modified_date_tasks`
+--
+
+LOCK TABLES `modified_date_tasks` WRITE;
+/*!40000 ALTER TABLE `modified_date_tasks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `modified_date_tasks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `modified_name_tasks`
+--
+
+DROP TABLE IF EXISTS `modified_name_tasks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `modified_name_tasks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) NOT NULL,
+  `modified_title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `modified_name_tasks_task_id_index` (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `modified_name_tasks`
+--
+
+LOCK TABLES `modified_name_tasks` WRITE;
+/*!40000 ALTER TABLE `modified_name_tasks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `modified_name_tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -60,7 +114,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (1,'Test project','2014-06-26 17:18:04','2014-06-26 17:18:04');
+INSERT INTO `projects` VALUES (1,'Test project','2014-07-01 19:07:27','2014-07-01 19:07:27');
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +145,7 @@ CREATE TABLE `subreports` (
 
 LOCK TABLES `subreports` WRITE;
 /*!40000 ALTER TABLE `subreports` DISABLE KEYS */;
-INSERT INTO `subreports` VALUES (1,1,31,'2014-06-11','2014-06-26 17:18:04','2014-06-26 17:18:04',0,NULL);
+INSERT INTO `subreports` VALUES (1,1,31,'2014-06-11','2014-07-01 19:07:27','2014-07-01 19:07:27',0,NULL);
 /*!40000 ALTER TABLE `subreports` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,7 +179,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,1,'1','','',0,'notreported','2014-06-26 17:18:04','2014-06-26 17:18:04','0000-00-00',1,0);
+INSERT INTO `tasks` VALUES (1,1,'1','','Task 1',0,'notreported','2014-07-01 19:07:27','2014-07-01 19:07:27','0000-00-00',1,0);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,7 +211,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'niklas@bbweb.se','$2y$10$xzN6BRiE9JKwzHuvMqeSb.4ZwHLLK7LiFOeUJ/UlLBCzNy1nftM1m',1,'2014-06-26 17:18:04','2014-06-26 17:18:04','123','Niklas Andréasson',NULL),(2,'user@bbweb.se','$2y$10$XZKyprnVhDN3r39HSWpzP.oz1hiF8UHDATg3N5U8/75xJii/rojN6',0,'2014-06-26 17:18:04','2014-06-26 17:18:04','','User Doe',NULL);
+INSERT INTO `users` VALUES (1,'niklas@bbweb.se','$2y$10$crI42GuaM6rNhPNj04u6jewWpE5OREd60GXveBAKEGeHJhUkKoCfe',1,'2014-07-01 19:07:27','2014-07-01 19:07:27','123','Niklas Andréasson',NULL),(2,'user@bbweb.se','$2y$10$O2aqgizOdiqNBQBISeyGEu19AoNcMxDgMuj3UYvwo3dLfuMpqmZgy',0,'2014-07-01 19:07:27','2014-07-01 19:07:27','','User Doe',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -170,4 +224,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-26  7:18:08
+-- Dump completed on 2014-07-01  9:07:42
