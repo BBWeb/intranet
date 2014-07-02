@@ -41,10 +41,19 @@ Route::group(array('before' => 'admin'), function() {
    Route::get('staff-report/payed/{user}', 'AdminReportedTimeController@getPayedUser');
    // Route::get('staff-report/{user}/{from}/{to}/print', 'AdminReportedTimeController@printProjectOverview');
 
+
+   // CUSTOMER REPORT 
    Route::get('customer-report','CustomerViewController@getIndex');
-   Route::get('customer-report/{project}/{from}/{to}', 'CustomerViewController@getProjectOverview');
+   Route::post('customer-report/filter', 'CustomerViewController@filter');
+   Route::get('customer-report/{project}/{from}/{to}', array(
+         'as' => 'customer.getTimeReport',
+         'uses' => 'CustomerViewController@getProjectOverview'
+      )
+   );
+
    Route::get('customer-report/{project}/{from}/{to}/print', 'CustomerViewController@printProjectOverview');
 
+   // CHANGES
    Route::get('changes', 'ChangesController@getIndex');
    Route::post('changes', 'ChangesController@postIndex');
 
