@@ -31,10 +31,12 @@ class ChangesController extends \BaseController {
 	public function getProject($id)
 	{
 		$projects = $this->project->lists('name', 'id');
-		$project = $this->project->find( $id )->with('orderedTasks')->first();
+
+		Session::flash('projectId', $id);	
+		$project = $this->project->find( $id );
 
 		return View::make('admin.changes.project', array(
-			'projects' => $projects	,
+			'projects' => $projects,
 			'project' => $project
 			)
 		);

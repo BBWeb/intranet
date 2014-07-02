@@ -5,7 +5,7 @@
  <div class="row">
  	{{ Form::open(array('url' => 'changes')) }}
  	<div class="col-md-3">
-		{{ Form::select('project', $projects, null, array('class' => 'form-control')) }}
+		{{ Form::select('project', $projects, Session::get('projectId'), array('class' => 'form-control')) }}
 	</div>
 
  	<div class="col-md-2">
