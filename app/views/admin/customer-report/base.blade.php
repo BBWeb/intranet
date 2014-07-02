@@ -3,13 +3,9 @@
 @section('content')
 
  <div class="row">
- 	{{ Form::open(array('url' => 'customer-report', 'method' => 'get')) }}
+ 	{{ Form::open(array('url' => 'customer-report/filter')) }}
 	<div class="col-md-3">
-		<select name="project" id="project" class="form-control">
-			@foreach($projects as $project)
-		  		<option value="{{ $project->id }}">{{ $project->name }}</option>
-			@endforeach
-		</select>
+		{{ Form::select('project', $projects, Session::get('projectId'), array('class' => 'form-control', 'id' => 'user')) }}
 	</div>
 	<div class="col-md-2">
 		 <div class="input-group date">
@@ -26,7 +22,7 @@
 	</div>
 
 	<div class="col-md-2">
-		<button type="submit" id="search-project-tasks" class="btn btn-primary">Sök</button>
+		{{ Form::submit('Sök', array('class' => 'btn btn-primary')) }}
 	</div>
 	{{ Form::close() }}
 </div>
