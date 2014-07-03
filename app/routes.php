@@ -13,7 +13,6 @@
 
 Route::group(array('before' => 'auth'), function() {
    Route::controller('account', 'AccountController');
-   Route::get('reported-time', 'ReportedTimeController@getIndex');
 
    Route::group(array('before' => 'apikey'), function() {
       Route::get('/', 'ProjectsController@getIndex');
@@ -22,6 +21,27 @@ Route::group(array('before' => 'auth'), function() {
 
       Route::resource('asana', 'AsanaController');
    });
+});
+
+Route::group(array('before' => 'auth', 'prefix' => 'reported-time'), function() {
+
+   Route::get('/', array(
+      'as' => 'reported-time.index',
+      'uses' => 'ReportedTimeController@getIndex'
+      )
+   );
+   
+   Route::get('/{project}', array(
+      'as' => 'reported-time.showProject',
+      'uses' => 'ReportedTimeController@showProject'
+      )
+   );
+
+   Route::post('/', array(
+      'as' => 'reported-time.filter',
+      'uses' => 'ReportedTimeController@filter'
+      )
+   );
 });
 
 Route::group(array('before' => 'admin'), function() {

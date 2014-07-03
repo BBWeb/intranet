@@ -3,36 +3,62 @@
 @section('content')
 
 <div class="container">
-	<div class="col-md-12">
-     	<table class="table table-bordered">
-        	<thead>
-               <tr>
-                  <th>Projekt</th>
-                  <th>Uppgift</th>
-                  <th>Obetald tid</th>
-                  <th>Tid (minuter)</th>
-                  <th>Datum (rapporterat)</th>
-               </tr>
-           </thead>
-           <tbody>
-            @foreach($tasks as $task)
-               <tr data-id="{{ $task->id }}">
-                  <td>{{ $task->theproject->name }}</td>
-                  <td>{{ $task->task }}</td>
-                  <td>{{ $task->totalUnpayedTime() }}</td>
-                  <td><span class="total-time" href="">{{ $task->totaltime() }}</span></td>
-                  <td>
-                    @if ($task->reported_date == '0000-00-00')
-                      Icke avslutad
-                    @else
-                      {{$task->reported_date }}
-                    @endif
-                  </td>
-    	       </tr>
-            @endforeach
-            </tbody>
-            </table>
-      </div>
+  <div class="row">
+    <div class="col-md-6">
+      {{ Form::open(array('route' => 'reported-time.filter', 'class' => 'form-inline')) }}
+        <div class="form-group">
+          <label for="exampleInputEmail2">Projekt</label>
+          {{ Form::select('project', array('all' => 'Alla') + $projects, Session::get('project'), array('class' => 'form-control')) }}
+        </div>
+      
+        {{ Form::submit('Filtrera', array('class' => 'btn btn-primary')) }}        
+      {{ Form::close() }}
+    </div>
+  </div>
+  
+  <div class="row" style="margin-top: 15px">
+    <div class="col-md-6">
+     <!-- unpayed time in hours and minutes  -->
+      <ul class="list-unstyled">
+        <li>Obetald tid {{ $totalUnpayed->hours }} timmar {{ $totalUnpayed->minutes }} minuter</li>
+        <li>Betald tid {{ $totalPayed->hours }} timmar {{ $totalPayed->minutes }} minuter</li>
+      </ul>
+     <!-- payed time in hours and minutes -->
+    </div> 
+  </div>
+
+  <div class="row" style="margin-top: 15px">
+    <div class="col-md-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Projekt</th>
+            <th>Uppgift</th>
+            <th>Obetald tid</th>
+            <th>Tid (minuter)</th>
+            <th>Datum (rapporterat)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($tasks as $task)
+          <tr data-id="{{ $task->id }}">
+            <td>{{ $task->theproject->name }}</td>
+            <td>{{ $task->task }}</td>
+            <td>{{ $task->totalUnpayedTime() }}</td>
+            <td><span class="total-time" href="">{{ $task->totaltime() }}</span></td>
+            <td>
+              @if ($task->reported_date == '0000-00-00')
+              Icke avslutad
+              @else
+              {{$task->reported_date }}
+              @endif
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 
