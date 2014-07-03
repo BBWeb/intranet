@@ -7,14 +7,16 @@ class AuthController extends BaseController {
 		return View::make('login');
 	}
 
-	public function postLogin() {
+	public function postLogin() 
+	{
 		$userCredentials = Input::only('email', 'password');
 		$remember = Input::has('remember-me');
 
-		if ( Auth::attempt( $userCredentials, $remember ) ) {
+		if ( Auth::attempt( $userCredentials, $remember ) ) 
+		{
 			return Redirect::intended('/');
 		}
-		return Redirect::to('/')->with('message', 'Your username/password combination was incorrect')->withInput();
+		return Redirect::to('login')->with('message', 'Your username/password combination was incorrect')->withInput();
 	}
 
    public function getLogout()
@@ -23,6 +25,5 @@ class AuthController extends BaseController {
 
       return Redirect::to('login');
    }
-
 
 }

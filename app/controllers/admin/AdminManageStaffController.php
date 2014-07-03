@@ -1,10 +1,24 @@
 <?php
 
+use Intranet\Service\User\UserCreatorService;
+use Intranet\Service\User\UserUpdateService;
+
 class AdminManageStaffController extends BaseController {
+
+	private $user;
+	private $userCreator;
+	private $userUpdateService;
+
+	public function __construct(User $user, UserCreatorService $userCreator, UserUpdateService $userUpdateService)
+	{
+		$this->user = $user;
+		$this->userCreator = $userCreator;
+		$this->userUpdateService = $userUpdateService;
+	}
 
 	public function index()
 	{
-		$users = User::all();
+		$users = $this->user->all();
 
 		return View::make('admin.manage-staff')->with('staff', $users);
 	}
@@ -16,43 +30,52 @@ class AdminManageStaffController extends BaseController {
 
 	public function store()
 	{
-		$user = new User();
+		$user = $this->userCreator->save(array(
+			'email' => Input::get('email'),
+			'name' => Input::get('name'),
+			'password' => Input::get('password'),
+			'password_confirmation' => Input::get('password'),
+			'admin' => Input::has('admin')
+		));
 
-		$user->email = Input::get('email');
-      $user->name = Input::get('name');
-		$user->password = Input::get('password');
-      $user->password_confirmation = Input::get('password');
-
-		if ( Input::has('admin') ) $user->admin = true;
-
-	    if ( !$user->save() ) return Redirect::to('/staff/create')->with('errors', $user->errors()->all());
+	    if ( !$user ) 
+	    {
+	    	return Redirect::to('/staff/create')
+	    			->withErrors( $this->userCreator->errors() )
+	    			->withInput();
+	    }
 
 		return Redirect::to('/staff');
 	}
 
 	public function edit($id)
 	{
-		$user = User::find( $id );
+		$user = $this->user->find( $id );
 
 		return View::make('admin.edit-staff')->with('staff', $user);
 	}
 
 	public function update($id)
 	{
-		$user = User::find( $id );
+    $password = Input::get('password');
 
-      	$password = Input::get('password');
-		$user->password = $password;
-      	$user->password_confirmation = $password;
+		$input = array(
+			'id' => $id,
+			'password' => $password,
+			'password_confirmation' => $password,
+			'admin' => Input::has('admin')
+		);
 
-		if ( !$user->updateUniques() ) return Redirect::to('/staff/' . $id . '/edit')->with('errors', $user->errors()->all());
+		if ( !$this->userUpdateService->update( $input ) )  {
+			return Redirect::to('/staff/' . $id . '/edit')->withErrors( $this->userUpdateService->errors() );
+		}
 
 		return Redirect::to('/staff');
 	}
 
 	public function destroy($id)
 	{
-		User::destroy($id);
+		$this->user->destroy($id);
 	}
 
 }

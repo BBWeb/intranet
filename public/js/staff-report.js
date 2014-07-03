@@ -1,18 +1,5 @@
 $('.input-group.date').datepicker({
   format: 'dd-mm-yyyy'
-}).datepicker('setDate', new Date());
-
-$('#search-user-tasks').click(function(e) {
-  e.preventDefault();
-
-  var selectedUser = $('#user').val()
-    , fromDate = $('#from-date').val()
-    , toDate = $('#to-date').val()
-    ;
-
-  var url = [ '/staff-report', selectedUser, fromDate, toDate ].join('/');
-
-  $(location).attr('href', url);
 });
 
 $('#pay-btn').click(function(e) {

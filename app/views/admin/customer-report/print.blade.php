@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h2>{{ $project->name }} <small>{{ $from }} - {{ $to }}</small></h2>
-			<p>Total tid {{ $totalTime }} minuter</p>
+			<p>Total tid {{ $hours }} timmar {{ $minutes }} minuter</p>
 		</div>
 	</div>
 
@@ -21,9 +21,9 @@
 				<tbody>
 					@foreach($tasks as $task)
 					<tr>
-						<td>{{ $task->task }}</td>
+						<td>{{ $task->modifiedNameIfAny() }}</td>
 						<td>{{ $task->adjusted_time }}</td>
-						<td>{{ $task->reported_date }}</td>
+						<td>{{ $task->modifiedDateIfAny() }}</td>
 					</tr>
 					@endforeach
 				</tbody>

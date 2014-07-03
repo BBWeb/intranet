@@ -24,10 +24,10 @@
 				<tbody>
 					@foreach($tasks as $task)
 					<tr data-id="{{ $task->id }}">
-						<td>{{ $task->task }}</td>
+						<td>{{ $task->modifiedNameIfAny() }}</td>
 						<td>{{ $task->totaltime() }}</td>
 						<td><input type="number" min="0" name="adjusted-time" class="adjusted-time" value="{{ $task->totaltime() }}" style="width: 60px"></td>
-						<td>{{ $task->reported_date }}</td>
+						<td>{{ $task->modifiedDateIfAny() }}</td>
 					</tr>
 					@endforeach
 				</tbody>

@@ -3,31 +3,28 @@
 @section('content')
 
  <div class="row">
- 	{{ Form::open(array('url' => 'staff-report', 'method' => 'get')) }}
+ 	{{ Form::open(array('url' => 'staff-report/filter')) }}
+
 	<div class="col-md-2">
-		<select name="user" id="user" class="form-control">
-			@foreach($users as $user)
-		  		<option value="{{ $user->id }}" @if(Request::segment(2) == $user->id)selected="selected" @endif>{{ $user->name }}</option>
-			@endforeach
-		</select>
+	{{ Form::select('user', $users, Session::get('userId'), array('class' => 'form-control', 'id' => 'user')) }}
 	</div>
 
 	<div class="col-md-2">
 		 <div class="input-group date">
 		 	<span class="input-group-addon">Från</span>
-		 	<input type="text" name="from" id="from-date" class="form-control">
+		 	{{ Form::text('from', Session::get('from'), array('class' => 'form-control', 'id' => 'from-date')) }}
 		 </div>
 	</div>
 
 	<div class="col-md-2">
 		<div class="input-group date">
 	 		<span class="input-group-addon">Till</span>
-	 		<input type="text" name="to" id="to-date" class="form-control" >
+	 		{{ Form::text('to', Session::get('to'), array('id' => 'to-date', 'class' => 'form-control')) }}
 	 	</div>
 	</div>
 
 	<div class="col-md-2">
-		<button type="submit" id="search-user-tasks" class="btn btn-primary">Sök</button>
+	{{ Form::submit('Sök', array('class' => 'btn btn-primary', 'id' => 'search-user-tasks'))}}
 	</div>
 	{{ Form::close() }}
 </div>

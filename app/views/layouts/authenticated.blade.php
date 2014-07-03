@@ -38,14 +38,16 @@
 <!--             <li {{ (Request::is('time') ? ' class="active"' : '') }}><a href="/staff-report">Lönevy</a></li>
  -->
             <li><a href="/customer-report">Kundvy</a></li>
+
+            <li class="@if (Request::is('changes*')) active @endif"><a href="/changes">Förändringar</a></li>
             @endif
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Acccount <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Konto <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="/account">Account</a></li>
+                <li><a href="/account">Profil</a></li>
                 <li class="divider"></li>
                 <li><a href="/logout">Log out</a></li>
               </ul>

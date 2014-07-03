@@ -2,21 +2,46 @@
 
 class AdminReportedTimeController extends BaseController {
 
+	private $user;
+
+	public function __construct(User $user)
+	{
+		$this->user = $user;
+	}
+
 	public function getIndex()
 	{
-		$users = User::all();
+		$users = $this->user->lists('name', 'id');
 
-		return \View::make('admin.staff-report.base')->with(array('users' => $users));
+		// define in helper functions 
+		$lastMonthTimeStamp = mktime(0, 0, 0, date('m') - 1, 1, date('Y'));
+
+		// first day of last month 
+		$defaultFromDate =  date('d-m-Y', $lastMonthTimeStamp);
+		Session::flash('from', $defaultFromDate);
+
+		// last date in last month
+		$defaultToDate = date('t-m-Y', $lastMonthTimeStamp);
+		Session::flash('to', $defaultToDate);
+
+		return \View::make('admin.staff-report.base', array(
+				'users' => $users
+			)
+		);
 	}
 
 	public function getTimeReport($userId, $fromStr, $toStr)
 	{
-		$users = User::all();
+		$users = $this->user->lists('name', 'id');
 
-		$user = User::find($userId);
+		Session::flash('userId', $userId);
+		$user = $this->user->find( $userId );
 
-	    $from = date('Y-m-d', strtotime($fromStr));
-  		$to = date('Y-m-d', strtotime($toStr));
+		Session::flash('from', $fromStr);
+	    $from = date('Y-m-d', strtotime( $fromStr ));
+
+	    Session::flash('to', $toStr);
+  		$to = date('Y-m-d', strtotime( $toStr ));
 
 		// add option for admin to mark tasks as "payed"
     	// TODO we should only get tasks with "unpayed" subreports
@@ -25,7 +50,7 @@ class AdminReportedTimeController extends BaseController {
 
 		$totalTime = 0;
 		foreach ($unpayedTasks as $unpayedTask) {
-			$totalTime += $unpayedTask->totalUnpayedTimeBetween($from, $to);
+			$totalTime += $unpayedTask->totalUnpayedTimeBetween( $from, $to );
 		}
 
 		return View::make('admin.staff-report.index',
@@ -39,17 +64,28 @@ class AdminReportedTimeController extends BaseController {
 		);
 	}
 
+
+	// take input options user, dateinterval and create a route from em
+	public function filterTimeReport()
+	{
+		// get input user, from, to	
+		$input = Input::only('user', 'from', 'to');
+
+		$url = route('getTimeReport', $input);
+		return Redirect::to( $url );
+	}
+
   public function getPayedIndex()
   {
-    $users = User::all();
+    $users = $this->user->all();
 
     return View::make('admin.staff-report.payed', array('users' => $users));
   }
 
   public function getPayedUser($userId)
   {
-    $users = User::all();
-  	$user = User::find($userId);
+    $users = $this->user->all();
+  	$user = $this->user->find($userId);
 
   	$payedTasks = $user->payedTasks();
 
