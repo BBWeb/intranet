@@ -105,7 +105,7 @@ CREATE TABLE `projects` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,7 +114,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (1,'Test project','2014-07-01 19:07:27','2014-07-01 19:07:27');
+INSERT INTO `projects` VALUES (1,'Test project','2014-07-03 19:24:41','2014-07-03 19:24:41'),(2,'Second test project','2014-07-03 19:24:41','2014-07-03 19:24:41');
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,7 +136,7 @@ CREATE TABLE `subreports` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `subreports_task_id_index` (`task_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +145,7 @@ CREATE TABLE `subreports` (
 
 LOCK TABLES `subreports` WRITE;
 /*!40000 ALTER TABLE `subreports` DISABLE KEYS */;
-INSERT INTO `subreports` VALUES (1,1,31,'2014-06-11','2014-07-01 19:07:27','2014-07-01 19:07:27',0,NULL);
+INSERT INTO `subreports` VALUES (1,1,31,'2014-06-11','2014-07-03 19:24:41','2014-07-03 19:24:41',0,NULL),(1,2,60,'2014-06-05','2014-07-03 19:24:41','2014-07-03 19:24:41',1,NULL),(1,3,10,'2014-07-14','2014-07-03 19:24:41','2014-07-03 19:24:41',0,NULL),(2,4,25,'2014-05-01','2014-07-03 19:24:41','2014-07-03 19:24:41',0,NULL);
 /*!40000 ALTER TABLE `subreports` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +170,7 @@ CREATE TABLE `tasks` (
   `project_id` bigint(20) NOT NULL,
   `adjusted_time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +179,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,1,'1','','Task 1',0,'notreported','2014-07-01 19:07:27','2014-07-01 19:07:27','0000-00-00',1,0);
+INSERT INTO `tasks` VALUES (1,1,'1','','Task 1',0,'notreported','2014-07-03 19:24:41','2014-07-03 19:24:41','0000-00-00',1,0),(2,1,'2','','Task 2',0,'notreported','2014-07-03 19:24:41','2014-07-03 19:24:41','0000-00-00',1,0);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -211,7 +211,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'niklas@bbweb.se','$2y$10$crI42GuaM6rNhPNj04u6jewWpE5OREd60GXveBAKEGeHJhUkKoCfe',1,'2014-07-01 19:07:27','2014-07-01 19:07:27','123','Niklas Andréasson',NULL),(2,'user@bbweb.se','$2y$10$O2aqgizOdiqNBQBISeyGEu19AoNcMxDgMuj3UYvwo3dLfuMpqmZgy',0,'2014-07-01 19:07:27','2014-07-01 19:07:27','','User Doe',NULL);
+INSERT INTO `users` VALUES (1,'niklas@bbweb.se','$2y$10$eWaPGrQFBC2ykRWnnDMqY.SBTdjt3VwU2yg2V/nrK02UF23ZIK1/a',1,'2014-07-03 19:24:41','2014-07-03 19:24:41','123','Niklas Andréasson',NULL),(2,'user@bbweb.se','$2y$10$trSO1Y3wTad0nTazXI/GL.iPu6THHVSpUY9ChG05v1G80r76Cut8W',0,'2014-07-03 19:24:41','2014-07-03 19:24:41','','User Doe',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -224,4 +224,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-07-01  9:07:42
+-- Dump completed on 2014-07-03  9:25:04
