@@ -102,5 +102,5 @@
 @stop
 
 @section('footer-scripts')
-   <script src="js/reported-time.js"></script>
+   <script src="/js/reported-time.js"></script>
 @stop
