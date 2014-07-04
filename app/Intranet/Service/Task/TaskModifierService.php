@@ -2,7 +2,7 @@
 
 use \Task;
 use \ModifiedNameTask;
-use \modifiedDateTask;
+use \ModifiedDateTask;
 
 class TaskModifierService {
 
@@ -10,7 +10,7 @@ class TaskModifierService {
 	private $modifiedNameTask;
 	private $modifiedDateTask;
 
-	public function __construct(Task $task, ModifiedNameTask $modifiedNameTask, modifiedDateTask $modifiedDateTask)
+	public function __construct(Task $task, ModifiedNameTask $modifiedNameTask, ModifiedDateTask $modifiedDateTask)
 	{
 		$this->task = $task;
 		$this->modifiedNameTask = $modifiedNameTask;
