@@ -5,6 +5,18 @@
 <div class="container">
 
    <div class="row">
+      <div class="col-md-5">
+      {{ Form::open([ 'url' => '/', 'method' => 'GET', 'class' => 'form-inline' ]) }}
+            <div class="form-group">
+               <label for="project-select" class="">Visa projekt</label>
+               {{ Form::select('project', array( 'all' => 'All' ) +$projects, Session::get('project'), array('id' => 'project-select', 'class' => 'form-control')) }}
+            </div>
+            {{ Form::submit('Filtrera', array('class' => 'btn btn-primary'))}}
+      {{ Form::close() }}
+      </div>
+   </div>
+
+   <div class="row" style="margin-top: 10px">
       <div class="col-md-12">
          <table class="table table-bordered">
             <thead>

@@ -1,16 +1,37 @@
 <?php
 
-use Intranet\Handlers\AsanaHandler;
-
 class ProjectsController extends BaseController {
 
-   public function getIndex()
-   {
-      $user = Auth::user();
+	private $project;
 
-      $tasks = $user->notreportedTasks;
+	public function __construct(Project $project)
+	{
+		$this->project = $project;
+	}
 
-      return View::make('user.start')->with('tasks', $tasks);
-   }
+	public function getIndex()
+	{
+		$user = Auth::user();
+
+		$projects = $this->project->lists('name', 'id');
+
+		$projectId = Input::get('project');
+		Session::flash('project', $projectId);
+
+		$tasks;
+
+		if ( $projectId == '' || $projectId == 'all' ) {
+			$tasks = $user->notreportedTasks;
+		} else {
+			$tasks = $user->notreportedTasksFor( $projectId )->get();
+		}
+
+		return View::make('user.start', array(
+			'projects' => $projects,
+			'tasks' => $tasks
+			)
+		);
+	}
+
 }
 

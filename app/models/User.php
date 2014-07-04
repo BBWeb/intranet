@@ -76,6 +76,14 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return $this->tasks()->whereStatus('notreported')->orderBy('created_at', 'DESC');
    }
 
+   public function notreportedTasksFor($project)
+   {
+      return $this->tasks()
+             ->whereStatus('notreported')
+             ->where('project_id', '=', $project)  
+             ->orderBy('created_at', 'DESC');
+   }
+
    public function payedTasks()
    {
       $tasks = $this->hasMany('Task')->with('subreports')->get();
