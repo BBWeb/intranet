@@ -1,8 +1,4 @@
 (function( $ ){
-
-    function incrementer(ct, increment) {
-        return function() { ct+=increment; return ct; };
-    }
     
     function pad2(number) {
          return (number < 10 ? '0' : '') + number;
@@ -41,7 +37,7 @@
         init: function(options) {
             var defaults = {
                 updateInterval: 1000,
-                startTime: 0,
+                initialTime: 0,
                 format: '{HH}:{MM}:{SS}',
                 formatter: formatMilliseconds
             };
@@ -59,12 +55,11 @@
                     data = settings;
                     data.active = false;
                     data.target = $this;
-                    data.elapsed = settings.startTime;
+                    data.elapsed = settings.initialTime;
                     // create counter
-                    data.incrementer = incrementer(data.startTime, data.updateInterval);
                     data.tick_function = function() {
-                        var millis = data.incrementer();
-                        data.elapsed = millis;
+                        var timeNow = new Date().getTime();
+                        data.elapsed = millis = timeNow - data.startTime; 
                         data.target.trigger('tick.stopwatch', [millis]);
                         data.target.stopwatch('render');
                     };
@@ -80,6 +75,7 @@
                     data = $this.data('stopwatch');
                 // Mark as active
                 data.active = true;
+                data.startTime = new Date().getTime();
                 data.timerID = setInterval(data.tick_function, data.updateInterval);
                 $this.data('stopwatch', data);
             });
@@ -131,8 +127,7 @@
             return this.each(function() {
                 var $this = $(this);
                     data = $this.data('stopwatch');
-                data.incrementer = incrementer(data.startTime, data.updateInterval);
-                data.elapsed = data.startTime;
+                data.elapsed = data.initialTime;
                 $this.data('stopwatch', data);
             });
         }
