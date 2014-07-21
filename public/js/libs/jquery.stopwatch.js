@@ -64,6 +64,7 @@
                         data.target.stopwatch('render');
                     };
                     $this.data('stopwatch', data);
+                    data.target.stopwatch('render');
                 }
                 
             });
@@ -127,7 +128,7 @@
             return this.each(function() {
                 var $this = $(this);
                     data = $this.data('stopwatch');
-                data.elapsed = data.initialTime;
+                data.elapsed = 0;
                 $this.data('stopwatch', data);
             });
         }

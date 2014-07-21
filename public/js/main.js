@@ -1,5 +1,24 @@
 ;(function() {
 
+  initTimeFromLocalStorage();
+  // we want 
+  function initTimeFromLocalStorage() {
+    var $addedTasks = $('#added-tasks-tbody tr');
+
+    $addedTasks.each(function() {
+      var $tr = $(this);
+      var taskId = $tr.data('id'); 
+
+      var timeForRow = getLocalStorageFor( taskId );
+
+      if ( timeForRow === 0 ) return true; 
+
+      var $timerBadge = $tr.find('.timer');
+      $timerBadge.stopwatch({ initialTime: timeForRow });
+    });
+
+  }
+
    var $addedTasksTBody = $('#added-tasks-tbody');
 
    $('#tasks-tbody').on('click', 'button.add-task', addTaskToDb);
@@ -18,35 +37,66 @@
 
   $('#finish-task-btn').click(finishTask);
 
-  $('body').on('click', '.timer', function() {
-    $(this).stopwatch();
+  $('body').on('click', '.timer', handleTimer);
 
-    var $timerBadge = $(this)
-      , $timeWorkedInput = $timerBadge.closest('tr').find('input.time-worked')
+  function convertMillisToMinutes(ms) {
+    var elapsedTimeInS = ms / 1000;
+    var minutesWorked = Math.round( elapsedTimeInS / 60 );
+    return minutesWorked;
+  }
+
+  function getLocalStorageFor(id) {
+    var time = +localStorage.getItem('time.' + id) || 0;
+    return time;
+  }
+
+  function setLocalStorageFor(id, time) {
+    localStorage.setItem('time.' + id, millis);
+  }
+
+  function clearLocalStorageFor(id) {
+    localStorage.removeItem('time.' + id); 
+  }
+
+  function handleTimer() {
+    var $trParent = $(this).closest('tr')
+    , id = $trParent.data('id')
+    ;
+
+    var $timerBadge = $(this);
+    var stopwatch = $timerBadge.stopwatch();
+
+    var $timeWorkedInput = $timerBadge.closest('tr').find('input.time-worked')
       , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
+      , timerIsRunning = elapsedTimeInMs > 0
       ;
 
-    if ( elapsedTimeInMs > 0) {
-      $timerBadge.stopwatch('stop');
-      // convert to minutes, elapsedTime is number of ms
-      var elapsedTimeInS = elapsedTimeInMs / 1000
-        , minutesWorked = Math.round( elapsedTimeInS / 60 )
-        ;
-
-      // update input field
-      var timeAlreadyWorked = parseInt( $timeWorkedInput.val(), 10 );
-      $timeWorkedInput.val( timeAlreadyWorked + minutesWorked );
-
-      // report to server etc
-      updateWorkedTime.call(this);
-      $timeWorkedInput.prop( 'disabled', false );
-
-      $timerBadge.stopwatch('reset');
-    } else {
+    if ( !timerIsRunning ) {
       $timerBadge.stopwatch('start');
       $timeWorkedInput.prop( 'disabled', true );
+
+      stopwatch.on('tick.stopwatch', function(e, millis) {
+        setLocalStorageFor(id, millis);
+      });
+
+      return;
     }
-  });
+
+    // timer was running when we clicked "time"
+    $timerBadge.stopwatch('stop');
+    // convert to minutes, elapsedTime is number of ms
+    var minutesWorked = convertMillisToMinutes( elapsedTimeInMs );
+
+    // update input field
+    var timeAlreadyWorked = parseInt( $timeWorkedInput.val(), 10 );
+    $timeWorkedInput.val( timeAlreadyWorked + minutesWorked );
+
+    // report to server etc
+    updateWorkedTime.call(this);
+    $timeWorkedInput.prop( 'disabled', false );
+
+    $timerBadge.stopwatch('reset');
+  }
 
    var $trParent;
    function showRemoveTaskModal() {
@@ -109,6 +159,7 @@
       $.post('task/update-time', { id: id, timeWorked: timeWorked }, function(data, textStatus, jqXhr) {
          if (textStatus !== 'success') return;
 
+         clearLocalStorageFor(id);
          $timeWorkedInput.siblings('.spinner').remove();
       });
    }
