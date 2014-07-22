@@ -47,6 +47,16 @@ Route::group(array('before' => 'auth', 'prefix' => 'reported-time'), function() 
 Route::group(array('before' => 'admin'), function() {
    Route::resource('staff', 'AdminManageStaffController');
 
+   Route::get('/staff/{id}/edit/personal', [
+      'as' => 'staff.personal',
+      'uses' => 'AdminManageStaffController@personal'
+      ]);
+
+   Route::get('/staff/{id}/edit/company', [
+     'as' => 'staff.company',
+     'uses' => 'AdminManageStaffController@company' 
+      ]);
+
    // Route::resource('time', 'AdminReportedTimeController');
    Route::get('staff-report','AdminReportedTimeController@getIndex');
 

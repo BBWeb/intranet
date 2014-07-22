@@ -52,7 +52,7 @@ class AdminManageStaffController extends BaseController {
 	{
 		$user = $this->user->find( $id );
 
-		return View::make('admin.edit-staff')->with('staff', $user);
+		return View::make('admin.staff.account')->with('staff', $user);
 	}
 
 	public function update($id)
@@ -76,6 +76,20 @@ class AdminManageStaffController extends BaseController {
 	public function destroy($id)
 	{
 		$this->user->destroy($id);
+	}
+
+	public function personal($id)
+	{
+		$user = $this->user->find($id);
+
+		return View::make('admin.staff.personal')->with('staff', $user);
+	}
+
+	public function company($id)
+	{
+		$user = $this->user->find($id);
+
+		return View::make('admin.staff.company')->with('staff', $user);
 	}
 
 }
