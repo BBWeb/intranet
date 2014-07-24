@@ -14,6 +14,8 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 
    protected $fillable = array('email', 'name', 'password', 'admin');
 
+   public $presenter = 'Intranet\Presenters\StaffPresenter';
+
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -69,6 +71,16 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
    public function tasks()
    {
       return $this->hasMany('Task');
+   }
+
+   public function personaldata()
+   {
+      return $this->hasOne('StaffPersonalData');
+   }
+
+   public function companydata()
+   {
+      return $this->hasOne('StaffCompanyData');
    }
 
    public function notreportedTasks()

@@ -110,7 +110,9 @@ return array(
 		'Rocketeer\RocketeerServiceProvider', 
 		'Basset\BassetServiceProvider',
 
-		'Intranet\Providers\UserServiceProvider'
+		'Intranet\Providers\UserServiceProvider',
+
+		'McCool\LaravelAutoPresenter\LaravelAutoPresenterServiceProvider'
 	),
 
 	/*

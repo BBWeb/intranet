@@ -4,8 +4,13 @@ use Illuminate\Support\ServiceProvider;
 
 use Intranet\Service\User\UserCreatorService;
 use Intranet\Service\User\UserCreateValidator;
+
 use Intranet\Service\User\UserUpdateService;
 use Intranet\Service\User\UserUpdateValidator;
+
+use Intranet\Service\User\UserUpdatePersonalService;
+use Intranet\Service\User\UserUpdateCompanyService;
+
 
 class UserServiceProvider extends ServiceProvider {
 
@@ -26,6 +31,20 @@ class UserServiceProvider extends ServiceProvider {
 			return new UserUpdateService(
 				new UserUpdateValidator( $app['validator'] ),
 				$app->make('User')
+			);
+		});
+
+		$app->bind('Intranet\Service\User\UserUpdatePersonalService', function($app)
+		{
+			return new UserUpdatePersonalService(
+				$app->make('StaffPersonalData')
+			);
+		});
+
+		$app->bind('Intranet\Service\User\UserUpdateCompanyService', function($app)
+		{
+			return new UserUpdateCompanyService(
+				$app->make('StaffCompanyData')
 			);
 		});
 	}

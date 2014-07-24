@@ -2,18 +2,30 @@
 
 use Intranet\Service\User\UserCreatorService;
 use Intranet\Service\User\UserUpdateService;
+use Intranet\Service\User\UserUpdatePersonalService;
+use Intranet\Service\User\UserUpdateCompanyService;
 
 class AdminManageStaffController extends BaseController {
 
 	private $user;
 	private $userCreator;
 	private $userUpdateService;
+	private $userUpdatePersonalService;
+	private $userUpdateCompanyService;
 
-	public function __construct(User $user, UserCreatorService $userCreator, UserUpdateService $userUpdateService)
+	public function __construct(
+		User $user, 
+		UserCreatorService $userCreator, 
+		UserUpdateService $userUpdateService, 
+		UserUpdatePersonalService $userUpdatePersonalService,
+		UserUpdateCompanyService $userUpdateCompanyService
+	)
 	{
 		$this->user = $user;
 		$this->userCreator = $userCreator;
 		$this->userUpdateService = $userUpdateService;
+		$this->userUpdatePersonalService = $userUpdatePersonalService;
+		$this->userUpdateCompanyService = $userUpdateCompanyService;
 	}
 
 	public function index()
@@ -57,7 +69,7 @@ class AdminManageStaffController extends BaseController {
 
 	public function update($id)
 	{
-    $password = Input::get('password');
+		$password = Input::get('password');
 
 		$input = array(
 			'id' => $id,
@@ -85,11 +97,31 @@ class AdminManageStaffController extends BaseController {
 		return View::make('admin.staff.personal')->with('staff', $user);
 	}
 
+	public function updatepersonal($id)
+	{
+		Log::info('Update personal');
+		$user = $this->user->find($id);
+
+		$this->userUpdatePersonalService->update( ['user_id' => $user->id ] + Input::all() );
+
+		// redirect back to view
+		return Redirect::back();
+	}
+
 	public function company($id)
 	{
 		$user = $this->user->find($id);
 
 		return View::make('admin.staff.company')->with('staff', $user);
+	}
+
+	public function updatecompany($id)
+	{
+		$user = $this->user->find($id);			
+
+		$this->userUpdateCompanyService->update( ['user_id' => $user->id ] + Input::all() );
+
+		return Redirect::back();
 	}
 
 }

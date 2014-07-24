@@ -52,10 +52,20 @@ Route::group(array('before' => 'admin'), function() {
       'uses' => 'AdminManageStaffController@personal'
       ]);
 
+   Route::put('/staff/{id}/edit/personal', [
+      'as' => 'staff.updatepersonal',
+      'uses' => 'AdminManageStaffController@updatepersonal'
+      ]);
+
    Route::get('/staff/{id}/edit/company', [
      'as' => 'staff.company',
      'uses' => 'AdminManageStaffController@company' 
       ]);
+
+   Route::put('/staff/{id}/edit/company', [
+      'as' => 'staff.updatecompany',
+      'uses' => 'AdminManageStaffController@updatecompany'
+   ]);
 
    // Route::resource('time', 'AdminReportedTimeController');
    Route::get('staff-report','AdminReportedTimeController@getIndex');
