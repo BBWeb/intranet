@@ -83,6 +83,21 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return $this->hasOne('StaffCompanyData');
    }
 
+   public function paymentdata()
+   {
+      return $this->hasMany('StaffPaymentData');
+   }
+
+   public function getActivePaymentInfo()
+   {
+      $currentDate = date('Y-m-d');
+
+      // query to get the one active where startDate <= currentDate, the one with the most recent start_date should be the active one
+      $paymentdata = $this->paymentdata()->where('start_date', '<=', $currentDate)->orderBy('start_date', 'desc');   
+      
+      return $paymentdata->first();
+   }
+
    public function notreportedTasks()
    {
       return $this->tasks()->whereStatus('notreported')->orderBy('created_at', 'DESC');

@@ -77,4 +77,33 @@ class StaffPresenter extends BasePresenter {
 	{
 		return $this->getCompanyData('bank_nr');
 	}
+
+	public function currentHourlySalary()
+	{
+		$activePaymentInfo = $this->resource->getActivePaymentInfo();
+
+		return $activePaymentInfo->hourly_salary; 	
+	}
+
+	public function currentEmployerFee()
+	{
+		$activePaymentInfo = $this->resource->getActivePaymentInfo();
+
+		return $activePaymentInfo->employer_fee;
+	}
+
+	public function currentIncomeTax()
+	{
+		$activePaymentInfo = $this->resource->getActivePaymentInfo();
+
+		return $activePaymentInfo->income_tax;
+	}
+
+	public function currentStartDate()
+	{
+		$activePaymentInfo = $this->resource->getActivePaymentInfo();
+
+		return $activePaymentInfo->start_date;
+	}
+
 }

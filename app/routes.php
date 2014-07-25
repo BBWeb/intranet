@@ -67,6 +67,11 @@ Route::group(array('before' => 'admin'), function() {
       'uses' => 'AdminManageStaffController@updatecompany'
    ]);
 
+   Route::get('/staff/{id}/edit/payment', [
+      'as' => 'staff.payment',
+      'uses' => 'AdminManageStaffController@payment'
+   ]);
+
    // Route::resource('time', 'AdminReportedTimeController');
    Route::get('staff-report','AdminReportedTimeController@getIndex');
 

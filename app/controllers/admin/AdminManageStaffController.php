@@ -99,7 +99,6 @@ class AdminManageStaffController extends BaseController {
 
 	public function updatepersonal($id)
 	{
-		Log::info('Update personal');
 		$user = $this->user->find($id);
 
 		$this->userUpdatePersonalService->update( ['user_id' => $user->id ] + Input::all() );
@@ -122,6 +121,13 @@ class AdminManageStaffController extends BaseController {
 		$this->userUpdateCompanyService->update( ['user_id' => $user->id ] + Input::all() );
 
 		return Redirect::back();
+	}
+
+	public function payment($id)
+	{
+		$user = $this->user->find($id);
+
+		return View::make('admin.staff.payment')->with('staff', $user);
 	}
 
 }
