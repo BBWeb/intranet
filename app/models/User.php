@@ -110,6 +110,15 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return $paymentdata->first();
    }
 
+   public function getFuturePaymentInfo()
+   {
+      $currentDate = date('Y-m-d');
+
+      $paymentdata = $this->paymentdata()->where('start_date', '>', $currentDate)->orderBy('start_date', 'asc');
+
+      return $paymentdata->get();
+   }
+
    public function notreportedTasks()
    {
       return $this->tasks()->whereStatus('notreported')->orderBy('created_at', 'DESC');
