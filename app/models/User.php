@@ -88,6 +88,18 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return $this->hasMany('StaffPaymentData');
    }
 
+   public function getOldPaymentInfo()
+   {
+      $currentDate = date('Y-m-d');
+
+      // same as in getActivePaymentInfo but remove the first result which should be active
+      // take 9999 because an offset must be used with skip
+      $paymentdata = $this->paymentdata()->where('start_date', '<=', $currentDate) 
+                     ->orderBy('start_date', 'desc')->skip(1)->take(9999);   
+
+      return $paymentdata->get();
+   }
+
    public function getActivePaymentInfo()
    {
       $currentDate = date('Y-m-d');
