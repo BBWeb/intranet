@@ -4,6 +4,7 @@ use Intranet\Service\User\UserCreatorService;
 use Intranet\Service\User\UserUpdateService;
 use Intranet\Service\User\UserUpdatePersonalService;
 use Intranet\Service\User\UserUpdateCompanyService;
+use Intranet\Service\User\UserUpdatePaymentService;
 
 class AdminManageStaffController extends BaseController {
 
@@ -12,13 +13,15 @@ class AdminManageStaffController extends BaseController {
 	private $userUpdateService;
 	private $userUpdatePersonalService;
 	private $userUpdateCompanyService;
+	private $userUpdatePaymentService;
 
 	public function __construct(
 		User $user, 
 		UserCreatorService $userCreator, 
 		UserUpdateService $userUpdateService, 
 		UserUpdatePersonalService $userUpdatePersonalService,
-		UserUpdateCompanyService $userUpdateCompanyService
+		UserUpdateCompanyService $userUpdateCompanyService,
+		UserUpdatePaymentService $userUpdatePaymentService
 	)
 	{
 		$this->user = $user;
@@ -26,6 +29,7 @@ class AdminManageStaffController extends BaseController {
 		$this->userUpdateService = $userUpdateService;
 		$this->userUpdatePersonalService = $userUpdatePersonalService;
 		$this->userUpdateCompanyService = $userUpdateCompanyService;
+		$this->userUpdatePaymentService = $userUpdatePaymentService;
 	}
 
 	public function index()
@@ -128,6 +132,32 @@ class AdminManageStaffController extends BaseController {
 		$user = $this->user->find($id);
 
 		return View::make('admin.staff.payment')->with('staff', $user);
+	}
+
+	public function updatepayment($id)
+	{
+		$user = $this->user->find($id);
+
+		$updateSuccess = $this->userUpdatePaymentService->update( ['user_id' => $user->id ] + Input::all() );
+
+		if ( $updateSuccess )
+		{
+			return Response::json(['success' => true]);
+		}
+		else 
+		{
+			return Response::json(['errors' => $this->userUpdatePaymentService->errors()->toJson() ]);	
+		}
+	}
+
+	public function removepayment($userId, $id)
+	{
+		// the id should be unique for payment, so userId is not needed at this time
+		$staffPaymentData = StaffPaymentData::find($id);
+
+		$deleted = $staffPaymentData->delete();
+
+		return Response::json(['deleted' => $deleted ]);
 	}
 
 }

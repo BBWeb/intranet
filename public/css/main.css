@@ -24,3 +24,7 @@ span.total-time {
 	text-decoration: underline;
 	cursor: pointer;
 }
+
+.remove-salary-change {
+	cursor: pointer;	
+}

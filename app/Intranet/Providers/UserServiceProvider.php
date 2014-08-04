@@ -12,6 +12,9 @@ use Intranet\Service\User\UserUpdatePersonalService;
 use Intranet\Service\User\UserUpdateCompanyService;
 
 
+use Intranet\Service\User\UserUpdatePaymentService;
+use Intranet\Service\User\UserPaymentValidator;
+
 class UserServiceProvider extends ServiceProvider {
 
 	public function register()
@@ -45,6 +48,14 @@ class UserServiceProvider extends ServiceProvider {
 		{
 			return new UserUpdateCompanyService(
 				$app->make('StaffCompanyData')
+			);
+		});
+
+		$app->bind('Intranet\Service\User\UserUpdatePaymentService', function($app)
+		{
+			return new UserUpdatePaymentService(
+				new UserPaymentValidator( $app['validator'] ),
+				$app->make('StaffPaymentData')
 			);
 		});
 	}

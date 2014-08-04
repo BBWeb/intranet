@@ -72,6 +72,16 @@ Route::group(array('before' => 'admin'), function() {
       'uses' => 'AdminManageStaffController@payment'
    ]);
 
+   Route::post('/staff/{id}/edit/payment', [
+      'as' => 'staff.updatepayment',
+      'uses' => 'AdminManageStaffController@updatepayment'
+   ]);
+
+   Route::delete('/staff/{userId}/edit/payment/{id}', [
+      'as' => 'staff.removepayment',
+      'uses' => 'AdminManageStaffController@removepayment'
+   ]);
+
    // Route::resource('time', 'AdminReportedTimeController');
    Route::get('staff-report','AdminReportedTimeController@getIndex');
 
