@@ -16,22 +16,22 @@
 
   <div class="form-group">
     <label for="">Avdrag inkomstskatt (%)</label>
-      <input type="text" value="{{ $staff->currentIncomeTax }}" class="form-control" disabled>
+      <input type="text" id="current-income-tax" value="{{ $staff->currentIncomeTax }}" class="form-control" disabled>
   </div>
 
   <div class="form-group">
     <label for="">Timlön (kr)</label>
-    <input type="text" value="{{ $staff->currentHourlySalary }}" class="form-control" disabled>
+    <input type="text" id="current-hourly-salary" value="{{ $staff->currentHourlySalary }}" class="form-control" disabled>
   </div>
 
   <div class="form-group">
     <label for="">Arbetsgivaravgift (%)</label>
-    <input type="text" value="{{ $staff->currentEmployerFee }}" class="form-control" disabled>
+    <input type="text" id="current-employer-fee" value="{{ $staff->currentEmployerFee }}" class="form-control" disabled>
   </div>
 
   <div class="form-group">
     <label for="#">Gällande från</label>
-    <input type="text" value="{{ $staff->currentStartDate }}" class="form-control" disabled>
+    <input type="text" id="current-start-date" value="{{ $staff->currentStartDate }}" class="form-control" disabled>
   </div>
 
 </div>
