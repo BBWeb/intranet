@@ -33,8 +33,37 @@ class ManageStaffCest {
     $I->seeCurrentUrlEquals('/staff/2/edit/personal');
   }
 
+  public function updateCompanyData(TestGuy $I)
+  {
+    Auth::loginUsingId(1);
+
+    $I->wantTo('set new company data for an employee');
+
+    $I->amOnPage('/staff/2/edit/company');
+
+    $I->fillField('employment_nr', '1'); 
+    $I->fillField('bank', 'The bank'); 
+    $I->fillField('clearing_nr', '123'); 
+    $I->fillField('bank_nr', '1234');
+
+    $I->click('Spara betalningsinfo');
+
+    $I->seeRecord('staff_company_data', [ 
+      'user_id' => 2,
+      'employment_nr' => '1',
+      'bank' => 'The bank',
+      'clearing_nr' => '123',
+      'bank_nr' => '1234'
+    ]);
+
+    $I->seeCurrentUrlEquals('/staff/2/edit/company');
+  }
+
   public function setNewActivePaymentData(TestGuy $I)
   {
+    Auth::loginUsingId(1);
+
+    $I->wantTo('set new payment data an employee');
     // send ajax call to a route
     $I->sendAjaxPostRequest('/staff/2/edit/payment', [
       'hourly_salary' => 200,
