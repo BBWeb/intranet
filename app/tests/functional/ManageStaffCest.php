@@ -57,6 +57,11 @@ class ManageStaffCest {
     ]);
 
     $I->seeCurrentUrlEquals('/staff/2/edit/company');
+
+    $I->seeInField('bank', 'The bank');
+    $I->seeInField('clearing_nr', '123');
+    $I->seeInField('bank_nr', '1234');
+    $I->seeInField('employment_nr', '1');
   }
 
   public function setNewActivePaymentData(TestGuy $I)
