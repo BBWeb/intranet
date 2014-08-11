@@ -27,7 +27,7 @@
             </td>
             <td class="valign">
               <a href="#">
-                <span class="glyphicon glyphicon-random"></span>
+                <span class="connect glyphicon glyphicon-random"></span>
               </a>
               <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
             </td>
@@ -40,7 +40,7 @@
             </td>
             <td class="valign">
               <a href="#">
-                <span class="glyphicon glyphicon-random"></span>
+                <span class="connect glyphicon glyphicon-random"></span>
               </a>
               <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
             </td>
@@ -134,6 +134,37 @@
  <!-- /container -->
 
 <!-- Modal -->
+<div class="modal fade" id="asana-tasks-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Koppla ihop med uppgift</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Projekt</th>
+                <th>Namn</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="asana-tasks">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- Modal -->
 <div class="modal fade" id="remove-added-task-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -191,7 +222,7 @@
     </td>
     <td class="valign">
       <a href="#">
-        <span class="glyphicon glyphicon-random"></span>
+        <span class="connect glyphicon glyphicon-random"></span>
       </a>
       <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
     </td>
@@ -202,7 +233,7 @@
    <tr data-id="<%- id %>" data-project-name="<%- project_name %>" data-project-id="<%- project_id %>" data-name="<%- task %>">
       <td class="task-project"><%- project_name %></td>
       <td class="task-name"><%- task %></td>
-      <td><button class="btn btn-success add-task">Lägg till</button></td>
+      <td><button class="btn btn-primary connect-task">Koppla</button></td>
    </tr>
 </script>
 
