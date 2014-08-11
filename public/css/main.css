@@ -28,3 +28,29 @@ span.total-time {
 .remove-salary-change {
 	cursor: pointer;	
 }
+
+span.new-report {
+  cursor: pointer;
+  color: rgb(0, 190, 50);
+}
+
+span.remove-report {
+  cursor: pointer;
+  color: rgb(250, 15, 15);
+}
+
+th.name {
+ width: 60%;
+}
+
+th.report {
+  width: 25%;
+}
+
+th.actions {
+  width: 15%;
+}
+
+td.valign {
+  vertical-align: middle !important;
+}

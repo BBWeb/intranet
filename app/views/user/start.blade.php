@@ -4,7 +4,59 @@
 
 <div class="container">
 
-   <div class="row">
+  <div class="row">
+    
+    <div class="col-md-5">
+      <h1>Privata</h1>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="name">Namn</th>
+            <th class="report">Tid</th>
+            <th class="actions">
+              <span id="new-report" class="new-report glyphicon glyphicon-plus pull-right"></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="private-tasks">
+          <tr>
+            <td><input type="text" class="form-control name" value="Meck"></td>
+            <td>
+              <input type="number" class="form-control" value="10">
+            </td>
+            <td class="valign">
+              <a href="#">
+                <span class="glyphicon glyphicon-random"></span>
+              </a>
+              <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input type="text" class="form-control name" value="Opp"></td>
+            <td>
+              <input type="number" class="form-control" value="15">
+            </td>
+            <td class="valign">
+              <a href="#">
+                <span class="glyphicon glyphicon-random"></span>
+              </a>
+              <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div> 
+
+    <div class="col-md-5 col-md-offset-1">
+      <h1>Rapporterade</h1>
+
+    </div>
+
+  </div>
+
+ <!--   <div class="row">
       <div class="col-md-5">
       {{ Form::open([ 'url' => '/', 'method' => 'GET', 'class' => 'form-inline' ]) }}
             <div class="form-group">
@@ -14,10 +66,10 @@
             {{ Form::submit('Filtrera', array('class' => 'btn btn-primary'))}}
       {{ Form::close() }}
       </div>
-   </div>
-
+   </div> -->
+   <!--
    <div class="row" style="margin-top: 10px">
-      <div class="col-md-12">
+     <div class="col-md-12">
          <table class="table table-bordered">
             <thead>
                <tr>
@@ -45,7 +97,7 @@
             @endforeach
             </tbody>
          </table>
-      </div>
+      </div> 
    </div>
 
    <div class="row">
@@ -77,7 +129,9 @@
          </table>
       </div>
    </div>
-</div> <!-- /container -->
+</div>
+  -->
+ <!-- /container -->
 
 <!-- Modal -->
 <div class="modal fade" id="remove-added-task-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -129,6 +183,21 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<script type="text/template" id="report-template">
+  <tr class="newly-added">
+    <td><input type="text" class="form-control name" placeholder="Programmerat..."></td>
+    <td>
+      <input type="number" class="form-control" value="0">
+    </td>
+    <td class="valign">
+      <a href="#">
+        <span class="glyphicon glyphicon-random"></span>
+      </a>
+      <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
+    </td>
+  </tr>  
+</script>
+
 <script type="text/template" id="task-template">
    <tr data-id="<%- id %>" data-project-name="<%- project_name %>" data-project-id="<%- project_id %>" data-name="<%- task %>">
       <td class="task-project"><%- project_name %></td>
@@ -173,6 +242,7 @@
 @stop
 
 @section('footer-scripts')
-   <script src="js/main.js"></script>
+   <!-- // <script src="js/main.js"></script> -->
+   <script src="js/timereport.js"></script>
    <script src="js/libs/jquery.noty.packaged.min.js"></script>
 @stop
