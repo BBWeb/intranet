@@ -73,6 +73,11 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return $this->hasMany('Task');
    }
 
+   public function privateTasks()
+   {
+      return $this->hasMany('PrivateTask');
+   }
+
    public function personaldata()
    {
       return $this->hasOne('StaffPersonalData');

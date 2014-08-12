@@ -52,7 +52,7 @@
       var asanaTasks = response.data || {};
 
       // remove data that might exists 
-      $asanaTasks.html();
+      $asanaTasks.html('');
 
       // add all of the tasks to the modal
       for (var taskKey in asanaTasks) {

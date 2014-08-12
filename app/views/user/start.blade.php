@@ -20,31 +20,22 @@
           </tr>
         </thead>
         <tbody id="private-tasks">
-          <tr>
-            <td><input type="text" class="form-control name" value="Meck"></td>
-            <td>
-              <input type="number" class="form-control" value="10">
-            </td>
-            <td class="valign">
-              <a href="#">
-                <span class="connect glyphicon glyphicon-random"></span>
-              </a>
-              <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="text" class="form-control name" value="Opp"></td>
-              <td>
-                <input type="number" class="form-control" value="15">
-              </td>
-              <td class="valign">
-                <a href="#">
-                  <span class="connect glyphicon glyphicon-random"></span>
-                </a>
-                <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
-              </td>
-            </tr>
+        @foreach ($privateTasks as $privateTask)
+        <tr>
+          <td>
+            <input type="text" class="form-control name" value="{{ $privateTask->name }}">
+          </td>
+          <td>
+            <input type="number" class="form-control" value="{{ $privateTask->time_worked }}">
+          </td>
+           <td class="valign">
+             <a href="#">
+              <span class="connect glyphicon glyphicon-random"></span>
+            </a>
+            <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
+          </td>
+        </tr>
+        @endforeach
           </tbody>
         </table>
       </div> 

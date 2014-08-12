@@ -13,6 +13,8 @@ class ProjectsController extends BaseController {
 	{
 		$user = Auth::user();
 
+		$privateTasks = $user->privateTasks;
+
 		$projects = $this->project->lists('name', 'id');
 
 		$projectId = Input::get('project');
@@ -28,6 +30,7 @@ class ProjectsController extends BaseController {
 
 		return View::make('user.start', array(
 			'projects' => $projects,
+			'privateTasks' => $privateTasks,
 			'tasks' => $tasks
 			)
 		);
