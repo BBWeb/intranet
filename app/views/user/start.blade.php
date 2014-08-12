@@ -5,7 +5,7 @@
 <div class="container">
 
   <div class="row">
-    
+
     <div class="col-md-5">
       <h1>Privata</h1>
 
@@ -35,26 +35,26 @@
           <tr>
             <td>
               <input type="text" class="form-control name" value="Opp"></td>
-            <td>
-              <input type="number" class="form-control" value="15">
-            </td>
-            <td class="valign">
-              <a href="#">
-                <span class="connect glyphicon glyphicon-random"></span>
-              </a>
-              <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div> 
+              <td>
+                <input type="number" class="form-control" value="15">
+              </td>
+              <td class="valign">
+                <a href="#">
+                  <span class="connect glyphicon glyphicon-random"></span>
+                </a>
+                <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div> 
 
-    <div class="col-md-5 col-md-offset-1">
-      <h1>Rapporterade</h1>
+      <div class="col-md-5 col-md-offset-1">
+        <h1>Rapporterade</h1>
+
+      </div>
 
     </div>
-
-  </div>
 
  <!--   <div class="row">
       <div class="col-md-5">
@@ -66,7 +66,7 @@
             {{ Form::submit('Filtrera', array('class' => 'btn btn-primary'))}}
       {{ Form::close() }}
       </div>
-   </div> -->
+    </div> -->
    <!--
    <div class="row" style="margin-top: 10px">
      <div class="col-md-12">
@@ -130,8 +130,8 @@
       </div>
    </div>
 </div>
-  -->
- <!-- /container -->
+-->
+<!-- /container -->
 
 <!-- Modal -->
 <div class="modal fade" id="asana-tasks-modal" tabindex="-1" role="dialog">
@@ -139,10 +139,16 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Koppla ihop med uppgift</h4>
+        <h4 class="modal-title">Koppla ihop med uppgift</h4> 
       </div>
       <div class="modal-body">
         <div class="row">
+          <div class="col-md-6">
+            <input id="asana-task-filter" type="text" placeholder="Filter..." class="form-control"> 
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
           <table class="table">
             <thead>
               <tr>
@@ -154,6 +160,7 @@
             <tbody id="asana-tasks">
             </tbody>
           </table>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -174,13 +181,13 @@
       </div>
       <div class="modal-body">
        <p>Är du säker?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
-        <button type="button" class="btn btn-danger confirm-remove-button">Bekräfta</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+     </div>
+     <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+      <button type="button" class="btn btn-danger confirm-remove-button">Bekräfta</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 <!-- Modal -->
@@ -230,25 +237,25 @@
 </script>
 
 <script type="text/template" id="task-template">
-   <tr data-id="<%- id %>" data-project-name="<%- project_name %>" data-project-id="<%- project_id %>" data-name="<%- task %>">
-      <td class="task-project"><%- project_name %></td>
-      <td class="task-name"><%- task %></td>
-      <td><button class="btn btn-primary connect-task">Koppla</button></td>
-   </tr>
+ <tr data-id="<%- id %>" data-project-name="<%- project_name %>" data-project-id="<%- project_id %>" data-name="<%- task %>">
+  <td class="task-project"><%- project_name %></td>
+  <td class="task-name"><%- task %></td>
+  <td><button class="btn btn-primary connect-task">Koppla</button></td>
+</tr>
 </script>
 
 <script type="text/template" id="added-task-template">
-   <tr data-id="<%- id %>">
-      <td class="task-project"><%- project_name %></td>
-      <td class="task-name"><%- name %></td>
-      <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
-      <td><div class="badge timer">00:00:00</div></td>
-      <td>0</td>
-      <td>
-         <button class="btn btn-primary report-button">Rapportera</button>
-         <button class="btn btn-danger remove-button">Ta bort</button>
-      </td>
-   </tr>
+ <tr data-id="<%- id %>">
+  <td class="task-project"><%- project_name %></td>
+  <td class="task-name"><%- name %></td>
+  <td><input type="number" value="0" class="time-worked" style="width: 60px" /></td>
+  <td><div class="badge timer">00:00:00</div></td>
+  <td>0</td>
+  <td>
+   <button class="btn btn-primary report-button">Rapportera</button>
+   <button class="btn btn-danger remove-button">Ta bort</button>
+ </td>
+</tr>
 </script>
 
 <script type="text/template" id="subreport-template">
@@ -261,19 +268,19 @@
       <td>
         <% if (subreport.payed == 1) { %>
           Redan betald
-        <% } else { %>
-          <button class="btn btn-danger remove-button">Ta bort</button>
-        <% } %>
-      </td>
-    </tr>
-  <% }); %>
+          <% } else { %>
+            <button class="btn btn-danger remove-button">Ta bort</button>
+            <% } %>
+          </td>
+        </tr>
+        <% }); %>
 </script>
 
 
 @stop
 
 @section('footer-scripts')
-   <!-- // <script src="js/main.js"></script> -->
-   <script src="js/timereport.js"></script>
-   <script src="js/libs/jquery.noty.packaged.min.js"></script>
+<!-- // <script src="js/main.js"></script> -->
+<script src="js/timereport.js"></script>
+<script src="js/libs/jquery.noty.packaged.min.js"></script>
 @stop

@@ -8,12 +8,14 @@
 
   // parent for tasks in asana modal
   var $asanaTasks = $('#asana-tasks');
+  var $asanaTaskFilter = $('#asana-task-filter');
 
   // Event handlers 
   $newReportAction.click(createNewReport)
 
   $privateTasks.on('click', '.connect', connectToAsanaTaskModal);
-
+  $privateTasks.on('click', '.remove-report', removePrivateReport)
+  $asanaTaskFilter.on('input', filterAsanaTasks);
 
   function createNewReport() {
     // checkout all the newly added reports, if they have an empty value focus that one
@@ -36,6 +38,10 @@
     if ( foundUnusedReport ) return;
 
     $privateTasks.prepend( $('#report-template').html() ); 
+  }
+
+  function removePrivateReport() {
+    // show noty
   }
 
   function connectToAsanaTaskModal() {
@@ -68,6 +74,19 @@
       project_name: task.taskState.projects.name,
       project_id: task.taskState.projects.id
     };
+  }
+
+  function filterAsanaTasks() {
+    var filterString = $(this).val();
+
+    var regex = new RegExp(filterString, 'i');
+
+    var $trs = $asanaTasks.find('tr');
+    $trs.hide();
+
+    $trs.filter(function () {
+      return regex.test($(this).text());
+    }).show();
   }
 
 })(jQuery);
