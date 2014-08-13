@@ -21,12 +21,12 @@
         </thead>
         <tbody id="private-tasks">
         @foreach ($privateTasks as $privateTask)
-        <tr>
+        <tr class="private-task" data-id="{{ $privateTask->id }}">
           <td>
             <input type="text" class="form-control name" value="{{ $privateTask->name }}">
           </td>
           <td>
-            <input type="number" class="form-control" value="{{ $privateTask->time_worked }}">
+            <input type="number" class="form-control report" value="{{ $privateTask->time_worked }}">
           </td>
            <td class="valign">
              <a href="#">
@@ -36,7 +36,7 @@
           </td>
         </tr>
         @endforeach
-          </tbody>
+      </tbody>
         </table>
       </div> 
 
@@ -216,7 +216,7 @@
   <tr class="newly-added">
     <td><input type="text" class="form-control name" placeholder="Programmerat..."></td>
     <td>
-      <input type="number" class="form-control" value="0">
+      <input type="number" class="form-control report" value="0">
     </td>
     <td class="valign">
       <a href="#">

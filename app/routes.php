@@ -17,6 +17,8 @@ Route::group(array('before' => 'auth'), function() {
    Route::group(array('before' => 'apikey'), function() {
       Route::get('/', 'ProjectsController@getIndex');
 
+      Route::resource('private-task', 'PrivateTaskController');
+
       Route::controller('task', 'TaskController');
 
       Route::resource('asana', 'AsanaController');

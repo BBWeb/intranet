@@ -17,6 +17,11 @@
   $privateTasks.on('click', '.remove-report', removePrivateReport)
   $asanaTaskFilter.on('input', filterAsanaTasks);
 
+  // we want to save a new private task when name is changed
+  $privateTasks.on('change', '.newly-added input.name', createPrivateTask);
+
+  $privateTasks.on('change', '.private-task input', updatePrivateTask);
+
   function createNewReport() {
     // checkout all the newly added reports, if they have an empty value focus that one
     var $newlyAddedNames = $('.newly-added input.name'); 
@@ -87,6 +92,65 @@
     $trs.filter(function () {
       return regex.test($(this).text());
     }).show();
+  }
+
+  function updatePrivateTask() {
+    var $inputChanged = $(this);
+    var $tr = $inputChanged.closest('tr');
+    var taskId = $tr.data('id');
+
+    // get the inputs values
+    var name = $tr.find('input.name').first().val();
+    var timeWorked = $tr.find('input.report').first().val();
+
+    setUpdateState( $tr );
+
+    $.ajax({
+      method: 'PUT',
+      url: '/private-task/' + taskId,
+      data: {
+        name: name,
+        time_worked: timeWorked
+      },
+      success: function() {
+        removeUpdateState( $tr );
+      }
+    });
+  }
+
+  function createPrivateTask() {
+    var $inputChanged = $(this);
+    var $tr = $inputChanged.closest('tr');
+
+    // get the inputs values
+    var name = $tr.find('input.name').first().val();
+    var timeWorked = $tr.find('input.report').first().val();
+
+    setUpdateState( $tr );
+
+    $.post('/private-task', {
+      name: name,
+      time_worked: timeWorked
+    }, function(data) {
+      removeUpdateState( $tr );
+
+      $tr
+        .data('id', data.id)
+        .removeClass('newly-added')
+        .addClass('private-task');
+    });
+  }
+
+
+
+  function setUpdateState($tr) {
+    $tr.addClass('updating');
+    $tr.find('input').attr('disabled', true);
+  }
+
+  function removeUpdateState($tr) {
+    $tr.removeClass('updating');
+    $tr.find('input').attr('disabled', false);
   }
 
 })(jQuery);
