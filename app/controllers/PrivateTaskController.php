@@ -12,7 +12,7 @@ class PrivateTaskController extends BaseController {
   public function store()
   {
     $user = Auth::user();
-    
+
     $input = Input::only('name', 'time_worked');
 
     $privateTask = $this->privateTask->create(['user_id' => $user->id] + $input);
@@ -22,13 +22,20 @@ class PrivateTaskController extends BaseController {
 
   public function update($id) 
   {
-    $privateTask = $this->privateTask->find( $id );
+    $privateTask = $this->privateTask->find($id);
 
     $input = Input::only('name', 'time_worked');
 
     $privateTask->update($input);
 
     return $privateTask;
+  }
+
+  public function destroy($id)
+  {
+    $privateTask = $this->privateTask->find($id);
+
+    return Response::json([ 'deleted' => $privateTask->delete() ]); 
   }
   
 }

@@ -46,7 +46,18 @@
   }
 
   function removePrivateReport() {
-    // show noty
+    var $deleteButton = $(this);
+    var $tr = $deleteButton.closest('tr');
+    var taskId = $tr.data('id');
+
+    // send a delete req to server
+    $.ajax({
+      method: 'DELETE',
+      url: '/private-task/' + taskId,
+      success: function(data) {
+        if ( data.deleted ) $tr.remove();
+      }
+    })
   }
 
   function connectToAsanaTaskModal() {

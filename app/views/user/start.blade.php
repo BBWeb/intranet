@@ -267,7 +267,6 @@
         <% }); %>
 </script>
 
-
 @stop
 
 @section('footer-scripts')
