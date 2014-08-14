@@ -271,6 +271,7 @@
 
 @section('footer-scripts')
 <!-- // <script src="js/main.js"></script> -->
+<script src="js/asanaModal.js"></script>
 <script src="js/timereport.js"></script>
 <script src="js/libs/jquery.noty.packaged.min.js"></script>
 @stop

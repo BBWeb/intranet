@@ -4,22 +4,16 @@
   // Global variables
   var $newReportAction = $('#new-report');
   var $privateTasks = $('#private-tasks');
-  var $asanaTasksModal = $('#asana-tasks-modal');
-
-  // parent for tasks in asana modal
-  var $asanaTasks = $('#asana-tasks');
-  var $asanaTaskFilter = $('#asana-task-filter');
 
   // Event handlers 
   $newReportAction.click(createNewReport)
 
   $privateTasks.on('click', '.connect', connectToAsanaTaskModal);
   $privateTasks.on('click', '.remove-report', removePrivateReport)
-  $asanaTaskFilter.on('input', filterAsanaTasks);
 
   // we want to save a new private task when name is changed
   $privateTasks.on('change', '.newly-added input.name', createPrivateTask);
-
+  // update an existing task if we change input
   $privateTasks.on('change', '.private-task input', updatePrivateTask);
 
   function createNewReport() {
@@ -61,25 +55,24 @@
   }
 
   function connectToAsanaTaskModal() {
-    // get tasks from asana
+    var $connectButton = $(this);
+    var $tr = $(this).closest('tr');
+    var privateTaskId = $tr.data('id');
+
+    asanaModal.onConnect = function(asanaTaskId) {
+      asanaModal.close();
+    };
+
+    asanaModal.show();
     $.get('asana/all', function(response, textStatus) {
-      var asanaTaskTemplate = _.template( $('#task-template').html() );
+      var asanaTasks = response.data || [];
 
-      var asanaTasks = response.data || {};
+      var transformed = _.map(asanaTasks, function(task, key) {
+        return extractTaskData(task); 
+      });
 
-      // remove data that might exists 
-      $asanaTasks.html('');
-
-      // add all of the tasks to the modal
-      for (var taskKey in asanaTasks) {
-        var task = asanaTasks[ taskKey ];
-        var taskObject = extractTaskData( task );
-        $asanaTasks.append( asanaTaskTemplate( taskObject ) );
-      }
+      asanaModal.populate( transformed );
     });
-
-    // show modal
-    $asanaTasksModal.modal();
   }
 
   // get the important data and return an object
@@ -90,19 +83,6 @@
       project_name: task.taskState.projects.name,
       project_id: task.taskState.projects.id
     };
-  }
-
-  function filterAsanaTasks() {
-    var filterString = $(this).val();
-
-    var regex = new RegExp(filterString, 'i');
-
-    var $trs = $asanaTasks.find('tr');
-    $trs.hide();
-
-    $trs.filter(function () {
-      return regex.test($(this).text());
-    }).show();
   }
 
   function updatePrivateTask() {
@@ -152,8 +132,6 @@
     });
   }
 
-
-
   function setUpdateState($tr) {
     $tr.addClass('updating');
     $tr.find('input').attr('disabled', true);
@@ -162,6 +140,15 @@
   function removeUpdateState($tr) {
     $tr.removeClass('updating');
     $tr.find('input').attr('disabled', false);
+  }
+
+  function connectToAsanaTask() {
+    var $buttonClicked = $(this);
+    var $tr = $buttonClicked.closest('tr');
+    var asanaId = $tr.data('id');
+
+    // send post or put, the task we want to connect and the asana id needs to be sent
+    console.log('Asana id', asanaId);
   }
 
 })(jQuery);
