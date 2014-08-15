@@ -1,6 +1,31 @@
 ;(function($) {
 
+  $('.expand-task').click(function() {
+    var $expandButton = $(this);
+    var $tr = $expandButton.closest('tr');
+    var $subreports = $tr.nextUntil('.task', '.subreport');
 
+    var expanded = $tr.hasClass('expanded');
+
+    if ( expanded ) {
+      $expandButton.removeClass('glyphicon-chevron-down');
+      $expandButton.addClass('glyphicon-chevron-right');
+
+      $subreports.addClass('hide');
+      $tr.removeClass('expanded');
+
+      return;
+    }
+
+    $expandButton.removeClass('glyphicon-chevron-right');
+    $expandButton.addClass('glyphicon-chevron-down');
+
+    $subreports.removeClass('hide')
+    $tr.addClass('expanded');
+    console.log('Subreports', $subreports);
+    // get next subreports until next task
+    // display them
+  });
   // Global variables
   var $newReportAction = $('#new-report');
   var $privateTasks = $('#private-tasks');
@@ -60,6 +85,13 @@
     var privateTaskId = $tr.data('id');
 
     asanaModal.onConnect = function(asanaTaskId) {
+
+      // send private task id and asana task id to server
+
+      // when we get a response we want to hide/delete the private task
+
+      // add to the right side, 
+
       asanaModal.close();
     };
 

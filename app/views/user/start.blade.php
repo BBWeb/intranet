@@ -43,6 +43,36 @@
       <div class="col-md-5 col-md-offset-1">
         <h1>Rapporterade</h1>
 
+        <table id="reported-tasks" class="table">
+          <thead>
+            <tr>
+              <th>Projekt</th>
+              <th>Namn</th>
+              <th>Total tid (min)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          @foreach ($tasks as $task)
+          <tr class="first-level task">
+            <td>{{ $task->theproject->name }}</td>
+            <td>{{ $task->task }}</td>
+            <td>10</td>
+            <td>
+              <span class="glyphicon glyphicon-chevron-right pull-right expand-task"></span>
+            </td>
+          </tr> 
+          @foreach($task->subreports as $subreport)
+          <tr class="second-level hide subreport">
+            <td colspan="2">A name</td>
+            <td><input type="number" class="form-control" value="{{ $subreport->time }}"></td> 
+            <td></td>
+          </tr>
+          @endforeach
+          @endforeach
+          </tbody>
+        </table>
+
       </div>
 
     </div>

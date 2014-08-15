@@ -39,6 +39,10 @@ span.remove-report {
   color: rgb(250, 15, 15);
 }
 
+#reported-tasks {
+  table-layout: fixed;
+}
+
 th.name {
  width: 60%;
 }
@@ -63,4 +67,17 @@ td.valign {
   height: 26px;
   position: absolute;
   left: -19px;
+}
+
+.expand-task {
+  cursor: pointer;
+  color: #428bca;
+}
+
+tr.second-level td:first-child {
+  padding-left: 25px;
+}
+
+.hidden-subreport {
+  display: none;
 }
