@@ -104,12 +104,11 @@ class TaskController extends BaseController {
    public function postUpdateSubreportTime()
    {
       $id = Input::get('id');
-      $timeWorked = Input::get('timeWorked');
 
       $subreport = $this->subreport->find( $id );
 
       if ($subreport && !$subreport->payed) {
-         $subreport->time = $timeWorked;
+         $subreport->time = Input::get('time');
          $subreport->save();
       }
    }

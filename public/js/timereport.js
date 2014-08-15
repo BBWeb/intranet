@@ -1,31 +1,5 @@
 ;(function($) {
 
-  $('.expand-task').click(function() {
-    var $expandButton = $(this);
-    var $tr = $expandButton.closest('tr');
-    var $subreports = $tr.nextUntil('.task', '.subreport');
-
-    var expanded = $tr.hasClass('expanded');
-
-    if ( expanded ) {
-      $expandButton.removeClass('glyphicon-chevron-down');
-      $expandButton.addClass('glyphicon-chevron-right');
-
-      $subreports.addClass('hide');
-      $tr.removeClass('expanded');
-
-      return;
-    }
-
-    $expandButton.removeClass('glyphicon-chevron-right');
-    $expandButton.addClass('glyphicon-chevron-down');
-
-    $subreports.removeClass('hide')
-    $tr.addClass('expanded');
-    console.log('Subreports', $subreports);
-    // get next subreports until next task
-    // display them
-  });
   // Global variables
   var $newReportAction = $('#new-report');
   var $privateTasks = $('#private-tasks');
@@ -162,16 +136,6 @@
         .removeClass('newly-added')
         .addClass('private-task');
     });
-  }
-
-  function setUpdateState($tr) {
-    $tr.addClass('updating');
-    $tr.find('input').attr('disabled', true);
-  }
-
-  function removeUpdateState($tr) {
-    $tr.removeClass('updating');
-    $tr.find('input').attr('disabled', false);
   }
 
   function connectToAsanaTask() {
