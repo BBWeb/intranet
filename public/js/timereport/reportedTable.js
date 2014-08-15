@@ -39,21 +39,37 @@ var reportedTable = {
     var $input = $(this);
     var $tr = $input.closest('tr');
     var subreportId = $tr.data('id');
-    var time = $input.val();
+    var time = Number( $input.val() );
 
-    if ( !Number(time) ) return;
+    if ( isNaN( time ) ) return;
 
     setUpdateState( $tr );
 
     $.post('task/update-subreport-time', { id: subreportId, time: time }, function(data, textStatus) {
       if (textStatus !== 'success') return;
 
-      // update total time for subreport?
+      // the task which the subreport belongs to
+      var $task = $tr.prevAll('tr.task').first();
+      sumTotalTaskTime( $task );
 
       removeUpdateState( $tr );
     });
   }
 
 };
+
+function sumTotalTaskTime($taskTr) {
+  var $subreports = $taskTr.nextUntil('tr.task', 'tr.subreport');
+
+  var totaltime = 0;
+
+  $subreports.each(function() {
+    var $subreport = $(this);
+    totaltime += Number( $subreport.find('input').val() );
+  });
+
+  $taskTr.find('td.totaltime').text( totaltime );
+  // update the time for task tr
+}
 
 reportedTable.init();
