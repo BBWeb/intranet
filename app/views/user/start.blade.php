@@ -9,7 +9,7 @@
     <div class="col-md-5">
       <h1>Privata</h1>
 
-      <table class="table">
+      <table id="private-tasks" class="table">
         <thead>
           <tr>
             <th class="name">Namn</th>
@@ -19,7 +19,7 @@
             </th>
           </tr>
         </thead>
-        <tbody id="private-tasks">
+        <tbody id="private-tasks-tbody">
         @foreach ($privateTasks as $privateTask)
         <tr class="private-task" data-id="{{ $privateTask->id }}">
           <td>
@@ -40,36 +40,20 @@
         </table>
       </div> 
 
-      <div class="col-md-5 col-md-offset-1">
+      <div class="col-md-6 col-md-offset-1">
         <h1>Rapporterade</h1>
 
         <table id="reported-tasks" class="table">
           <thead>
             <tr>
-              <th>Projekt</th>
-              <th>Namn</th>
+              <th class="project">Projekt</th>
+              <th class="name">Namn</th>
               <th>Total tid (min)</th>
-              <th></th>
+              <th class="actions"></th>
             </tr>
           </thead>
           <tbody>
-          @foreach ($tasks as $task)
-          <tr class="first-level task">
-            <td>{{ $task->theproject->name }}</td>
-            <td>{{ $task->task }}</td>
-            <td class="totaltime">{{ $task->totaltime() }}</td>
-            <td>
-              <span class="glyphicon glyphicon-chevron-right pull-right expand-task"></span>
-            </td>
-          </tr> 
-          @foreach($task->subreports as $subreport)
-          <tr data-id="{{ $subreport->id }}" data-time="{{ $subreport->time }}" class="second-level hide subreport">
-            <td colspan="2">A name</td>
-            <td><input type="number" class="form-control" value="{{ $subreport->time }}"></td> 
-            <td class="valign"><span class="remove-report glyphicon glyphicon-minus pull-right"></span></td>
-          </tr>
-          @endforeach
-          @endforeach
+            {{ View::renderEach('templates.reported_task', $tasks, 'task') }} 
           </tbody>
         </table>
 

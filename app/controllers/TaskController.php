@@ -54,6 +54,61 @@ class TaskController extends BaseController {
       return Response::json(array('id' => $id)); 
    }
 
+   public function postConnectAsana()
+   {
+      $user = Auth::user();
+
+      $privateTaskId = Input::get('private_task_id');
+      $asanaTaskId = Input::get('asana_task_id');
+      $projectId = Input::get('project_id');
+      $name = Input::get('name');
+      $projectName = Input::get('project_name');
+
+      $project = $this->project->find( $projectId );
+
+      if ( !$project ) {
+         $project = $this->project->create(array(
+            'id' => $projectId,
+            'name' => $projectName
+         ));
+      }
+
+      // find task for the current user and asana id
+      $task = $this->task->where('user_id', '=', $user->id)->where('asana_id', '=', $asanaTaskId)->first();
+
+      // if there is none, create one
+      if ( !$task ) {
+         $task = $this->task->create(array(
+            'user_id' => $user->id,
+            'asana_id' => $asanaTaskId,
+            'project_id' => $projectId,
+            'task' => $name 
+         ));
+      }
+
+      $privateTask = PrivateTask::find( $privateTaskId );
+
+      // transfer private task data to a subreport 
+      $todaysDate = date('Y-m-d');
+
+      $subreport = $this->subreport->create([
+         'task_id' => $task->id,
+         'reported_date' => $todaysDate,
+         'time' => $privateTask->time_worked
+      ]); 
+
+      $privateTask->delete();
+
+      // create a new subreport with the current date
+
+      // get the private task info and create a new subreport with time
+      // return $subreport;
+      return Response::json([
+         'task_id' => $task->id,
+         'template' => View::make('templates.reported_task')->with('task', $task)->render()
+      ]);
+   }
+
    public function postCreate()
    {
       $input = Input::only('asana_id', 'project_id', 'project_name', 'name');

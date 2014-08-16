@@ -2,7 +2,7 @@
 
   // Global variables
   var $newReportAction = $('#new-report');
-  var $privateTasks = $('#private-tasks');
+  var $privateTasks = $('#private-tasks-tbody');
 
   // Event handlers 
   $newReportAction.click(createNewReport)
@@ -58,15 +58,31 @@
     var $tr = $(this).closest('tr');
     var privateTaskId = $tr.data('id');
 
-    asanaModal.onConnect = function(asanaTaskId) {
-
+    asanaModal.onConnect = function(asanaData) {
       // send private task id and asana task id to server
+      console.log('Asana data', asanaData);
+
+      $.post('/task/connect-asana', {
+        private_task_id: privateTaskId,
+        asana_task_id: asanaData.asana_id,
+        project_id: asanaData.project_id, 
+        project_name: asanaData.project_name,
+        name: asanaData.name
+      }, function(data) {
+        var taskId = data.task_id;
+        var template = data.template;
+        // find rendered task with id, or append
+        reportedTable.updateOrAppendTask(taskId, template);
+
+        // close modal and remove "private task"
+        asanaModal.close();
+        $tr.remove();
+      });
 
       // when we get a response we want to hide/delete the private task
 
       // add to the right side, 
 
-      asanaModal.close();
     };
 
     asanaModal.show();
@@ -136,15 +152,6 @@
         .removeClass('newly-added')
         .addClass('private-task');
     });
-  }
-
-  function connectToAsanaTask() {
-    var $buttonClicked = $(this);
-    var $tr = $buttonClicked.closest('tr');
-    var asanaId = $tr.data('id');
-
-    // send post or put, the task we want to connect and the asana id needs to be sent
-    console.log('Asana id', asanaId);
   }
 
 })(jQuery);

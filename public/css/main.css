@@ -43,15 +43,15 @@ span.remove-report {
   table-layout: fixed;
 }
 
-th.name {
+#private-tasks th.name {
  width: 60%;
 }
 
-th.report {
+#private-tasks th.report {
   width: 25%;
 }
 
-th.actions {
+#private-tasks th.actions {
   width: 15%;
 }
 
@@ -81,3 +81,18 @@ tr.second-level td:first-child {
 .hidden-subreport {
   display: none;
 }
+
+#reported-tasks th.project {
+  width: 20%; 
+}
+
+#reported-tasks th.name {
+  width: 40%; 
+}
+
+#reported-tasks th.actions {
+  width: 15%; 
+}
+
+
+

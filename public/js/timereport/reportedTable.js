@@ -54,6 +54,29 @@ var reportedTable = {
 
       removeUpdateState( $tr );
     });
+  },
+
+  updateOrAppendTask: function(taskId, template) {
+    // get the tbody   
+    var $tbody = $('#reported-tasks tbody').first();
+    var $existingTasks = $tbody.children('tr.task');
+
+    var foundExisting = false;
+
+    $existingTasks.each(function() {
+      var $task = $(this);
+
+      if ( $task.data('id') == taskId) {
+        $task.html( template );
+        foundExisting = true;
+        return;
+      }
+    });
+
+    // we dont need to append a new task
+    if ( foundExisting ) return;
+
+    $tbody.prepend( template );
   }
 
 };

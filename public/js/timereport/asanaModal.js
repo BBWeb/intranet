@@ -20,10 +20,10 @@ var asanaModal = {
     });
 
     this.$tasks.on('click', '.connect-task', function() {
-      var asanaId = $(this).closest('tr').data('id');
-
-      // send the clicked asanaID to the listener
-      self.onConnect( asanaId );
+      var $tr = $(this).closest('tr');
+      var asanaData = extractAsanaDataFrom( $tr );
+      // send data to the listener
+      self.onConnect( asanaData );
     });
   },
 
@@ -65,3 +65,12 @@ var asanaModal = {
 };
 
 asanaModal.init();
+
+function extractAsanaDataFrom($tr) {
+  return {
+     asana_id: $tr.data('id'),
+     project_name: $tr.data('project-name'),
+     project_id: $tr.data('project-id'),
+     name: $tr.data('name')
+  };
+}
