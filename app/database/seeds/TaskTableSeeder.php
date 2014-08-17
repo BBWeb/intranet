@@ -21,11 +21,11 @@ class TaskTableSeeder extends Seeder {
 			'task' => 'Task 1'
 		));
 
-		$this->createSubreport($task, 31, '2014-06-11');
+		$this->createSubreport($task, 'Cool name', 31, '2014-06-11');
 		// create an already payed subreport
-		$this->createSubreport($task, 60, '2014-06-05', true);
+		$this->createSubreport($task, 'Programmed', 60, '2014-06-05', true);
 
-		$this->createSubreport($task, 10, '2014-07-14');
+		$this->createSubreport($task, 'Stuff', 10, '2014-07-14');
 
 		// add another task to Test project for Niklas
 		$task2 = Task::create(array(
@@ -35,13 +35,14 @@ class TaskTableSeeder extends Seeder {
 			'task' => 'Task 2'
 		));
 
-		$this->createSubreport($task2, 25, '2014-05-01');
+		$this->createSubreport($task2, 'More stuff', 25, '2014-05-01');
 	}
 
-	private function createSubreport($task, $time, $date, $payed = false)
+	private function createSubreport($task, $name, $time, $date, $payed = false)
 	{
 		Subreport::create(array(
 			'task_id' => $task->id,
+			'name' => $name,
 			'time' => $time,
 			'reported_date' => $date,
 			'payed' => $payed

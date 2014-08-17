@@ -94,5 +94,10 @@ tr.second-level td:first-child {
   width: 15%; 
 }
 
+#reported-tasks td.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 

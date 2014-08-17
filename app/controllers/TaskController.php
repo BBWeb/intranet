@@ -94,6 +94,7 @@ class TaskController extends BaseController {
       $subreport = $this->subreport->create([
          'task_id' => $task->id,
          'reported_date' => $todaysDate,
+         'name' => $privateTask->name,
          'time' => $privateTask->time_worked
       ]); 
 
@@ -156,14 +157,16 @@ class TaskController extends BaseController {
       return Response::json( $subreport->toJson() );
    }
 
-   public function postUpdateSubreportTime()
+   public function postUpdateSubreport()
    {
       $id = Input::get('id');
 
       $subreport = $this->subreport->find( $id );
 
       if ($subreport && !$subreport->payed) {
+         $subreport->name = Input::get('name');
          $subreport->time = Input::get('time');
+
          $subreport->save();
       }
    }
