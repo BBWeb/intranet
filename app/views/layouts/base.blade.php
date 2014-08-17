@@ -17,6 +17,7 @@
   {{ HTML::script('/js/libs/underscore-min.js') }}
   {{ HTML::script('/js/libs/bootstrap-datepicker.js') }}
   {{ HTML::script('/js/libs/jquery.stopwatch.js') }}
+  {{ HTML::script('/js/jquery-ui.min.js') }}
    @yield('footer-scripts')
 </body>
 </html>

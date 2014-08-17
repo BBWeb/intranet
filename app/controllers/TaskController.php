@@ -54,6 +54,33 @@ class TaskController extends BaseController {
       return Response::json(array('id' => $id)); 
    }
 
+   public function postAddPrivateToTask() {
+      $user = Auth::user();
+
+      $privateTaskId = Input::get('private_task_id');
+      $reportedTaskId = Input::get('reported_task_id');
+
+      $task = $this->task->find( $reportedTaskId );
+      
+      $privateTask = PrivateTask::find( $privateTaskId ); 
+
+      $todaysDate = date('Y-m-d');
+
+      $subreport = $this->subreport->create([
+         'task_id' => $task->id,
+         'reported_date' => $todaysDate,
+         'name' => $privateTask->name,
+         'time' => $privateTask->time_worked
+      ]); 
+
+      $privateTask->delete();
+
+      return Response::json([
+         'task_id' => $task->id,
+         'template' => View::make('templates.reported_task')->with('task', $task)->render()
+      ]);
+   }
+
    public function postConnectAsana()
    {
       $user = Auth::user();

@@ -69,7 +69,8 @@ var reportedTable = {
       var $task = $(this);
 
       if ( $task.data('id') == taskId) {
-        $task.html( template );
+        $task.after( template );
+        $task.remove();
         foundExisting = true;
         return;
       }

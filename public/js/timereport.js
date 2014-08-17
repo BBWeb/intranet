@@ -1,5 +1,40 @@
 ;(function($) {
 
+  // clean this code up
+  $('.private-task').draggable({
+    helper: function( event ) {
+      var name = $(this).find('input.name').first().val();
+      return $( "<div class='helper'>Flyttar " + name + "</div>" );
+    },
+    cursor: 'pointer',
+    cursorAt: {
+      left: 0,
+      top: 0
+    }
+  });
+
+  $('tr.task').droppable({ 
+    hoverClass: "drop-hover",
+    drop: function(e, ui) {
+      var $dragged = $(ui.draggable);
+      var privateTaskId = $dragged.data('id');
+      var reportedTaskId = $(this).data('id');
+
+      $.post('/task/add-private-to-task', {
+        private_task_id: privateTaskId,
+        reported_task_id: reportedTaskId
+     }, function(data) {
+        var template = data.template;
+        // find rendered task with id, or append
+        reportedTable.updateOrAppendTask(reportedTaskId, template);
+
+        // close modal and remove "private task"
+        $dragged.remove();
+      });
+   }
+  });
+  // on drop, do the connect things moon
+
   // Global variables
   var $newReportAction = $('#new-report');
   var $privateTasks = $('#private-tasks-tbody');

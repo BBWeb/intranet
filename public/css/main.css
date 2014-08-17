@@ -99,5 +99,17 @@ tr.second-level td:first-child {
   text-overflow: ellipsis;
 }
 
+.helper {
+  display: block;
+  width: 200px;
+  background: #eee;
+  font-weight: bold;
+  z-index: 9999;
+  position: absolute;
+}
+
+.drop-hover {
+  background: yellow;
+}
 
 
