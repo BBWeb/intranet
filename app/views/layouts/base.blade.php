@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Intranet</title>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon" />
 
     {{ HTML::style('css/bootstrap.css') }}
     {{ HTML::style('css/main.css') }}
