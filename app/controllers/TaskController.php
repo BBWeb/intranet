@@ -239,6 +239,26 @@ class TaskController extends BaseController {
       return Response::json();
    }
 
+   // TODO make sure that subreport is unpayed
+   public function putMoveSubreport($subreportId)
+   {
+      $subreport = $this->subreport->find( $subreportId );
+
+      $taskId = Input::get('reported_task_id');
+
+      $subreport->task_id = $taskId;
+
+      $subreport->save();
+
+      $task = $subreport->task;
+
+      // return new view
+      return Response::json([
+         'task_id' => $task->id,
+         'template' => View::make('templates.reported_task')->with('task', $task)->render()
+      ]);
+   }
+
    public function postUndoSubreportRemove()
    {
       $id = Input::get('id');

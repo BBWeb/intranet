@@ -286,6 +286,7 @@
 @section('footer-scripts')
 <!-- // <script src="js/main.js"></script> -->
 <script src="js/timereport/utils.js"></script>
+<script src="js/timereport/draggable.js"></script>
 <script src="js/timereport/asanaModal.js"></script>
 <script src="js/timereport/reportedTable.js"></script>
 <script src="js/timereport.js"></script>

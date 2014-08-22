@@ -13,4 +13,8 @@ class Subreport extends Eloquent {
   );
 
 	protected $softDelete = true;
+
+  public function task() {
+    return $this->belongsTo('Task');
+  }
 }
