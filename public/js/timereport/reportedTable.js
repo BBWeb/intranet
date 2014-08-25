@@ -55,7 +55,7 @@ var reportedTable = {
 
       // the task which the subreport belongs to
       var $task = $tr.prevAll('tr.task').first();
-      sumTotalTaskTime( $task );
+      reportedTable.sumTotalTaskTime( $task );
 
       removeUpdateState( $tr );
     });
@@ -66,36 +66,58 @@ var reportedTable = {
     var $tbody = $('#reported-tasks tbody').first();
     var $existingTasks = $tbody.children('tr.task');
 
-    var foundExisting = false;
+    var $existingTask = this.findTaskTr(taskId);
 
-    $existingTasks.each(function() {
-      var $task = $(this);
+    if ( $existingTask ) {
+      var $subreports = getFollowingSubreports( $existingTask );
+      $subreports.remove();
 
-      if ( $task.data('id') == taskId) {
-        var $subreports = getFollowingSubreports($task);
-        $subreports.remove();
+      var $template = $(template);
 
-        var $template = $(template);
+      // maybe extract into a nice function
+      $template.first().droppable( droppableOptions );
+      $template.filter('.subreport').draggable( draggableOptions );
 
-        // maybe extract into a nice function
-        $template.first().droppable( droppableOptions );
-        $template.filter('.subreport').draggable( draggableOptions );
+      $existingTask.after( $template );
 
-        $task.after( $template );
+      if ( $existingTask.hasClass('expanded') ) reportedTable.expandReport( $template.first() );
+      $existingTask.remove();
 
-        if ( $task.hasClass('expanded') ) reportedTable.expandReport( $template.first() );
-        $task.remove();
+      return;
+    }
+    // prepend a new task if not found
+    $tbody.prepend( template );
+  },
 
-        // remove all the subreports aswell
-        foundExisting = true;
+  findTaskTr: function(taskId) {
+    var $tbody = $('#reported-tasks tbody').first();
+    var $taskTrs = $tbody.children('tr.task');
+
+    var $foundTaskTr = null;
+
+    $taskTrs.each(function() {
+      var $taskTr = $(this);
+
+      if ( $taskTr.data('id') == taskId ) {
+        $foundTaskTr = $taskTr;
         return;
       }
     });
 
-    // we dont need to append a new task
-    if ( foundExisting ) return;
+    return $foundTaskTr;
+  },
 
-    $tbody.prepend( template );
+  sumTotalTaskTime: function($taskTr) {
+    var totaltime = 0;
+
+    var $subreports = getFollowingSubreports($taskTr);
+
+    $subreports.each(function() {
+      var $subreport = $(this);
+      totaltime += Number( $subreport.find('input.time').val() );
+    }); 
+
+    $taskTr.find('td.totaltime').text( totaltime );
   }
 
 };
@@ -113,17 +135,15 @@ function getFollowingSubreports($taskTr) {
   return $subreports;
 }
 
-function sumTotalTaskTime($taskTr) {
-  var totaltime = 0;
+function getParentTaskTr($subreportTr) {
+  var $prevSibling = $subreportTr.prev();
 
-  var $subreports = getFollowingSubreports($taskTr);
+  while ($prevSibling && $prevSibling.hasClass('subreport')) {
+    $prevSibling = $prevSibling.prev();
+  }
 
-  $subreports.each(function() {
-    var $subreport = $(this);
-    totaltime += Number( $subreport.find('input.time').val() );
-  }); 
-
-  $taskTr.find('td.totaltime').text( totaltime );
+  // when the loop breaks we should have found a tr with a class "task"
+  return $prevSibling;
 }
 
 reportedTable.init();
@@ -147,12 +167,11 @@ var droppableOptions = {
           // calculate report time for the old one, append the new template osv
           reportedTable.updateOrAppendTask(reportedTaskId, template);
 
+          var $parentTask = getParentTaskTr( $dragged );
           $dragged.remove();              
+          reportedTable.sumTotalTaskTime( $parentTask );
         }
       });
-        // do a put to some "update subreport path" 
-        // send the task and the subreport id 
-        // remove the dragged one
     };
 
     var movePrivateTask = function() {
@@ -166,6 +185,8 @@ var droppableOptions = {
         reportedTable.updateOrAppendTask(reportedTaskId, template);
 
         // close modal and remove "private task"
+
+        // get the parent task.tr, then update that summm thime and so on mon
         $dragged.remove();
       });
     };
