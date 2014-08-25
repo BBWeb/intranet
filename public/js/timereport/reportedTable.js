@@ -13,6 +13,25 @@ var reportedTable = {
     });
 
     this.$el.on('change', '.subreport input', this.updateSubreport);    
+    this.$el.on('click', '.subreport span.remove-report', function() {
+      var $subreportTr = $(this).closest('tr.subreport');
+      self.removeSubreport( $subreportTr );
+    });
+  },
+
+  removeSubreport: function($subreportTr) {
+    var subreportId = $subreportTr.data('id');
+
+    $.ajax({
+      url: '/task/remove-subreport',
+      method: 'POST',
+      data: {
+        id: subreportId
+      },
+      success: function() {
+        removeSubreportUpdateTask( $subreportTr );
+      }
+    });
   },
 
   expandReport: function($tr) {
@@ -148,6 +167,12 @@ function getParentTaskTr($subreportTr) {
 
 reportedTable.init();
 
+function removeSubreportUpdateTask($subreportTr) {
+  var $parentTask = getParentTaskTr( $subreportTr );
+  $subreportTr.remove();              
+  reportedTable.sumTotalTaskTime( $parentTask );
+}
+
 var droppableOptions = {
   hoverClass: "drop-hover",
   drop: function(e, ui) {
@@ -167,9 +192,7 @@ var droppableOptions = {
           // calculate report time for the old one, append the new template osv
           reportedTable.updateOrAppendTask(reportedTaskId, template);
 
-          var $parentTask = getParentTaskTr( $dragged );
-          $dragged.remove();              
-          reportedTable.sumTotalTaskTime( $parentTask );
+          removeSubreportUpdateTask( $dragged );
         }
       });
     };
