@@ -24,10 +24,10 @@ class TaskController extends BaseController {
 
       return Response::json( $subreports->toJson() );
    }
-   
+
    /**
     * Returns name and date, if modified data exists then returns that
-    * @param  [integer] $id 
+    * @param  [integer] $id
     * @return [json] id, title, date
     */
    public function getModifiedTaskData($id)
@@ -51,7 +51,7 @@ class TaskController extends BaseController {
    {
       $this->taskModifier->modifyTask( $id, Input::all() );
 
-      return Response::json(array('id' => $id)); 
+      return Response::json(array('id' => $id));
    }
 
    public function postAddPrivateToTask() {
@@ -61,8 +61,8 @@ class TaskController extends BaseController {
       $reportedTaskId = Input::get('reported_task_id');
 
       $task = $this->task->find( $reportedTaskId );
-      
-      $privateTask = PrivateTask::find( $privateTaskId ); 
+
+      $privateTask = PrivateTask::find( $privateTaskId );
 
       $todaysDate = date('Y-m-d');
 
@@ -71,7 +71,7 @@ class TaskController extends BaseController {
          'reported_date' => $todaysDate,
          'name' => $privateTask->name,
          'time' => $privateTask->time_worked
-      ]); 
+      ]);
 
       $privateTask->delete();
 
@@ -109,13 +109,13 @@ class TaskController extends BaseController {
             'user_id' => $user->id,
             'asana_id' => $asanaTaskId,
             'project_id' => $projectId,
-            'task' => $name 
+            'task' => $name
          ));
       }
 
       $privateTask = PrivateTask::find( $privateTaskId );
 
-      // transfer private task data to a subreport 
+      // transfer private task data to a subreport
       $todaysDate = date('Y-m-d');
 
       $subreport = $this->subreport->create([
@@ -123,7 +123,7 @@ class TaskController extends BaseController {
          'reported_date' => $todaysDate,
          'name' => $privateTask->name,
          'time' => $privateTask->time_worked
-      ]); 
+      ]);
 
       $privateTask->delete();
 
@@ -239,24 +239,32 @@ class TaskController extends BaseController {
       return Response::json();
    }
 
-   // TODO make sure that subreport is unpayed
    public function putMoveSubreport($subreportId)
    {
+      $response;
       $subreport = $this->subreport->find( $subreportId );
 
-      $taskId = Input::get('reported_task_id');
+      if ($subreport->payed)
+      {
+         $response = Response::json([
+            'body' => 'Already payed, not possible to change task'
+         ], 422);
+         // 422 seems to be an acceptable return code for business rules violations
+      }
+      else
+      {
+         $subreport->task_id = Input::get('reported_task_id');
+         $subreport->save();
 
-      $subreport->task_id = $taskId;
+         $task = $subreport->task;
+         // return new view
+         $response = Response::json([
+            'task_id' => $task->id,
+            'template' => View::make('templates.reported_task')->with('task', $task)->render()
+         ]);
+      }
 
-      $subreport->save();
-
-      $task = $subreport->task;
-
-      // return new view
-      return Response::json([
-         'task_id' => $task->id,
-         'template' => View::make('templates.reported_task')->with('task', $task)->render()
-      ]);
+      return $response;
    }
 
    public function postUndoSubreportRemove()
