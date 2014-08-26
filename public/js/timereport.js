@@ -1,12 +1,15 @@
 ;(function($) {
 
-  $('.private-task').draggable( draggableOptions );
+  var draggable = require('./timereport/draggable');
+  var reportedTable = require('./timereport/reportedTable')();
+
+  $('.private-task').draggable( draggable.config );
 
   // Global variables
   var $newReportAction = $('#new-report');
   var $privateTasks = $('#private-tasks-tbody');
 
-  // Event handlers 
+  // Event handlers
   $newReportAction.click(createNewReport)
 
   $privateTasks.on('click', '.connect', connectToAsanaTaskModal);
@@ -19,7 +22,7 @@
 
   function createNewReport() {
     // checkout all the newly added reports, if they have an empty value focus that one
-    var $newlyAddedNames = $('.newly-added input.name'); 
+    var $newlyAddedNames = $('.newly-added input.name');
 
     var foundUnusedReport = false;
 
@@ -37,7 +40,7 @@
     // we dont want to add a new report row if there is an unused
     if ( foundUnusedReport ) return;
 
-    $privateTasks.prepend( $('#report-template').html() ); 
+    $privateTasks.prepend( $('#report-template').html() );
   }
 
   function removePrivateReport() {
@@ -67,7 +70,7 @@
       $.post('/task/connect-asana', {
         private_task_id: privateTaskId,
         asana_task_id: asanaData.asana_id,
-        project_id: asanaData.project_id, 
+        project_id: asanaData.project_id,
         project_name: asanaData.project_name,
         name: asanaData.name
       }, function(data) {
@@ -83,7 +86,7 @@
 
       // when we get a response we want to hide/delete the private task
 
-      // add to the right side, 
+      // add to the right side,
 
     };
 
@@ -92,7 +95,7 @@
       var asanaTasks = response.data || [];
 
       var transformed = _.map(asanaTasks, function(task, key) {
-        return extractTaskData(task); 
+        return extractTaskData(task);
       });
 
       asanaModal.populate( transformed );
@@ -154,7 +157,7 @@
         .removeClass('newly-added')
         .addClass('private-task');
 
-      $tr.draggable( draggableOptions );
+      $tr.draggable( draggable.config );
     });
   }
 

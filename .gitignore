@@ -8,3 +8,5 @@ Thumbs.db
 *.swp
 
 app/tests/_log
+
+node_modules/

@@ -38,7 +38,7 @@
         @endforeach
       </tbody>
         </table>
-      </div> 
+      </div>
 
       <div class="col-md-6 col-md-offset-1">
         <h1>Rapporterade</h1>
@@ -53,7 +53,7 @@
             </tr>
           </thead>
           <tbody>
-            {{ View::renderEach('templates.reported_task', $tasks, 'task') }} 
+            {{ View::renderEach('templates.reported_task', $tasks, 'task') }}
           </tbody>
         </table>
 
@@ -102,7 +102,7 @@
             @endforeach
             </tbody>
          </table>
-      </div> 
+      </div>
    </div>
 
    <div class="row">
@@ -144,12 +144,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Koppla ihop med uppgift</h4> 
+        <h4 class="modal-title">Koppla ihop med uppgift</h4>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6">
-            <input id="asana-task-filter" type="text" placeholder="Filter..." class="form-control"> 
+            <input id="asana-task-filter" type="text" placeholder="Filter..." class="form-control">
           </div>
         </div>
         <div class="row">
@@ -238,7 +238,7 @@
       </a>
       <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
     </td>
-  </tr>  
+  </tr>
 </script>
 
 <script type="text/template" id="task-template">
@@ -286,9 +286,7 @@
 @section('footer-scripts')
 <!-- // <script src="js/main.js"></script> -->
 <script src="js/timereport/utils.js"></script>
-<script src="js/timereport/draggable.js"></script>
 <script src="js/timereport/asanaModal.js"></script>
-<script src="js/timereport/reportedTable.js"></script>
-<script src="js/timereport.js"></script>
+<script src="dist/timereport-bundle.js"></script>
 <script src="js/libs/jquery.noty.packaged.min.js"></script>
 @stop
