@@ -95,7 +95,7 @@ var reportedTable = {
 
       // maybe extract into a nice function
       $template.first().droppable( droppableOptions );
-      $template.filter('.subreport').draggable( draggableOptions );
+      $template.filter('.subreport:not(.payed)').draggable( draggableOptions );
 
       $existingTask.after( $template );
 
@@ -226,6 +226,6 @@ var droppableOptions = {
 
 };
 
-$('.subreport').draggable( draggableOptions );
+$('.subreport:not(.payed)').draggable( draggableOptions );
 
 $('tr.task').droppable( droppableOptions );
