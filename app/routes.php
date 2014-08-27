@@ -21,7 +21,7 @@ Route::group(array('before' => 'auth'), function() {
 
       Route::controller('task', 'TaskController');
 
-      Route::resource('asana', 'AsanaController');
+      Route::controller('asana', 'AsanaController');
    });
 });
 
@@ -32,7 +32,7 @@ Route::group(array('before' => 'auth', 'prefix' => 'reported-time'), function() 
       'uses' => 'ReportedTimeController@getIndex'
       )
    );
-   
+
    Route::get('/{project}', array(
       'as' => 'reported-time.showProject',
       'uses' => 'ReportedTimeController@showProject'
@@ -61,7 +61,7 @@ Route::group(array('before' => 'admin'), function() {
 
    Route::get('/staff/{id}/edit/company', [
      'as' => 'staff.company',
-     'uses' => 'AdminManageStaffController@company' 
+     'uses' => 'AdminManageStaffController@company'
       ]);
 
    Route::put('/staff/{id}/edit/company', [
@@ -99,7 +99,7 @@ Route::group(array('before' => 'admin'), function() {
    // Route::get('staff-report/{user}/{from}/{to}/print', 'AdminReportedTimeController@printProjectOverview');
 
 
-   // CUSTOMER REPORT 
+   // CUSTOMER REPORT
    Route::get('customer-report','CustomerViewController@getIndex');
    Route::post('customer-report/filter', 'CustomerViewController@filter');
    Route::get('customer-report/{project}/{from}/{to}', array(

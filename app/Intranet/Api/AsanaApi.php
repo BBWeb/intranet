@@ -89,10 +89,10 @@ class AsanaApi {
     public function getOneTask($taskId){
         $resultJson = json_decode($this->apiRequest($this->taskUri.'/'.$taskId));
 
-        $castIntoArray = array();
+        $projectData = array();
 
         if(array_key_exists(0, $resultJson->data->projects)) {
-            $castIntoArray = (array)$resultJson->data->projects[0];
+            $projectData = (array)$resultJson->data->projects[0];
         }
         elseif(is_object($resultJson->data->parent)){
             // TODO we really need to integrate this more with redis cache
@@ -100,24 +100,26 @@ class AsanaApi {
             //  For now this should do the trick though
             $parentProject = $this->getParentProject($resultJson->data->parent->id);
 
-            $castIntoArray = $parentProject;
+            $projectData = (array) $parentProject;
             // $castIntoArray = array(
             //                     'id' => $resultJson->data->parent->id,
             //                     'name' => 'PARENT TASK: '.$resultJson->data->parent->name
             //                  );
         }
         else{
-            $castIntoArray = array(
+            $projectData = array(
                                 'id' => $resultJson->data->id,
                                 'name' => 'NO PROJECT'
                              );
         }
 
-        $array = array ( 'completed' => $resultJson->data->completed,
-                         'projects' => $castIntoArray
-                       );
+        $taskData = [
+            'name' => $resultJson->data->name,
+            'completed' => $resultJson->data->completed,
+            'projects' => $projectData
+        ];
 
-        return $array;
+        return $taskData;
     }
 
     public function updateTask($taskId, $workedHours, $workedMinutes, $estimatedHours, $estimatedMinutes, $taskName){

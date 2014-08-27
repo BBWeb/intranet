@@ -92,15 +92,15 @@
     };
 
     asanaModal.show();
-    $.get('asana/all', function(response, textStatus) {
-      var asanaTasks = response.data || [];
+    // $.get('asana/all', function(response, textStatus) {
+    //   var asanaTasks = response.data || [];
 
-      var transformed = _.map(asanaTasks, function(task, key) {
-        return extractTaskData(task);
-      });
+    //   var transformed = _.map(asanaTasks, function(task, key) {
+    //     return extractTaskData(task);
+    //   });
 
-      asanaModal.populate( transformed );
-    });
+    //   // asanaModal.populate( transformed );
+    // });
   }
 
   // get the important data and return an object

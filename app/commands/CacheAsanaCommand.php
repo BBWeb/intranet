@@ -45,7 +45,7 @@ class CacheAsanaCommand extends Command {
 
 			// run the asana handler thingie
 		    $asana = new AsanaHandler( $user );
-		    $asana->getAllAssignedTasks();
+		    $asana->updateAllTasks();
 		}
 	}
 

@@ -25,6 +25,13 @@ var asanaModal = {
       // send data to the listener
       self.onConnect( asanaData );
     });
+
+    this.$el.on('click', '.asana-sync', function() {
+      console.log('Asana synk');
+      $.post('/asana/trigger-asana-update', {}, function() {
+        console.log('Success');
+      });
+    });
   },
 
   populate: function(tasks) {
@@ -50,14 +57,14 @@ var asanaModal = {
   },
 
   show: function() {
-   // show the modal 
+   // show the modal
    this.$el.modal();
 
    return this;
   },
 
   close: function() {
-    this.$el.modal('hide'); 
+    this.$el.modal('hide');
 
     return this;
   }

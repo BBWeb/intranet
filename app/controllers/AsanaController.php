@@ -19,4 +19,11 @@ class AsanaController extends BaseController {
 
       return Response::json( $projectTasks );
    }
+
+   public function postTriggerAsanaUpdate()
+   {
+      // trigger a new update
+
+      // return all tasks
+   }
 }

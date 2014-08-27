@@ -151,6 +151,9 @@
           <div class="col-md-6">
             <input id="asana-task-filter" type="text" placeholder="Filter..." class="form-control">
           </div>
+          <div class="col-md-6">
+            <button class="btn pull-right asana-sync">Asana synk</button>
+          </div>
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -163,6 +166,13 @@
               </tr>
             </thead>
             <tbody id="asana-tasks">
+            @foreach($asanaTasks as $asanaTask)
+            <tr>
+              <td class="task-project">{{ $asanaTask['projects']['name'] }}</td>
+              <td class="task-name">{{ $asanaTask['name'] }}</td>
+              <td><button class="btn btn-primary connect-task">Koppla</button></td>
+            </tr>
+            @endforeach
             </tbody>
           </table>
           </div>
