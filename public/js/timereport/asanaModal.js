@@ -28,8 +28,8 @@ var asanaModal = {
 
     this.$el.on('click', '.asana-sync', function() {
       console.log('Asana synk');
-      $.post('/asana/trigger-asana-update', {}, function() {
-        console.log('Success');
+      $.post('/asana/trigger-asana-update', {}, function(data) {
+        self.$tasks.html( data.template );
       });
     });
   },

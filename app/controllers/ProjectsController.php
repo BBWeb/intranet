@@ -33,8 +33,6 @@ class ProjectsController extends BaseController {
 		$asanaHandler = new AsanaHandler( $user );
 		$asanaTasks = $asanaHandler->getUserTasks();
 
-		Log::info(print_r($asanaTasks, true));
-
 		return View::make('user.start', array(
 			'projects' => $projects,
 			'privateTasks' => $privateTasks,

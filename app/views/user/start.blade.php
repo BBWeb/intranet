@@ -152,7 +152,9 @@
             <input id="asana-task-filter" type="text" placeholder="Filter..." class="form-control">
           </div>
           <div class="col-md-6">
-            <button class="btn pull-right asana-sync">Asana synk</button>
+          <a href="#" class="pull-right" style="line-height: 34px">
+            <span class="glyphicon glyphicon-refresh asana-sync"></span>
+          </a>
           </div>
         </div>
         <div class="row">
@@ -166,13 +168,7 @@
               </tr>
             </thead>
             <tbody id="asana-tasks">
-            @foreach($asanaTasks as $asanaTask)
-            <tr>
-              <td class="task-project">{{ $asanaTask['projects']['name'] }}</td>
-              <td class="task-name">{{ $asanaTask['name'] }}</td>
-              <td><button class="btn btn-primary connect-task">Koppla</button></td>
-            </tr>
-            @endforeach
+            {{ View::renderEach('templates.asana_task', $asanaTasks, 'asanaTask') }}
             </tbody>
           </table>
           </div>

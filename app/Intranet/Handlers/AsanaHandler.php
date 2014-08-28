@@ -4,6 +4,7 @@ use Intranet\Api\AsanaApi;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
+use \DateTime;
 
 class AsanaHandler {
 
@@ -42,6 +43,10 @@ class AsanaHandler {
 
          // add to users set
       }
+
+      $this->saveQueryTime();
+
+
       // go through all assigned tasks and update for user
 
       // get lists of tasks for asana
@@ -49,6 +54,30 @@ class AsanaHandler {
          // more info about them
 
       // insert each and every one of them
+   }
+
+   public function updateTasksSinceLastQuery()
+   {
+      $asana = new AsanaApi( $this->apiKey );
+
+      $lastQueryTime = $this->getLastQueryTime();
+
+      $modifiedTasks = json_decode( $asana->getModifiedTasks( self::WORKSPACE_ID, $lastQueryTime ) );
+
+      Log::info("AAAA");
+      Log::info(print_r($modifiedTasks, true));
+      // what happens when modified and we already have the task
+      // will it me added to the users set or modified?
+      foreach ($modifiedTasks->data as $key => $task)
+      {
+         $taskData = $asana->getOneTask( $task->id );
+         $this->redis->set('tasks:' . $task->id, serialize( $taskData ));
+         $this->redis->sadd('users:' . $this->user->id, $task->id);
+      }
+
+      $this->saveQueryTime();
+
+      return $this->getUserTasks();
    }
 
    public function getUserTasks()
@@ -71,6 +100,46 @@ class AsanaHandler {
 
       // pipeline a get
       return $tasks;
+   }
+
+   public function removeDeletedAsanaTasks()
+   {
+      $asana = new AsanaApi( $this->apiKey );
+      $tasks = json_decode( $asana->getTasks( self::WORKSPACE_ID ) );
+
+      $this->redis->del('tempasanatasks');
+
+      Log::info("Tasks");
+      Log::info(print_r($tasks, true));
+
+      $this->redis->pipeline(function($pipe) use (&$tasks) {
+         foreach ($tasks->data as $task)
+         {
+            $pipe->sadd('tempasanatasks', $task->id);
+         }
+      });
+
+      // check sdiff
+      $diffTasks = $this->redis->sdiff('users:' . $this->user->id, 'tempasanatasks');
+
+      Log::info(print_r($diffTasks, true));
+
+      $this->redis->pipeline(function($pipe) use (&$diffTasks) {
+         foreach($diffTasks as $diffTask)
+         {
+            $pipe->srem('users:' . $this->user->id, $diffTask);
+         }
+      });
+
+      // maybe we can keep the task if it has just changed assignne?
+      // remove from the users list of tasks
+
+
+      // what happens if a task is assigned to another user, we should have a diff.
+      // question is wheter we should delete the original task or not
+
+      // run sdiff, se what tasks that was contained in the earlier set that is no longer present
+      // remove these, atleast from the users list?
    }
 
 
@@ -144,6 +213,17 @@ class AsanaHandler {
       }
 
       return $tasks;
+   }
+
+   private function getLastQueryTime()
+   {
+      return $this->redis->get('users:' . $this->user->id . ':lastquery');
+   }
+
+   private function saveQueryTime()
+   {
+      $currentDateTime = new DateTime();
+      $this->redis->set('users:' . $this->user->id . ':lastquery', $currentDateTime->format(DateTime::ISO8601));
    }
 }
 

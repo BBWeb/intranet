@@ -68,6 +68,11 @@ class AsanaApi {
        return $this->apiRequest($this->workspaceUri . '/' . $workspaceId . '/tasks?assignee=me');
     }
 
+    public function getModifiedTasks($workspaceId, $lastQueryTime)
+    {
+       return $this->apiRequest($this->workspaceUri . '/' . $workspaceId . '/tasks?assignee=me&modified_since=' . urlencode($lastQueryTime));
+    }
+
     public function getProjectTasks($projectId)
     {
           return $this->apiRequest($this->projectUri . '/' . $projectId . '/tasks?assignee=me');

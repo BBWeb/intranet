@@ -22,8 +22,13 @@ class AsanaController extends BaseController {
 
    public function postTriggerAsanaUpdate()
    {
-      // trigger a new update
+      $user = Auth::user();
+      $asana = new AsanaHandler( $user );
 
-      // return all tasks
+      $asanaTasks = $asana->updateTasksSinceLastQuery();
+
+      return Response::json([
+         'template' => View::renderEach('templates.asana_task', $asanaTasks, 'asanaTask')
+      ]);
    }
 }
