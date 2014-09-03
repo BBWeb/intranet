@@ -87,29 +87,17 @@ class TaskController extends BaseController {
 
       $privateTaskId = Input::get('private_task_id');
       $asanaTaskId = Input::get('asana_task_id');
-      $projectId = Input::get('project_id');
-      $name = Input::get('name');
-      $projectName = Input::get('project_name');
 
-      $project = $this->project->find( $projectId );
-
-      if ( !$project ) {
-         $project = $this->project->create(array(
-            'id' => $projectId,
-            'name' => $projectName
-         ));
-      }
+      $asanaTask = AsanaTask::find( $asanaTaskId );
 
       // find task for the current user and asana id
-      $task = $this->task->where('user_id', '=', $user->id)->where('asana_id', '=', $asanaTaskId)->first();
+      $task = $this->task->where('user_id', '=', $user->id)->where('asana_task_id', '=', $asanaTaskId)->first();
 
       // if there is none, create one
       if ( !$task ) {
          $task = $this->task->create(array(
             'user_id' => $user->id,
-            'asana_id' => $asanaTaskId,
-            'project_id' => $projectId,
-            'task' => $name
+            'asana_task_id' => $asanaTaskId
          ));
       }
 

@@ -6,7 +6,7 @@ abstract class UserValidator extends AbstractLaravelValidator {
 
 	protected $baseRules = array(
 		'email'=> 'required|email|unique:users',
-		'name' => 'required|alpha',
+		'name' => 'required',
 		'password' => 'required|min:6|confirmed'
 	);
 

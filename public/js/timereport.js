@@ -69,10 +69,7 @@
 
       $.post('/task/connect-asana', {
         private_task_id: privateTaskId,
-        asana_task_id: asanaData.asana_id,
-        project_id: asanaData.project_id,
-        project_name: asanaData.project_name,
-        name: asanaData.name
+        asana_task_id: asanaData.asana_id
       }, function(data) {
         var taskId = data.task_id;
         var template = data.template;

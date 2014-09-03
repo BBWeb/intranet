@@ -10,15 +10,13 @@ class TaskTableSeeder extends Seeder {
 		$user = DB::table('users')->where('email', 'niklas@bbweb.se')->first();
 
 		// ADD some tasks for Niklas under different projects
-		// NOTE that these are used in acceptance testing 
+		// NOTE that these are used in acceptance testing
 		// Total time for these should equal 66 minutes
 
 		// Test project
 		$task = Task::create(array(
 			'user_id' => $user->id,
-			'asana_id' => '1',
-			'project_id' => 1,
-			'task' => 'Task 1'
+			'asana_task_id' => 1
 		));
 
 		$this->createSubreport($task, 'Cool name', 31, '2014-06-11');
@@ -30,9 +28,7 @@ class TaskTableSeeder extends Seeder {
 		// add another task to Test project for Niklas
 		$task2 = Task::create(array(
 			'user_id' => $user->id,
-			'asana_id' => '2',
-			'project_id' => 1,
-			'task' => 'Task 2'
+			'asana_task_id' => 1
 		));
 
 		$this->createSubreport($task2, 'More stuff', 25, '2014-05-01');
@@ -47,6 +43,6 @@ class TaskTableSeeder extends Seeder {
 			'reported_date' => $date,
 			'payed' => $payed
 			)
-		);	
+		);
 	}
 }

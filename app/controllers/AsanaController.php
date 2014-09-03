@@ -25,7 +25,9 @@ class AsanaController extends BaseController {
       $user = Auth::user();
       $asana = new AsanaHandler( $user );
 
-      $asanaTasks = $asana->updateTasksSinceLastQuery();
+      $asana->updateTasksSinceLastQuery();
+
+      $asanaTasks = $user->nonCompletedAsanaTasks;
 
       return Response::json([
          'template' => View::renderEach('templates.asana_task', $asanaTasks, 'asanaTask')

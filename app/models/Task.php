@@ -2,7 +2,9 @@
 
 class Task extends Eloquent {
 
-   protected $fillable = array('user_id', 'asana_id', 'project_id', 'task');
+   protected $fillable = array('user_id', 'asana_task_id', 'task');
+
+   public $presenter = 'Intranet\Presenters\TaskPresenter';
 
    public static $rules = array(
       'time_worked' => 'integer|min:0'
@@ -18,6 +20,12 @@ class Task extends Eloquent {
    public function user()
    {
       return $this->belongsTo('User');
+   }
+
+   public function asanatask()
+   {
+     // belongs to asana task
+      return $this->belongsTo('AsanaTask', 'asana_task_id');
    }
 
    public function theproject()

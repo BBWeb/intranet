@@ -76,8 +76,5 @@ asanaModal.init();
 function extractAsanaDataFrom($tr) {
   return {
      asana_id: $tr.data('id'),
-     project_name: $tr.data('project-name'),
-     project_id: $tr.data('project-id'),
-     name: $tr.data('name')
   };
 }

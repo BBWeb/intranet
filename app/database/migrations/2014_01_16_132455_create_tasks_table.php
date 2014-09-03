@@ -16,11 +16,9 @@ class CreateTasksTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('user_id');
-			
-			$table->string('asana_id');
 
-			$table->string('project');
-			$table->string('task');
+			$table->bigInteger('asana_task_id');
+
 			$table->integer('time_worked')->default(0);
 
 			$table->enum('status', array('reported', 'invoiced', 'notreported'))->default('notreported');

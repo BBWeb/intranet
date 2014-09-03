@@ -4,7 +4,10 @@ use Intranet\Api\AsanaApi;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
+
 use \DateTime;
+use \AsanaTask;
+use \Project;
 
 class AsanaHandler {
 
@@ -33,27 +36,33 @@ class AsanaHandler {
 
       $responseCode = $asana->getResponseCode();
 
+      Log::info('All tasks should be updated');
+
       if ( $responseCode != '200' ) return;
 
       foreach ($tasks->data as $key => $task) {
          $taskData = $asana->getOneTask( $task->id );
-            // cache in redis for set time
-         $this->redis->set('tasks:' . $task->id, serialize( $taskData ));
-         $this->redis->sadd('users:' . $this->user->id, $task->id);
 
-         // add to users set
+         // if completed remove
+         if ( $taskData['completed'] ) {
+            continue;
+         }
+
+         // if project does not exist, create it
+         $projectData = $taskData['projects'];
+
+         $project = $this->findOrCreateProject( $projectData );
+
+         AsanaTask::create([
+            'id' => $task->id,
+            'project_id' => $project->id,
+            'name' => $taskData['name'],
+            'completed' => false,
+            'user_id' => $this->user->id
+         ]);
       }
 
       $this->saveQueryTime();
-
-
-      // go through all assigned tasks and update for user
-
-      // get lists of tasks for asana
-
-         // more info about them
-
-      // insert each and every one of them
    }
 
    public function updateTasksSinceLastQuery()
@@ -63,43 +72,33 @@ class AsanaHandler {
       $lastQueryTime = $this->getLastQueryTime();
 
       $modifiedTasks = json_decode( $asana->getModifiedTasks( self::WORKSPACE_ID, $lastQueryTime ) );
-
-      Log::info("AAAA");
-      Log::info(print_r($modifiedTasks, true));
       // what happens when modified and we already have the task
       // will it me added to the users set or modified?
       foreach ($modifiedTasks->data as $key => $task)
       {
          $taskData = $asana->getOneTask( $task->id );
-         $this->redis->set('tasks:' . $task->id, serialize( $taskData ));
-         $this->redis->sadd('users:' . $this->user->id, $task->id);
+
+         // check if completed?
+            // then we should complete the task.
+
+         $this->updateOrCreateAsanaTask($task->id, $taskData);
+         // create or update task
+         // $asanaTask = AsanaTask::findOrNew($task->id);
+         // $asanaTask->project_id = $project->id;
+         // $asanaTask->name = $taskData['name'];
+         // $asanaTask->user_id = $this->user->id;
+         // $asanaTask->update();
+
+         // find or new asana task?
+            // set user id and so on
+
+         // update the name and so on for the task, or add it if not added
+
+         // $this->redis->set('tasks:' . $task->id, serialize( $taskData ));
+         // $this->redis->sadd('users:' . $this->user->id, $task->id);
       }
 
       $this->saveQueryTime();
-
-      return $this->getUserTasks();
-   }
-
-   public function getUserTasks()
-   {
-      // get the id
-      $userTasks = $this->redis->smembers('users:' . $this->user->id);
-
-      $resArray = $this->redis->pipeline(function($pipe) use (&$userTasks) {
-         foreach ($userTasks as $taskId) {
-            $pipe->get('tasks:' . $taskId);
-         }
-      });
-
-      $tasks = [];
-
-      foreach($resArray as $val) {
-         array_push($tasks, unserialize( $val ));
-      }
-      // get all of the members
-
-      // pipeline a get
-      return $tasks;
    }
 
    public function removeDeletedAsanaTasks()
@@ -224,6 +223,51 @@ class AsanaHandler {
    {
       $currentDateTime = new DateTime();
       $this->redis->set('users:' . $this->user->id . ':lastquery', $currentDateTime->format(DateTime::ISO8601));
+   }
+
+   private function updateOrCreateAsanaTask($taskId, $taskData)
+   {
+      // project should exist, otherwise create it
+      $projectData = $taskData['projects'];
+      $project = $this->findOrCreateProject( $projectData );
+
+         // need to handle updates as well
+      $asanaTask = AsanaTask::find($taskId);
+
+      if ($asanaTask)
+      {
+         if ( $asanaTask->completed && !$taskData['completed'] ) return;
+
+         $asanaTask->name = $taskData['name'];
+         $asanaTask->completed = $taskData['completed'];
+         $asanaTask->project_id = $project->id;
+         $asanaTask->user_id = $this->user->id;
+         $asanaTask->update();
+      }
+      else
+      {
+         AsanaTask::create([
+            'id' => $taskId,
+            'project_id' => $project->id,
+            'name' => $taskData['name'],
+            'completed' => $taskData['completed'],
+            'user_id' => $this->user->id
+         ]);
+      }
+   }
+
+   private function findOrCreateProject($projectData)
+   {
+      $project = Project::find( $projectData['id'] );
+
+      if ( !$project ) {
+         $project = Project::create(array(
+            'id' => $projectData['id'],
+            'name' => $projectData['name']
+         ));
+      }
+
+      return $project;
    }
 }
 

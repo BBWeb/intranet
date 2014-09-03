@@ -93,14 +93,24 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return $this->hasMany('StaffPaymentData');
    }
 
+   public function asanaTasks()
+   {
+      return $this->hasMany('AsanaTask');
+   }
+
+   public function nonCompletedAsanaTasks()
+   {
+      return $this->asanaTasks()->where('completed', '=', false);
+   }
+
    public function getOldPaymentInfo()
    {
       $currentDate = date('Y-m-d');
 
       // same as in getActivePaymentInfo but remove the first result which should be active
       // take 9999 because an offset must be used with skip
-      $paymentdata = $this->paymentdata()->where('start_date', '<=', $currentDate) 
-                     ->orderBy('start_date', 'desc')->skip(1)->take(9999);   
+      $paymentdata = $this->paymentdata()->where('start_date', '<=', $currentDate)
+                     ->orderBy('start_date', 'desc')->skip(1)->take(9999);
 
       return $paymentdata->get();
    }
@@ -110,8 +120,8 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       $currentDate = date('Y-m-d');
 
       // query to get the one active where startDate <= currentDate, the one with the most recent start_date should be the active one
-      $paymentdata = $this->paymentdata()->where('start_date', '<=', $currentDate)->orderBy('start_date', 'desc');   
-      
+      $paymentdata = $this->paymentdata()->where('start_date', '<=', $currentDate)->orderBy('start_date', 'desc');
+
       return $paymentdata->first();
    }
 
@@ -124,16 +134,18 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return $paymentdata->get();
    }
 
-   public function notreportedTasks()
+   public function nonCompletedTasks()
    {
-      return $this->tasks()->whereStatus('notreported')->orderBy('created_at', 'DESC');
+      return $this->tasks()->whereHas('asanatask', function($q) {
+         $q->where('completed', false);
+      });
    }
 
    public function notreportedTasksFor($project)
    {
       return $this->tasks()
              ->whereStatus('notreported')
-             ->where('project_id', '=', $project)  
+             ->where('project_id', '=', $project)
              ->orderBy('created_at', 'DESC');
    }
 
