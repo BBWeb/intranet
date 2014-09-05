@@ -78,69 +78,11 @@ class AsanaHandler {
       {
          $taskData = $asana->getOneTask( $task->id );
 
-         // check if completed?
-            // then we should complete the task.
-
          $this->updateOrCreateAsanaTask($task->id, $taskData);
-         // create or update task
-         // $asanaTask = AsanaTask::findOrNew($task->id);
-         // $asanaTask->project_id = $project->id;
-         // $asanaTask->name = $taskData['name'];
-         // $asanaTask->user_id = $this->user->id;
-         // $asanaTask->update();
-
-         // find or new asana task?
-            // set user id and so on
-
-         // update the name and so on for the task, or add it if not added
-
-         // $this->redis->set('tasks:' . $task->id, serialize( $taskData ));
-         // $this->redis->sadd('users:' . $this->user->id, $task->id);
       }
 
       $this->saveQueryTime();
    }
-
-   public function removeDeletedAsanaTasks()
-   {
-      $asana = new AsanaApi( $this->apiKey );
-      $tasks = json_decode( $asana->getTasks( self::WORKSPACE_ID ) );
-
-      $this->redis->del('tempasanatasks');
-
-      Log::info("Tasks");
-      Log::info(print_r($tasks, true));
-
-      $this->redis->pipeline(function($pipe) use (&$tasks) {
-         foreach ($tasks->data as $task)
-         {
-            $pipe->sadd('tempasanatasks', $task->id);
-         }
-      });
-
-      // check sdiff
-      $diffTasks = $this->redis->sdiff('users:' . $this->user->id, 'tempasanatasks');
-
-      Log::info(print_r($diffTasks, true));
-
-      $this->redis->pipeline(function($pipe) use (&$diffTasks) {
-         foreach($diffTasks as $diffTask)
-         {
-            $pipe->srem('users:' . $this->user->id, $diffTask);
-         }
-      });
-
-      // maybe we can keep the task if it has just changed assignne?
-      // remove from the users list of tasks
-
-
-      // what happens if a task is assigned to another user, we should have a diff.
-      // question is wheter we should delete the original task or not
-
-      // run sdiff, se what tasks that was contained in the earlier set that is no longer present
-      // remove these, atleast from the users list?
-   }
-
 
    public function getProjects()
    {
