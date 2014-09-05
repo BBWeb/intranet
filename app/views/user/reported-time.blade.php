@@ -7,15 +7,15 @@
     <div class="col-md-6">
       {{ Form::open(array('route' => 'reported-time.filter', 'class' => 'form-inline')) }}
         <div class="form-group">
-          <label for="exampleInputEmail2">Projekt</label>
+          <label for="">Projekt</label>
           {{ Form::select('project', array('all' => 'Alla') + $projects, Session::get('project'), array('class' => 'form-control')) }}
         </div>
-      
-        {{ Form::submit('Filtrera', array('class' => 'btn btn-primary')) }}        
+
+        {{ Form::submit('Filtrera', array('class' => 'btn btn-primary')) }}
       {{ Form::close() }}
     </div>
   </div>
-  
+
   <div class="row" style="margin-top: 15px">
     <div class="col-md-6">
      <!-- unpayed time in hours and minutes  -->
@@ -24,7 +24,7 @@
         <li>Betald tid {{ $totalPayed->hours }} timmar {{ $totalPayed->minutes }} minuter</li>
       </ul>
      <!-- payed time in hours and minutes -->
-    </div> 
+    </div>
   </div>
 
   <div class="row" style="margin-top: 15px">
@@ -42,8 +42,8 @@
         <tbody>
           @foreach($tasks as $task)
           <tr data-id="{{ $task->id }}">
-            <td>{{ $task->theproject->name }}</td>
-            <td>{{ $task->task }}</td>
+            <td>{{ $task->projectName() }}</td>
+            <td>{{ $task->taskName() }}</td>
             <td>{{ $task->totalUnpayedTime() }}</td>
             <td><span class="total-time" href="">{{ $task->totaltime() }}</span></td>
             <td>

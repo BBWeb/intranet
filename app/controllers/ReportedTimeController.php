@@ -33,8 +33,8 @@ class ReportedTimeController extends BaseController {
 
 	/**
 	 * Shows users tasks for a specific project
-	 * @param  [Integer] $id The identifier of the project to display 
-	 * @return [View]    View containing tasks 
+	 * @param  [Integer] $id The identifier of the project to display
+	 * @return [View]    View containing tasks
 	 */
 	public function showProject($id)
 	{
@@ -44,26 +44,29 @@ class ReportedTimeController extends BaseController {
 
 		$projects =  $this->project->lists('name', 'id');
 
-		$projectTasksQuery = $user->tasks()->where('project_id', '=', $id);
-		$projectTasks = $projectTasksQuery->with('subreports')->get();
+		// get the selected project
+		$project = $this->project->find( $id );
+		// get all of this users task which is connected to the project through an asana task
+		$userTasksInProjectQuery = $project->tasks()->where('tasks.user_id', '=', $user->id); // collision with user id on asana table, therefore tasks.user_id
+		$userTasksInProject = $userTasksInProjectQuery->with('subreports')->get();
 
-		$totalUnpayedInMinutes = $this->totalUnpayedFor( $projectTasks );
+		$totalUnpayedInMinutes = $this->totalUnpayedFor( $userTasksInProject );
 		$totalUnpayed = $this->getTimeObj( $totalUnpayedInMinutes );
 
-		$totalPayedInMinutes = $this->totalPayedFor( $projectTasks );
+		$totalPayedInMinutes = $this->totalPayedFor( $userTasksInProject );
 		$totalPayed = $this->getTimeObj( $totalPayedInMinutes );
 
 		return View::make('user.reported-time', array(
 			'projects' => $projects,
 			'totalUnpayed' => $totalUnpayed,
 			'totalPayed' => $totalPayed,
-			'tasks' => $projectTasks
+			'tasks' => $userTasksInProject
 			)
 		);
 	}
 
 	/**
-	 * Takes input form incoming post request and formats a new request to match 
+	 * Takes input form incoming post request and formats a new request to match
 	 * search criteria
 	 */
 	public function filter()
@@ -107,7 +110,7 @@ class ReportedTimeController extends BaseController {
 	{
 		$timeObj = new stdClass();
 
-		$timeObj->hours = floor( $minutes / 60 );	
+		$timeObj->hours = floor( $minutes / 60 );
 		$timeObj->minutes = $minutes % 60;
 
 		return $timeObj;
