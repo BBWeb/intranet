@@ -127,13 +127,12 @@ class AsanaApi {
         return $taskData;
     }
 
-    public function updateTask($taskId, $workedHours, $workedMinutes, $estimatedHours, $estimatedMinutes, $taskName){
+    public function checkTaskExistance($taskId)
+    {
+        // send a req, see whats returned
+        $resultJson = json_decode($this->apiRequest($this->taskUri.'/'.$taskId));
 
-        $data = array( "name" => $taskName ." [ET: " . $estimatedHours . "h " . $estimatedMinutes . "m] [WT: " . $workedHours . "h " . $workedMinutes . "m]");
-        $data = array("data" => $data);
-        $data = json_encode($data);
-
-        return $this->apiRequest($this->taskUri.'/'.$taskId , $data, self::PUT_METHOD);
+        return $resultJson;
     }
 
     // ##############################################################################################

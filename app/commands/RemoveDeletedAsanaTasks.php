@@ -40,15 +40,46 @@ class RemoveDeletedAsanaTasks extends Command {
 	{
 		$users = User::all();
 
+		$fetchedAsanaTasks = [];
+
 		foreach ($users as $user)
 		{
 			if ( $user->api_key == '' ) continue;
 
 			$asana = new AsanaHandler( $user );
 
-			$asana->removeDeletedAsanaTasks();
+			// get list of assigned tasks to user
+				// apppend to "global list"
+			$assignedTasks = $asana->getAllAssignedTasks();
+
+			foreach ($assignedTasks as $task)
+			{
+				array_push($fetchedAsanaTasks, $task->id);
+			}
 
 		}
+
+		Log::info("Fetched asana tasks");
+		Log::info(print_r($fetchedAsanaTasks, true));
+
+		$storedAsanaTasks = AsanaTask::where('completed', '=', false)->lists('id');  // get all non completed
+
+		Log::info("Stored asana tasks");
+		Log::info(print_r($storedAsanaTasks, true));
+
+		$diffTasks = array_diff($storedAsanaTasks, $fetchedAsanaTasks);
+
+		Log::info("Diff tasks");
+		Log::info(print_r($diffTasks, true));
+
+		$asanaKey = $_ENV['ASANA_KEY'];
+
+		AsanaHandler::deleteNotFoundTasks($asanaKey, $diffTasks);
+		// compare the global asana list to our local non completed tasks
+			// which meeans get the diff from these sets
+
+		// with the resulting diff, go through and check the current status of these
+		 // if not found in asana they should be completed or dropped!
 	}
 
 	/**

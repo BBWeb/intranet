@@ -17,4 +17,9 @@ class AsanaTask extends Eloquent {
     return $this->belongsTo('Project');
   }
 
+  public function tasks()
+  {
+    return $this->hasMany('Task', 'asana_task_id');
+  }
+
 }

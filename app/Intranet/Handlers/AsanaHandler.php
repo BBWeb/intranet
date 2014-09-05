@@ -160,38 +160,7 @@ class AsanaHandler {
 
       if ( $responseCode != '200' ) return;
 
-      foreach ( $tasks->data as $key => $task ) {
-
-         // if the tasks is found already, remove it etc
-         $existingTask = $this->user->tasks()->where('asana_id', '=', $task->id)->first();
-
-         if ( $existingTask ) {
-            // have the name been changed?
-            if ( $existingTask->task != $task->name ) {
-               // update the task in our db
-               $existingTask->task = $task->name;
-               $existingTask->save();
-            }
-
-            unset($tasks->data[$key]);
-            continue;
-         }
-
-         // if exists in redis?
-         if ( Cache::has( $task->id ) ) {
-            $cachedTaskState = unserialize( Cache::get( $task->id ) );
-            $task->taskState = $cachedTaskState;
-         } else {
-            // get additional info about the tasks (extra HTTP req)
-            $taskState = $asana->getOneTask( $task->id );
-            $task->taskState = $taskState;
-            // cache in redis for set time
-            Cache::put( $task->id, serialize( $taskState ), self::CACHE_TIME );
-         }
-
-      }
-
-      return $tasks;
+      return $tasks->data;
    }
 
    public function getProjectTasks($projectId)
@@ -212,6 +181,36 @@ class AsanaHandler {
       }
 
       return $tasks;
+   }
+
+   public static function deleteNotFoundTasks($key, $taskIds)
+   {
+      $asana = new AsanaApi( $key );
+
+      // go through all of the tasks ids
+      foreach ($taskIds as $id)
+      {
+         // check the state in asana
+         $taskResponse = $asana->checkTaskExistance( $id );
+
+         // if a task is not found on asana a 404 error should be returned
+         if ( $asana->getResponseCode() != 404) continue;
+
+         $asanaTask = AsanaTask::find( $id );
+
+         $nrTasks = $asanaTask->tasks()->count();
+
+         // if we have tasks connected to the Asana task,
+         // complete it
+         if ( $nrTasks > 0 )
+         {
+            $asanaTask->completed = true;
+            $asanaTask->update();
+         } else {
+            // otherwise delete it
+            $asanaTask->delete();
+         }
+      }
    }
 
    private function getLastQueryTime()
