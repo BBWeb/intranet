@@ -147,6 +147,7 @@ class AsanaHandler {
          if ( $nrTasks > 0 )
          {
             $asanaTask->completed = true;
+            $asanaTask->completion_date = date('Y-m-d'); // TODO extract to some util library as its used all over the app
             $asanaTask->update();
          } else {
             // otherwise delete it

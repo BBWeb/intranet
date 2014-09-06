@@ -47,10 +47,10 @@
             <td>{{ $task->totalUnpayedTime() }}</td>
             <td><span class="total-time" href="">{{ $task->totaltime() }}</span></td>
             <td>
-              @if ($task->reported_date == '0000-00-00')
+              @if ($task->completionDate() == '0000-00-00')
               Icke avslutad
               @else
-              {{$task->reported_date }}
+              {{$task->completionDate() }}
               @endif
             </td>
           </tr>

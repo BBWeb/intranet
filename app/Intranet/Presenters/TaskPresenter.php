@@ -9,6 +9,13 @@ class TaskPresenter extends BasePresenter {
     $this->resource = $task;
   }
 
+  public function completionDate()
+  {
+    $asanaTask = $this->resource->asanatask;
+
+    return $asanaTask->completion_date;
+  }
+
   public function taskName()
   {
     $asanaTask = $this->resource->asanatask;
