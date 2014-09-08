@@ -40,7 +40,7 @@ class Task extends Eloquent {
 
    public function modifiedNameIfAny()
    {
-      $title = $this->task;
+      $title = $this->asanatask->name;
 
       $modifiedNameTask = $this->modifiedTaskName;
 
@@ -54,7 +54,7 @@ class Task extends Eloquent {
 
    public function modifiedDateIfAny()
    {
-      $date = $this->reported_date;
+      $date = $this->asanatask->completion_date;
 
       $modifiedDateTask = $this->modifiedTaskDate;
 

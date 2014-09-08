@@ -31,14 +31,12 @@ class Project extends Eloquent {
 
 		// get not modified tasks for this project, with a reported_date between the date interval
 		// only get these if there are no modified dates for it
+
 		$notModifiedTasks = DB::table('tasks')
-			->selectRaw('tasks.*, modified_date_tasks.task_id, modified_date_tasks.modified_date')
-			->leftJoin('modified_date_tasks', 'tasks.id', '=', 'modified_date_tasks.task_id')
-			->whereRaw('NOT EXISTS( SELECT * FROM modified_date_tasks where modified_date_tasks.task_id = tasks.id )')
-			->where('tasks.project_id', '=', $this->id)
-			->whereBetween('tasks.reported_date', [ $dateFrom, $dateTo ]);
-
-
+			->selectRaw('tasks.*, asana_tasks.id, asana_tasks.completion_date')
+			->join('asana_tasks', 'tasks.asana_task_id', '=', 'asana_tasks.id')
+			->where('asana_tasks.project_id', '=', $this->id)
+			->whereBetween('asana_tasks.completion_date', [ $dateFrom, $dateTo ]);
 
 		// create a union between the modified tasks and the not modified tasks
 		$filteredTasks = Task::hydrate( $modifiedTasks->union($notModifiedTasks)->remember(10)->get() );
@@ -48,6 +46,7 @@ class Project extends Eloquent {
 
 	public function orderedTasks()
 	{
-		return $this->hasMany('Task')->orderBy('created_at');
+		$meck = $this->tasks()->orderBy('created_at');
+		return $meck;
 	}
 }

@@ -202,8 +202,12 @@ class TaskController extends BaseController {
 
       $task = $this->task->find( $id );
 
-      $task->reported_date = date('Y-m-d');
-      $task->status = 'reported';
+      $asanaTask = $task->asanatask;
+
+      $asanaTask->completed = true;
+      $asanaTask->completion_date = date('Y-m-d');
+
+      $asanaTask->update();
 
       $task->save();
 

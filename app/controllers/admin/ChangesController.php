@@ -16,12 +16,12 @@ class ChangesController extends \BaseController {
 		return \View::make('admin.changes.base', array(
 			'projects' => $projects
 			)
-		);	
-	}	
+		);
+	}
 
 	public function postIndex()
 	{
-		$projectId = Input::get('project');		
+		$projectId = Input::get('project');
 
 		$url = route('changes.project', array( $projectId ));
 
@@ -32,12 +32,13 @@ class ChangesController extends \BaseController {
 	{
 		$projects = $this->project->lists('name', 'id');
 
-		Session::flash('projectId', $id);	
+		Session::flash('projectId', $id);
 		$project = $this->project->find( $id );
 
 		return View::make('admin.changes.project', array(
 			'projects' => $projects,
-			'project' => $project
+			'project' => $project,
+			'tasks' => $project->orderedTasks
 			)
 		);
 

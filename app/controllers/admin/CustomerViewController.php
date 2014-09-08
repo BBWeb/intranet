@@ -13,10 +13,10 @@ class CustomerViewController extends BaseController {
 	{
 	    $projects = $this->project->lists('name', 'id');
 
-   		// define in helper functions 
+   		// define in helper functions
 		$lastMonthTimeStamp = mktime(0, 0, 0, date('m') - 1, 1, date('Y'));
 
-		// first day of last month 
+		// first day of last month
 		$defaultFromDate =  date('d-m-Y', $lastMonthTimeStamp);
 		Session::flash('from', $defaultFromDate);
 
@@ -24,7 +24,7 @@ class CustomerViewController extends BaseController {
 		$defaultToDate = date('t-m-Y', $lastMonthTimeStamp);
 		Session::flash('to', $defaultToDate);
 
-	    return View::make('admin.customer-report.base')->with('projects', $projects);
+		return View::make('admin.customer-report.base')->with('projects', $projects);
 	}
 
 	public function filter()
@@ -43,19 +43,19 @@ class CustomerViewController extends BaseController {
 		$project = $this->project->find($projectId);
 
 		Session::flash('from', $fromStr);
-	    $from = date('Y-m-d', strtotime($fromStr));
+		$from = date('Y-m-d', strtotime($fromStr));
 
-	    Session::flash('to', $toStr);
-  		$to = date('Y-m-d', strtotime($toStr));
+		Session::flash('to', $toStr);
+		$to = date('Y-m-d', strtotime($toStr));
 
 	    // $projectTasks = $project->tasks()->whereBetween('reported_date', array($from, $to))->get();
-	    $projectTasks = $project->tasksForCustomerBetween($from, $to);
+		$projectTasks = $project->tasksForCustomerBetween($from, $to);
 
 	    // return $tasks;
-	    $totalTime = 0;
-	    foreach ($projectTasks as $task) {
-	    	$totalTime += $task->totaltime();
-	    }
+		$totalTime = 0;
+		foreach ($projectTasks as $task) {
+			$totalTime += $task->totaltime();
+		}
 
 		return View::make('admin.customer-report.project',
 			array(
@@ -81,7 +81,7 @@ class CustomerViewController extends BaseController {
 
 	    $totalTime = 0;
 	    // go through all "adjusted time wich are not set"
-	    foreach ($projectTasks as $projectTask) 
+	    foreach ($projectTasks as $projectTask)
 	    {
 	    	if ( $projectTask->adjusted_time == 0) {
 	    		$projectTask->adjusted_time = $projectTask->totaltime();
@@ -90,7 +90,7 @@ class CustomerViewController extends BaseController {
 	    	$totalTime += $projectTask->adjusted_time;
 	    }
 
-	    $hours = floor($totalTime / 60); 
+	    $hours = floor($totalTime / 60);
 	    $minutes = $totalTime % 60;
 
 	    return View::make('admin.customer-report.print', array(

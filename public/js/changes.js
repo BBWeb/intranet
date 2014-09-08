@@ -4,7 +4,7 @@
     1. EVENT HANDLERS
     2. GLOBAL DATA
     3. CHANGES MODAL
-    4. SERVER INTERACTORS 
+    4. SERVER INTERACTORS
    */
 
   // EVENT HANDLERS
@@ -29,7 +29,7 @@
     var $trParent = $(this).closest('tr');
     taskId = $trParent.data('id');
 
-    fetchTaskData(taskId, showModal);      
+    fetchTaskData(taskId, showModal);
   }
 
   function showModal(taskData) {
@@ -39,14 +39,16 @@
 
     setDateGroup( taskData );
 
-    // show modal 
+    // show modal
     $changesModal.modal()
   }
 
   function setDateGroup(taskData) {
+
+    console.log('Task data', taskData);
     var dateTemplate = _.template( $taskDateTemplate.html() );
 
-    // compile template and append .. 
+    // compile template and append ..
     $dateGroup.html( dateTemplate( taskData ) );
   }
 
@@ -62,7 +64,7 @@
 
   function getFormData() {
     var title = $customerTitle.val();
-    var date = $('#customer-date').val(); 
+    var date = $('#customer-date').val();
 
     return { title: title, date: date };
   }
@@ -101,7 +103,7 @@
   }
 
   function reportTask(taskId, cb) {
-    $.post('/task/report', { id: taskId }, cb); 
+    $.post('/task/report', { id: taskId }, cb);
   }
 
 })();

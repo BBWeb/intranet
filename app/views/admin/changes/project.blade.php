@@ -22,22 +22,22 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($project->orderedTasks as $task)
+					@foreach($tasks as $task)
 					<tr data-id="{{ $task->id }}">
-						<td>{{ $task->task }}</td>
+						<td>{{ $task->taskName() }}</td>
 						<td>{{ $task->modifiedNameIfAny() }}</td>
 						<td>
-							@if ($task->reported_date == '0000-00-00')
+							@if ($task->completionDate() == '0000-00-00')
 							Icke avslutad
 							@else
-							{{$task->reported_date }}
+							{{ $task->completionDate() }}
 							@endif
 						</td>
 						<td>
-							@if ($task->reported_date == '0000-00-00')
+							@if ($task->completionDate() == '0000-00-00')
 							Icke avslutad
 							@else
-							{{$task->modifiedDateIfAny() }}
+							{{ $task->modifiedDateIfAny() }}
 							@endif
 						</td>
 						<td>
@@ -62,7 +62,7 @@
 					<form>
 						<div class="form-group">
 							<label for="customer-title">Kundtitel</label>
-							<input type="text" class="form-control" id="customer-title" name="customer-title">	
+							<input type="text" class="form-control" id="customer-title" name="customer-title">
 						</div>
 						<div class="form-group" id="date-group">
 						</div>
@@ -78,7 +78,7 @@
 
 	<script type="text/template" id="task-date-template">
 		<label for="customer-date">Kunddatum</label>
-		<% if (date == '0000-00-00') { %>		
+		<% if (date == '0000-00-00') { %>
 			<p>Icke avslutad</p>
 			<button data-id="<%- id %>" class="btn btn-danger finish-task-btn">Avsluta</button>
 		<% } else { %>

@@ -13,10 +13,10 @@ class AdminReportedTimeController extends BaseController {
 	{
 		$users = $this->user->lists('name', 'id');
 
-		// define in helper functions 
+		// define in helper functions
 		$lastMonthTimeStamp = mktime(0, 0, 0, date('m') - 1, 1, date('Y'));
 
-		// first day of last month 
+		// first day of last month
 		$defaultFromDate =  date('d-m-Y', $lastMonthTimeStamp);
 		Session::flash('from', $defaultFromDate);
 
@@ -40,8 +40,8 @@ class AdminReportedTimeController extends BaseController {
 		Session::flash('from', $fromStr);
 	    $from = date('Y-m-d', strtotime( $fromStr ));
 
-	    Session::flash('to', $toStr);
-  		$to = date('Y-m-d', strtotime( $toStr ));
+    Session::flash('to', $toStr);
+    $to = date('Y-m-d', strtotime( $toStr ));
 
 		// add option for admin to mark tasks as "payed"
     	// TODO we should only get tasks with "unpayed" subreports
@@ -68,7 +68,7 @@ class AdminReportedTimeController extends BaseController {
 	// take input options user, dateinterval and create a route from em
 	public function filterTimeReport()
 	{
-		// get input user, from, to	
+		// get input user, from, to
 		$input = Input::only('user', 'from', 'to');
 
 		$url = route('getTimeReport', $input);
