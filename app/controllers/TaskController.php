@@ -125,30 +125,6 @@ class TaskController extends BaseController {
       ]);
    }
 
-   public function postCreate()
-   {
-      $input = Input::only('asana_id', 'project_id', 'project_name', 'name');
-
-      $projectId = $input['project_id'];
-      $project = $this->project->find( $projectId );
-
-      if ( !$project ) {
-         $project = $this->project->create(array(
-            'id' => $projectId,
-            'name' => $input['project_name']
-         ));
-      }
-
-      $task = $this->task->create(array(
-         'user_id' => Auth::user()->id,
-         'asana_id' => $input['asana_id'],
-         'project_id' => $input['project_id'],
-         'task' => $input['name']
-      ));
-
-      return Response::json( $task->toJson() );
-   }
-
    public function postUpdateTime()
    {
       $id = Input::get('id');
