@@ -30,4 +30,15 @@ class TaskPresenter extends BasePresenter {
     return $asanaTask->project->name;
   }
 
+  public function adjustedTimeIfAny()
+  {
+    $time = $this->resource->totaltime();
+
+    if ($this->resource->adjusted_time > 0) {
+      $time = $this->resource->adjusted_time;
+    }
+
+    return $time;
+  }
+
 }

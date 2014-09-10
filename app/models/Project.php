@@ -39,7 +39,7 @@ class Project extends Eloquent {
 			->whereBetween('asana_tasks.completion_date', [ $dateFrom, $dateTo ]);
 
 		// create a union between the modified tasks and the not modified tasks
-		$filteredTasks = Task::hydrate( $modifiedTasks->union($notModifiedTasks)->remember(10)->get() );
+		$filteredTasks = Task::hydrate( $modifiedTasks->union($notModifiedTasks)->get() );
 
 		return $filteredTasks;
 	}

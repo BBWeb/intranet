@@ -83,6 +83,11 @@ class CustomerViewController extends BaseController {
 	    // go through all "adjusted time wich are not set"
 	    foreach ($projectTasks as $projectTask)
 	    {
+	    	Log::info("Project task");
+	    	Log::info($projectTask->id);
+	    	Log::info("Adjusted time");
+	    	Log::info($projectTask->adjusted_time);
+
 	    	if ( $projectTask->adjusted_time == 0) {
 	    		$projectTask->adjusted_time = $projectTask->totaltime();
 	    		$projectTask->save();
