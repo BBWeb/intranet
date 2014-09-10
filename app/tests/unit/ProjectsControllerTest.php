@@ -15,11 +15,13 @@ class ProjectsControllerTest extends TestCase {
 	{
 		Auth::shouldReceive('user')->andReturn($user = Mockery::mock('StdClass'));
 
-		$user->notreportedTasks = array();
+		$user->privateTasks = array();
+		$user->nonCompletedTasks = array();
+		$user->nonCompletedAsanaTasks = array();
 		$user->admin = false;
 
 		$this->call('GET', '/');
-		
-		$this->assertViewHas('tasks');	
+
+		$this->assertViewHas('tasks');
 	}
 }
