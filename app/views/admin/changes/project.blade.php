@@ -22,22 +22,22 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($tasks as $task)
-					<tr data-id="{{ $task->id }}">
-						<td>{{ $task->taskName() }}</td>
-						<td>{{ $task->modifiedNameIfAny() }}</td>
+					@foreach($asanaTasks as $asanaTask)
+					<tr data-id="{{ $asanaTask->id }}">
+						<td>{{ $asanaTask->name }}</td>
+						<td>{{ $asanaTask->modifiedNameIfAny() }}</td>
 						<td>
-							@if ($task->completionDate() == '0000-00-00')
-							Icke avslutad
+							@if ($asanaTask->completion_date == '0000-00-00')
+								Icke avslutad
 							@else
-							{{ $task->completionDate() }}
+								{{ $asanaTask->completion_date }}
 							@endif
 						</td>
 						<td>
-							@if ($task->completionDate() == '0000-00-00')
-							Icke avslutad
+							@if ($asanaTask->completion_date == '0000-00-00')
+								Icke avslutad
 							@else
-							{{ $task->modifiedDateIfAny() }}
+								{{ $asanaTask->modifiedDateIfAny() }}
 							@endif
 						</td>
 						<td>

@@ -1,8 +1,8 @@
 <?php namespace Intranet\Service\Task;
 
-use \Task;
-use \ModifiedNameTask;
-use \ModifiedDateTask;
+use \AsanaTask;
+use \ModifiedNameAsanaTask;
+use \ModifiedDateAsanaTask;
 
 class TaskModifierService {
 
@@ -10,39 +10,39 @@ class TaskModifierService {
 	private $modifiedNameTask;
 	private $modifiedDateTask;
 
-	public function __construct(Task $task, ModifiedNameTask $modifiedNameTask, ModifiedDateTask $modifiedDateTask)
+	public function __construct(AsanaTask $asanaTask, ModifiedNameAsanaTask $modifiedNameTask, ModifiedDateAsanaTask $modifiedDateTask)
 	{
-		$this->task = $task;
+		$this->asanaTask = $asanaTask;
 		$this->modifiedNameTask = $modifiedNameTask;
 		$this->modifiedDateTask = $modifiedDateTask;
 	}
 
 	public function modifyTask($id, $attributes)
 	{
-		$task = $this->task->find( $id );	
+		$asanaTask = $this->asanaTask->find( $id );
 
 		if ( array_key_exists('title', $attributes) )
 		{
-			$newAttributes = array( 'task_id' => $id, 'modified_title' => $attributes['title'] );
+			$newAttributes = array( 'asana_task_id' => $id, 'modified_title' => $attributes['title'] );
 
-			$modifiedNameTask = $task->modifiedTaskName;
+			$modifiedNameTask = $asanaTask->modifiedTaskName;
 
 			if ( $modifiedNameTask )
 			{
 				$modifiedNameTask->update( $newAttributes );
 			}
-			else 
+			else
 			{
-				$this->modifiedNameTask->create( $newAttributes );	
+				$this->modifiedNameTask->create( $newAttributes );
 			}
 		}
 
-		// create modified task with id
+		// create modified asanaTask with id
 		if ( array_key_exists('date', $attributes) )
 		{
-			$newAttributes = [ 'task_id' => $id, 'modified_date' => $attributes['date'] ];
+			$newAttributes = [ 'asana_task_id' => $id, 'modified_date' => $attributes['date'] ];
 
-			$modifiedDateTask = $task->modifiedTaskDate;
+			$modifiedDateTask = $asanaTask->modifiedTaskDate;
 
 			if ( $modifiedDateTask )
 			{

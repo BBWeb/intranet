@@ -17,6 +17,9 @@ class CreateAsanaTasksTable extends Migration {
 
 			$table->string('name');
 			$table->boolean('completed')->default(false);
+			$table->date('completion_date');
+
+			$table->integer('adjusted_time')->default(0);
 
 			$table->bigInteger('project_id');
 

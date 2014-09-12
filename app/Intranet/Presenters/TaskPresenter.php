@@ -23,22 +23,25 @@ class TaskPresenter extends BasePresenter {
     return $asanaTask->name;
   }
 
+  public function modifiedNameIfAny()
+  {
+    $asanaTask = $this->resource->asanatask;
+
+    return $asanaTask->modifiedNameIfAny();
+  }
+
+  public function modifiedDateIfAny()
+  {
+    $asanaTask = $this->resource->asanatask;
+
+    return $asanaTask->modifiedDateIfAny();
+  }
+
   public function projectName()
   {
     $asanaTask = $this->resource->asanatask;
 
     return $asanaTask->project->name;
-  }
-
-  public function adjustedTimeIfAny()
-  {
-    $time = $this->resource->totaltime();
-
-    if ($this->resource->adjusted_time > 0) {
-      $time = $this->resource->adjusted_time;
-    }
-
-    return $time;
   }
 
 }

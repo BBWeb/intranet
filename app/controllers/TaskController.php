@@ -32,14 +32,13 @@ class TaskController extends BaseController {
     */
    public function getModifiedTaskData($id)
    {
-      $task = $this->task->find( $id );
-
-      $taskTitle = $task->modifiedNameIfAny();
-      $taskDate = $task->modifiedDateIfAny();
+      $asanaTask = AsanaTask::find($id);
+      $taskTitle = $asanaTask->modifiedNameIfAny();
+      $taskDate = $asanaTask->modifiedDateIfAny();
 
       // return json
       return Response::json(array(
-         'id' => $task->id,
+         'id' => $asanaTask->id,
          'title' => $taskTitle,
          'date' => $taskDate
          )
@@ -176,18 +175,14 @@ class TaskController extends BaseController {
    {
       $id = Input::get('id');
 
-      $task = $this->task->find( $id );
-
-      $asanaTask = $task->asanatask;
+      $asanaTask = AsanaTask::find($id);
 
       $asanaTask->completed = true;
       $asanaTask->completion_date = date('Y-m-d');
 
       $asanaTask->update();
 
-      $task->save();
-
-      return Response::json( $task->toJson() );
+      return Response::json( $asanaTask->toJson() );
    }
 
    public function postRemove()

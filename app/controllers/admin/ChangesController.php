@@ -38,7 +38,7 @@ class ChangesController extends \BaseController {
 		return View::make('admin.changes.project', array(
 			'projects' => $projects,
 			'project' => $project,
-			'tasks' => $project->orderedTasks
+			'asanaTasks' => $project->orderedAsanaTasks
 			)
 		);
 
