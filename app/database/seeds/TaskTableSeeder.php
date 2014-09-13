@@ -13,7 +13,6 @@ class TaskTableSeeder extends Seeder {
 		// NOTE that these are used in acceptance testing
 		// Total time for these should equal 66 minutes
 
-		// Test project
 		$task = Task::create(array(
 			'user_id' => $user->id,
 			'asana_task_id' => 1
@@ -24,14 +23,6 @@ class TaskTableSeeder extends Seeder {
 		$this->createSubreport($task, 'Programmed', 60, '2014-06-05', true);
 
 		$this->createSubreport($task, 'Stuff', 10, '2014-07-14');
-
-		// add another task to Test project for Niklas
-		$task2 = Task::create(array(
-			'user_id' => $user->id,
-			'asana_task_id' => 1
-		));
-
-		$this->createSubreport($task2, 'More stuff', 25, '2014-05-01');
 	}
 
 	private function createSubreport($task, $name, $time, $date, $payed = false)

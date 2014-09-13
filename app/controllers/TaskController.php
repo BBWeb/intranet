@@ -164,11 +164,11 @@ class TaskController extends BaseController {
    public function postUpdateAdjustedTime()
    {
       $id = Input::get('id');
-      $task = $this->task->find( $id );
-      $task->adjusted_time = Input::get('adjusted-time');
-      $task->save();
+      $asanaTask = AsanaTask::find( $id );
+      $asanaTask->adjusted_time = Input::get('adjusted-time');
+      $asanaTask->save();
 
-      return Response::json( $task->toJson() );
+      return Response::json( $asanaTask->toJson() );
    }
 
    public function postReport()

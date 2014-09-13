@@ -19,8 +19,6 @@ class CreateTasksTable extends Migration {
 
 			$table->bigInteger('asana_task_id');
 
-			$table->integer('time_worked')->default(0);
-
 			$table->enum('status', array('reported', 'invoiced', 'notreported'))->default('notreported');
 
 			$table->timestamps();
