@@ -63,6 +63,17 @@ return array(
 			'prefix'    => '',
 		),
 
+		'migration' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'testing',
+			'username'  => 'homestead',
+			'password'  => 'secret',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+
 		'pgsql' => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',

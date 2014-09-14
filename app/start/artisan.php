@@ -16,3 +16,4 @@ Artisan::add(new UpdateTaskRefToProjectsCommand);
 Artisan::add(new MoveReportedTimeAndDateToTimeReport);
 Artisan::add(new UpdateAsanaTasks);
 Artisan::add(new RemoveDeletedAsanaTasks);
+Artisan::add(new MigrateToNewDb);
