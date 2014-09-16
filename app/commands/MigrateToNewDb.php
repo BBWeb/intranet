@@ -62,6 +62,23 @@ class MigrateToNewDb extends Command {
 			$DBuser->save();
 		}
 
+		DB::table('staff_company_data')->truncate();
+
+		$staffCompanyData = DB::connection('migration')->table('staff_company_data')->get();
+
+		foreach ($staffCompanyData as $companyData)
+		{
+			$scd= new StaffCompanyData();
+			$scd->id = $companyData->id;
+			$scd->user_id = $companyData->user_id;
+			$scd->employment_nr = $companyData->employment_nr;
+			$scd->clearing_nr = $companyData->clearing_nr;
+			$scd->bank = $companyData->bank;
+			$scd->created_at = $companyData->created_at;
+			$scd->updated_at = $companyData->updated_at;
+			$scd->save();
+		}
+
 		DB::table('projects')->truncate();
 		$projects = DB::connection('migration')->table('projects')->get();
 
@@ -101,14 +118,16 @@ class MigrateToNewDb extends Command {
 
 			if ($dbAsanaTask)
 			{
-
 				// append adjusted time?
+				$dbAsanaTask->adjusted_time += $task->adjusted_time;
+				$dbAsanaTask->save();
 			}
 			else
 			{
 				$dbAsanaTask = new AsanaTask();
 				$dbAsanaTask->id = $task->asana_id;
 				$dbAsanaTask->name = $task->task;
+				$dbAsanaTask->adjusted_time = $task->adjusted_time;
 				$dbAsanaTask->project_id = $task->project_id;
 				$dbAsanaTask->completion_date = $task->reported_date;
 				$dbAsanaTask->completed = $task->reported_date > '0000-00-00' ? true : false;

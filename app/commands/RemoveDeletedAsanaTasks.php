@@ -59,18 +59,9 @@ class RemoveDeletedAsanaTasks extends Command {
 
 		}
 
-		Log::info("Fetched asana tasks");
-		Log::info(print_r($fetchedAsanaTasks, true));
-
 		$storedAsanaTasks = AsanaTask::where('completed', '=', false)->lists('id');  // get all non completed
 
-		Log::info("Stored asana tasks");
-		Log::info(print_r($storedAsanaTasks, true));
-
 		$diffTasks = array_diff($storedAsanaTasks, $fetchedAsanaTasks);
-
-		Log::info("Diff tasks");
-		Log::info(print_r($diffTasks, true));
 
 		$asanaKey = $_ENV['ASANA_KEY'];
 
