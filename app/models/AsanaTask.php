@@ -9,6 +9,7 @@ class AsanaTask extends Eloquent {
     'name',
     'completed',
     'project_id',
+    'adjusted_time',
     'user_id'
   ];
 

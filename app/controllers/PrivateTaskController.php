@@ -17,10 +17,12 @@ class PrivateTaskController extends BaseController {
 
     $privateTask = $this->privateTask->create(['user_id' => $user->id] + $input);
 
-    return $privateTask;
+    return Response::json([
+      'template' => View::make('templates.private_task')->with('privateTask', $privateTask)->render()
+    ]);
   }
 
-  public function update($id) 
+  public function update($id)
   {
     $privateTask = $this->privateTask->find($id);
 
@@ -35,7 +37,7 @@ class PrivateTaskController extends BaseController {
   {
     $privateTask = $this->privateTask->find($id);
 
-    return Response::json([ 'deleted' => $privateTask->delete() ]); 
+    return Response::json([ 'deleted' => $privateTask->delete() ]);
   }
-  
+
 }

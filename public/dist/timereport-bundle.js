@@ -70,10 +70,7 @@
 
       $.post('/task/connect-asana', {
         private_task_id: privateTaskId,
-        asana_task_id: asanaData.asana_id,
-        project_id: asanaData.project_id,
-        project_name: asanaData.project_name,
-        name: asanaData.name
+        asana_task_id: asanaData.asana_id
       }, function(data) {
         var taskId = data.task_id;
         var template = data.template;
@@ -151,14 +148,12 @@
       name: name,
       time_worked: timeWorked
     }, function(data) {
-      removeUpdateState( $tr );
+      $tr.remove();
 
-      $tr
-        .data('id', data.id)
-        .removeClass('newly-added')
-        .addClass('private-task');
+      var $template = $(data.template);
+      $privateTasks.prepend( $template );
 
-      $tr.draggable( draggable.config );
+      $template.draggable( draggable.config );
     });
   }
 

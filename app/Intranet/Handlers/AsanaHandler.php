@@ -36,8 +36,6 @@ class AsanaHandler {
 
       $responseCode = $asana->getResponseCode();
 
-      Log::info('All tasks should be updated');
-
       if ( $responseCode != '200' ) return;
 
       foreach ($tasks->data as $key => $task) {
@@ -53,13 +51,18 @@ class AsanaHandler {
 
          $project = $this->findOrCreateProject( $projectData );
 
-         AsanaTask::create([
-            'id' => $task->id,
-            'project_id' => $project->id,
-            'name' => $taskData['name'],
-            'completed' => false,
-            'user_id' => $this->user->id
-         ]);
+         $asanaTask = AsanaTask::find($task->id);
+
+         if (!$asanaTask) {
+            AsanaTask::create([
+               'id' => $task->id,
+               'project_id' => $project->id,
+               'name' => $taskData['name'],
+               'completed' => false,
+               'user_id' => $this->user->id
+            ]);
+         }
+
       }
 
       $this->saveQueryTime();
@@ -100,7 +103,7 @@ class AsanaHandler {
 
       $responseCode = $asana->getResponseCode();
 
-      if ( $responseCode != '200' ) return;
+      if ( $responseCode != '200' ) return [];
 
       return $tasks->data;
    }

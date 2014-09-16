@@ -20,23 +20,8 @@
           </tr>
         </thead>
         <tbody id="private-tasks-tbody">
-        @foreach ($privateTasks as $privateTask)
-        <tr class="private-task" data-id="{{ $privateTask->id }}">
-          <td>
-            <input type="text" class="form-control name" value="{{ $privateTask->name }}">
-          </td>
-          <td>
-            <input type="number" class="form-control report" value="{{ $privateTask->time_worked }}">
-          </td>
-           <td class="valign">
-             <a href="#">
-              <span class="connect glyphicon glyphicon-random"></span>
-            </a>
-            <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
+          {{ View::renderEach('templates.private_task', $privateTasks, 'privateTask') }}
+        </tbody>
         </table>
       </div>
 
@@ -162,10 +147,6 @@
       <input type="number" class="form-control report" value="0">
     </td>
     <td class="valign">
-      <a href="#">
-        <span class="connect glyphicon glyphicon-random"></span>
-      </a>
-      <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
     </td>
   </tr>
 </script>

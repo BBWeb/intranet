@@ -147,14 +147,12 @@
       name: name,
       time_worked: timeWorked
     }, function(data) {
-      removeUpdateState( $tr );
+      $tr.remove();
 
-      $tr
-        .data('id', data.id)
-        .removeClass('newly-added')
-        .addClass('private-task');
+      var $template = $(data.template);
+      $privateTasks.prepend( $template );
 
-      $tr.draggable( draggable.config );
+      $template.draggable( draggable.config );
     });
   }
 
