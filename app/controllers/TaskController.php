@@ -102,16 +102,17 @@ class TaskController extends BaseController {
 
       $privateTask = PrivateTask::find( $privateTaskId );
 
-      // transfer private task data to a subreport
       $todaysDate = date('Y-m-d');
 
-      $subreport = $this->subreport->create([
+      $attributes = [
          'task_id' => $task->id,
          'reported_date' => $todaysDate,
          'name' => $privateTask->name,
          'time' => $privateTask->time_worked
-      ]);
+      ];
 
+      // transfer private task data to a subreport
+      $subreport = $this->subreport->create($attributes);
       $privateTask->delete();
 
       // create a new subreport with the current date
@@ -151,13 +152,17 @@ class TaskController extends BaseController {
    {
       $id = Input::get('id');
 
+      $attributes = Input::only('name', 'time');
+
       $subreport = $this->subreport->find( $id );
 
-      if ($subreport && !$subreport->payed) {
-         $subreport->name = Input::get('name');
-         $subreport->time = Input::get('time');
+      // if we didnt find the subreport or if its already payed for
+      if (!$subreport || $subreport && $subreport->payed) return;
 
-         $subreport->save();
+      $validator = Validator::make($attributes, Subreport::$rules);
+
+      if ( $validator->passes() ) {
+         $subreport->update($attributes);
       }
    }
 

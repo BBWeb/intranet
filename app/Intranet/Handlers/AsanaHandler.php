@@ -75,6 +75,8 @@ class AsanaHandler {
       $lastQueryTime = $this->getLastQueryTime();
 
       $modifiedTasks = json_decode( $asana->getModifiedTasks( self::WORKSPACE_ID, $lastQueryTime ) );
+      Log::info("Modified tasks");
+      Log::info(print_r($modifiedTasks, true));
       // what happens when modified and we already have the task
       // will it me added to the users set or modified?
       foreach ($modifiedTasks->data as $key => $task)

@@ -28,7 +28,11 @@ class PrivateTaskController extends BaseController {
 
     $input = Input::only('name', 'time_worked');
 
-    $privateTask->update($input);
+    $validator = Validator::make($input, PrivateTask::$rules);
+
+    if ( $validator->passes() ) {
+      $privateTask->update($input);
+    }
 
     return $privateTask;
   }
