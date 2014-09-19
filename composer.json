@@ -7,7 +7,7 @@
       "laravel/framework": "4.1.*",
       "laravelbook/ardent": "dev-master",
       "jasonlewis/basset": "dev-master",
-      "anahkiasen/rocketeer": "dev-master",
+      "anahkiasen/rocketeer": "~2.0.*",
       "mccool/laravel-auto-presenter": "1.*"
 	},
    "require-dev": {
