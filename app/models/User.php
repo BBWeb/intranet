@@ -103,6 +103,30 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return $this->asanaTasks()->where('completed', '=', false);
    }
 
+   /**
+    * Get those Asana Tasks that are assigned to this user, and those that we have added as tasks which are non completed
+    */
+   public function allAsanaTasks()
+   {
+      $userId = $this->id;
+
+      $asanaTasks = DB::table('asana_tasks')
+        ->whereExists(function($query) use(&$userId) {
+            $query->select(DB::raw(1))
+               ->from('tasks')
+               ->whereRaw('asana_tasks.id = tasks.asana_task_id')
+               ->where('tasks.user_id', '=', $userId);
+        })
+        ->where('completed', '=', false);
+
+
+      $assignedAsanaTasks = DB::table('asana_tasks')
+         ->where('user_id', '=', $this->id)
+         ->where('completed', '=', false);
+
+      return AsanaTask::hydrate( $asanaTasks->union($assignedAsanaTasks)->get() );
+   }
+
    public function getOldPaymentInfo()
    {
       $currentDate = date('Y-m-d');

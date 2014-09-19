@@ -19,7 +19,7 @@ class ProjectsController extends BaseController {
 
 		$tasks = $user->nonCompletedTasks;
 
-		$asanaTasks = $user->nonCompletedAsanaTasks;
+		$asanaTasks = $user->allAsanaTasks();
 
 		return View::make('user.start', array(
 			'privateTasks' => $privateTasks,
