@@ -26,11 +26,12 @@ CREATE TABLE `asana_tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `completed` tinyint(1) NOT NULL DEFAULT '0',
+  `completion_date` date NOT NULL,
+  `adjusted_time` int(11) NOT NULL DEFAULT '0',
   `project_id` bigint(20) NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `completion_date` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,7 +42,7 @@ CREATE TABLE `asana_tasks` (
 
 LOCK TABLES `asana_tasks` WRITE;
 /*!40000 ALTER TABLE `asana_tasks` DISABLE KEYS */;
-INSERT INTO `asana_tasks` VALUES (1,'Asana task 1',0,1,1,'2014-09-10 21:50:53','2014-09-10 21:50:53','0000-00-00'),(2,'Asana task 2',0,1,1,'2014-09-10 21:50:53','2014-09-10 21:50:53','0000-00-00');
+INSERT INTO `asana_tasks` VALUES (1,'Asana task 1',0,'0000-00-00',0,1,1,'2014-09-19 20:16:18','2014-09-19 20:16:18'),(2,'Asana task 2',0,'0000-00-00',0,1,1,'2014-09-19 20:16:18','2014-09-19 20:16:18');
 /*!40000 ALTER TABLE `asana_tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +65,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES ('2014_01_12_164147_create_users_table',1),('2014_01_12_191729_add_apikey_to_user_table',1),('2014_01_16_132455_create_tasks_table',1),('2014_01_31_162100_add_reported_date_to_tasks_table',1),('2014_01_31_170331_add_name_to_users_table',1),('2014_03_16_141059_create_projects_table',1),('2014_03_16_152116_add_ref_to_projects_for_tasks_table',1),('2014_03_20_193908_add_adjusted_time_to_tasks',1),('2014_03_26_170441_create_timereport_table',1),('2014_04_04_133619_add_payed_attr_to_subreports',1),('2014_04_07_135130_add_softdeletes_to_subreport',1),('2014_06_04_173851_add_remember_token_to_users_table',1),('2014_06_26_131131_create_modified_date_tasks_table',1),('2014_06_27_132600_create_modified_name_tasks_table',1),('2014_07_23_125339_create_staff_personal_data_table',1),('2014_07_24_113140_create_staff_company_data_table',1),('2014_07_24_121505_create_staff_payment_data_table',1),('2014_08_12_135611_create_private_tasks_table',1),('2014_08_17_150424_add_name_to_subreports_table',1),('2014_08_29_122501_create_asana_tasks_table',1),('2014_09_06_054348_add_completion_date_to_asana_tasks_table',1);
+INSERT INTO `migrations` VALUES ('2014_01_12_164147_create_users_table',1),('2014_01_12_191729_add_apikey_to_user_table',1),('2014_01_16_132455_create_tasks_table',1),('2014_01_31_170331_add_name_to_users_table',1),('2014_03_16_141059_create_projects_table',1),('2014_03_26_170441_create_timereport_table',1),('2014_04_04_133619_add_payed_attr_to_subreports',1),('2014_04_07_135130_add_softdeletes_to_subreport',1),('2014_06_04_173851_add_remember_token_to_users_table',1),('2014_06_26_131131_create_modified_date_tasks_table',1),('2014_06_27_132600_create_modified_name_tasks_table',1),('2014_07_23_125339_create_staff_personal_data_table',1),('2014_07_24_113140_create_staff_company_data_table',1),('2014_07_24_121505_create_staff_payment_data_table',1),('2014_08_12_135611_create_private_tasks_table',1),('2014_08_17_150424_add_name_to_subreports_table',1),('2014_08_29_122501_create_asana_tasks_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -77,12 +78,12 @@ DROP TABLE IF EXISTS `modified_date_tasks`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `modified_date_tasks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `task_id` int(11) NOT NULL,
+  `asana_task_id` int(11) NOT NULL,
   `modified_date` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `modified_date_tasks_task_id_index` (`task_id`)
+  KEY `modified_date_tasks_asana_task_id_index` (`asana_task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -104,12 +105,12 @@ DROP TABLE IF EXISTS `modified_name_tasks`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `modified_name_tasks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `task_id` int(11) NOT NULL,
+  `asana_task_id` int(11) NOT NULL,
   `modified_title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `modified_name_tasks_task_id_index` (`task_id`)
+  KEY `modified_name_tasks_asana_task_id_index` (`asana_task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -148,7 +149,7 @@ CREATE TABLE `private_tasks` (
 
 LOCK TABLES `private_tasks` WRITE;
 /*!40000 ALTER TABLE `private_tasks` DISABLE KEYS */;
-INSERT INTO `private_tasks` VALUES (1,1,'Testing',10,'2014-09-10 21:50:53','2014-09-10 21:50:53'),(2,1,'Whatyawant',20,'2014-09-10 21:50:53','2014-09-10 21:50:53');
+INSERT INTO `private_tasks` VALUES (1,1,'Testing',10,'2014-09-19 20:16:18','2014-09-19 20:16:18'),(2,1,'Whatyawant',20,'2014-09-19 20:16:18','2014-09-19 20:16:18');
 /*!40000 ALTER TABLE `private_tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,7 +175,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (1,'Test project','2014-09-10 21:50:53','2014-09-10 21:50:53'),(2,'Second test project','2014-09-10 21:50:53','2014-09-10 21:50:53');
+INSERT INTO `projects` VALUES (1,'Test project','2014-09-19 20:16:18','2014-09-19 20:16:18'),(2,'Second test project','2014-09-19 20:16:18','2014-09-19 20:16:18');
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,7 +238,7 @@ CREATE TABLE `staff_payment_data` (
 
 LOCK TABLES `staff_payment_data` WRITE;
 /*!40000 ALTER TABLE `staff_payment_data` DISABLE KEYS */;
-INSERT INTO `staff_payment_data` VALUES (1,1,30.00,31.42,150,'2014-04-15','2014-09-10 21:50:53','2014-09-10 21:50:53'),(2,1,30.00,31.42,200,'2014-09-10','2014-09-10 21:50:53','2014-09-10 21:50:53'),(3,1,30.00,31.42,250,'2016-04-16','2014-09-10 21:50:53','2014-09-10 21:50:53');
+INSERT INTO `staff_payment_data` VALUES (1,1,30.00,31.42,150,'2014-04-15','2014-09-19 20:16:18','2014-09-19 20:16:18'),(2,1,30.00,31.42,200,'2014-09-19','2014-09-19 20:16:18','2014-09-19 20:16:18'),(3,1,30.00,31.42,250,'2016-04-16','2014-09-19 20:16:18','2014-09-19 20:16:18');
 /*!40000 ALTER TABLE `staff_payment_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -292,7 +293,7 @@ CREATE TABLE `subreports` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `subreports_task_id_index` (`task_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -301,7 +302,7 @@ CREATE TABLE `subreports` (
 
 LOCK TABLES `subreports` WRITE;
 /*!40000 ALTER TABLE `subreports` DISABLE KEYS */;
-INSERT INTO `subreports` VALUES (1,1,31,'2014-06-11','2014-09-10 21:50:53','2014-09-10 21:50:53',0,NULL,'Cool name'),(1,2,60,'2014-06-05','2014-09-10 21:50:53','2014-09-10 21:50:53',1,NULL,'Programmed'),(1,3,10,'2014-07-14','2014-09-10 21:50:53','2014-09-10 21:50:53',0,NULL,'Stuff'),(2,4,25,'2014-05-01','2014-09-10 21:50:53','2014-09-10 21:50:53',0,NULL,'More stuff');
+INSERT INTO `subreports` VALUES (1,1,31,'2014-06-11','2014-09-19 20:16:18','2014-09-19 20:16:18',0,NULL,'Cool name'),(1,2,60,'2014-06-05','2014-09-19 20:16:18','2014-09-19 20:16:18',1,NULL,'Programmed'),(1,3,10,'2014-07-14','2014-09-19 20:16:18','2014-09-19 20:16:18',0,NULL,'Stuff');
 /*!40000 ALTER TABLE `subreports` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -316,15 +317,11 @@ CREATE TABLE `tasks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `asana_task_id` bigint(20) NOT NULL,
-  `time_worked` int(11) NOT NULL DEFAULT '0',
   `status` enum('reported','invoiced','notreported') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'notreported',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `reported_date` date NOT NULL,
-  `project_id` bigint(20) NOT NULL,
-  `adjusted_time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -333,7 +330,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,1,1,0,'notreported','2014-09-10 21:50:53','2014-09-10 21:50:53','0000-00-00',0,0),(2,1,1,0,'notreported','2014-09-10 21:50:53','2014-09-10 21:50:53','0000-00-00',0,0);
+INSERT INTO `tasks` VALUES (1,1,1,'notreported','2014-09-19 20:16:18','2014-09-19 20:16:18');
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -365,7 +362,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'niklas@bbweb.se','$2y$10$U7CpKcNUkW4CXAyYf0l5vOiVSAh13nmkv1ePV6jFufVWVBKY6WPlW',1,'2014-09-10 21:50:53','2014-09-10 21:50:53','123','Niklas Andréasson',NULL),(2,'user@bbweb.se','$2y$10$cSGkLUShI7pWcXAWITxAIOIsTaOILXUprMPoYeQAzj0Q4NTEDrGEy',0,'2014-09-10 21:50:53','2014-09-10 21:50:53','','User Doe',NULL);
+INSERT INTO `users` VALUES (1,'niklas@bbweb.se','$2y$10$eBfHqew6YjB9sIV.rx5k3eM392fGTvjDOGn8DmavKn5Lmy5jInC9K',1,'2014-09-19 20:16:18','2014-09-19 20:16:18','123','Niklas Andréasson',NULL),(2,'user@bbweb.se','$2y$10$9BmeuLUWp44JJ7Fh4kyodu7S7cXF8.2qj2S7eg0JNdfRGN7BPdJuy',0,'2014-09-19 20:16:18','2014-09-19 20:16:18','','User Doe',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -378,4 +375,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-10 11:52:31
+-- Dump completed on 2014-09-19 10:17:05
