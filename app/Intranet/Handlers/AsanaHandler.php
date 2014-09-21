@@ -75,10 +75,12 @@ class AsanaHandler {
       $lastQueryTime = $this->getLastQueryTime();
 
       $modifiedTasks = json_decode( $asana->getModifiedTasks( self::WORKSPACE_ID, $lastQueryTime ) );
+
       Log::info("Modified tasks");
       Log::info(print_r($modifiedTasks, true));
-      // what happens when modified and we already have the task
-      // will it me added to the users set or modified?
+
+      if (!array_key_exists('data', $modifiedTasks) || empty($modifiedTasks->data)) return;
+
       foreach ($modifiedTasks->data as $key => $task)
       {
          $taskData = $asana->getOneTask( $task->id );
@@ -178,12 +180,17 @@ class AsanaHandler {
       $projectData = $taskData['projects'];
       $project = $this->findOrCreateProject( $projectData );
 
-         // need to handle updates as well
       $asanaTask = AsanaTask::find($taskId);
 
+      // update an existing
       if ($asanaTask)
       {
+         // if the task was completed and now unchecked, do nothing
          if ( $asanaTask->completed && !$taskData['completed'] ) return;
+
+         if ( $taskData['completed'] ) {
+            $asanaTask->completion_date = $this->getCurrentDate();
+         }
 
          $asanaTask->name = $taskData['name'];
          $asanaTask->completed = $taskData['completed'];
@@ -193,14 +200,22 @@ class AsanaHandler {
       }
       else
       {
+         $completionDate = $taskData['completed'] ? $this->getCurrentDate() : '0000-00-00';
+
          AsanaTask::create([
             'id' => $taskId,
             'project_id' => $project->id,
             'name' => $taskData['name'],
             'completed' => $taskData['completed'],
+            'completion_date' => $completionDate,
             'user_id' => $this->user->id
          ]);
       }
+   }
+
+   private function getCurrentDate()
+   {
+      return date('Y-m-d');
    }
 
    private function findOrCreateProject($projectData)
