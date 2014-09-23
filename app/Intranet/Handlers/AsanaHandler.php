@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 use \DateTime;
+use \DateInterval;
 use \AsanaTask;
 use \Project;
 
@@ -165,13 +166,22 @@ class AsanaHandler {
 
    private function getLastQueryTime()
    {
-      return $this->redis->get('users:' . $this->user->id . ':lastquery');
+      $lastQueryTime = Cache::get('users:' . $this->user->id . ':lastquery');
+
+      if (!$lastQueryTime) {
+         $queryTime = new DateTime();
+         $queryTime->sub(new DateInterval('PT1H'));
+         return $queryTime->format(DateTime::ISO8601);
+      }
+
+      return $lastQueryTime;
    }
 
    private function saveQueryTime()
    {
       $currentDateTime = new DateTime();
-      $this->redis->set('users:' . $this->user->id . ':lastquery', $currentDateTime->format(DateTime::ISO8601));
+
+      Cache::forever('users:' . $this->user->id . ':lastquery', $currentDateTime->format(DateTime::ISO8601));
    }
 
    private function updateOrCreateAsanaTask($taskId, $taskData)
