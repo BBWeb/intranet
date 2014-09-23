@@ -3,102 +3,7 @@
 
   var draggable = require('./timereport/draggable');
   var reportedTable = require('./timereport/reportedTable')();
-
-  $('.private-task').draggable( draggable.config );
-
-  // Global variables
-  var $newReportAction = $('#new-report');
-  var $privateTasks = $('#private-tasks-tbody');
-
-  // Event handlers
-  $newReportAction.click(createNewReport)
-
-  $privateTasks.on('click', '.connect', connectToAsanaTaskModal);
-  $privateTasks.on('click', '.remove-report', removePrivateReport)
-
-  // we want to save a new private task when name is changed
-  $privateTasks.on('change', '.newly-added input.name', createPrivateTask);
-  // update an existing task if we change input
-  $privateTasks.on('change', '.private-task input', updatePrivateTask);
-
-  function createNewReport() {
-    // checkout all the newly added reports, if they have an empty value focus that one
-    var $newlyAddedNames = $('.newly-added input.name');
-
-    var foundUnusedReport = false;
-
-    $newlyAddedNames.each(function() {
-      var $newReport = $(this);
-
-      if ( !$newReport.val() ) {
-        foundUnusedReport = true;
-        $newReport.focus();
-        // break the each
-        return;
-      }
-    });
-
-    // we dont want to add a new report row if there is an unused
-    if ( foundUnusedReport ) return;
-
-    $privateTasks.prepend( $('#report-template').html() );
-  }
-
-  function removePrivateReport() {
-    var $deleteButton = $(this);
-    var $tr = $deleteButton.closest('tr');
-    var taskId = $tr.data('id');
-
-    // send a delete req to server
-    $.ajax({
-      method: 'DELETE',
-      url: '/private-task/' + taskId,
-      success: function(data) {
-        if ( data.deleted ) $tr.remove();
-      }
-    })
-  }
-
-  function connectToAsanaTaskModal() {
-    var $connectButton = $(this);
-    var $tr = $(this).closest('tr');
-    var privateTaskId = $tr.data('id');
-
-    asanaModal.onConnect = function(asanaData) {
-      // send private task id and asana task id to server
-      console.log('Asana data', asanaData);
-
-      $.post('/task/connect-asana', {
-        private_task_id: privateTaskId,
-        asana_task_id: asanaData.asana_id
-      }, function(data) {
-        var taskId = data.task_id;
-        var template = data.template;
-        // find rendered task with id, or append
-        reportedTable.updateOrAppendTask(taskId, template);
-
-        // close modal and remove "private task"
-        asanaModal.close();
-        $tr.remove();
-      });
-
-      // when we get a response we want to hide/delete the private task
-
-      // add to the right side,
-
-    };
-
-    asanaModal.show();
-    // $.get('asana/all', function(response, textStatus) {
-    //   var asanaTasks = response.data || [];
-
-    //   var transformed = _.map(asanaTasks, function(task, key) {
-    //     return extractTaskData(task);
-    //   });
-
-    //   // asanaModal.populate( transformed );
-    // });
-  }
+  var privateTable = require('./timereport/privateTable');
 
   // get the important data and return an object
   function extractTaskData(task) {
@@ -109,6 +14,90 @@
       project_id: task.taskState.projects.id
     };
   }
+
+})(jQuery);
+},{"./timereport/draggable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/draggable.js","./timereport/privateTable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/privateTable.js","./timereport/reportedTable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/reportedTable.js"}],"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/draggable.js":[function(require,module,exports){
+exports.config = {
+  helper: function( event ) {
+    var name = $(this).find('input.name').first().val();
+    return $( "<div class='helper'>Flyttar " + name + "</div>" );
+  },
+  cursor: 'pointer',
+  cursorAt: {
+    left: 0,
+    top: 15
+  }
+};
+
+},{}],"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/privateTable.js":[function(require,module,exports){
+var draggable = require('./draggable');
+var timer = require('./timer')({
+  el: 'input.report',
+  onStop: updatePrivateTask
+});
+
+var $privateTasks = $('#private-tasks-tbody');
+
+$privateTasks.on('click', '.connect', connectToAsanaTaskModal);
+$privateTasks.on('click', '.remove-report', removePrivateReport)
+
+// we want to save a new private task when name is changed
+$privateTasks.on('change', '.newly-added input.name', createPrivateTask);
+// update an existing task if we change input
+$privateTasks.on('change', '.private-task input', updatePrivateTask);
+
+$('.private-task').draggable( draggable.config );
+
+// Global variables
+var $newReportAction = $('#new-report');
+
+// Event handlers
+$newReportAction.click(createNewReport)
+
+$privateTasks.on('click', '.timer', handleTimer);
+
+function handleTimer() {
+  // start timer etc
+  timer.handleTimer.call(this);
+}
+
+function createNewReport() {
+  // checkout all the newly added reports, if they have an empty value focus that one
+  var $newlyAddedNames = $('.newly-added input.name');
+
+  var foundUnusedReport = false;
+
+  $newlyAddedNames.each(function() {
+    var $newReport = $(this);
+
+    if ( !$newReport.val() ) {
+      foundUnusedReport = true;
+      $newReport.focus();
+      // break the each
+      return;
+    }
+  });
+
+  // we dont want to add a new report row if there is an unused
+  if ( foundUnusedReport ) return;
+
+  $privateTasks.prepend( $('#report-template').html() );
+}
+
+function removePrivateReport() {
+  var $deleteButton = $(this);
+  var $tr = $deleteButton.closest('tr');
+  var taskId = $tr.data('id');
+
+  // send a delete req to server
+  $.ajax({
+    method: 'DELETE',
+    url: '/private-task/' + taskId,
+    success: function(data) {
+      if ( data.deleted ) $tr.remove();
+    }
+  })
+}
 
   function updatePrivateTask() {
     var $inputChanged = $(this);
@@ -157,24 +146,40 @@
     });
   }
 
-})(jQuery);
-},{"./timereport/draggable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/draggable.js","./timereport/reportedTable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/reportedTable.js"}],"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/draggable.js":[function(require,module,exports){
-exports.config = {
-  helper: function( event ) {
-    var name = $(this).find('input.name').first().val();
-    return $( "<div class='helper'>Flyttar " + name + "</div>" );
-  },
-  cursor: 'pointer',
-  cursorAt: {
-    left: 0,
-    top: 15
-  }
-};
 
-},{}],"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/reportedTable.js":[function(require,module,exports){
+  function connectToAsanaTaskModal() {
+    var $connectButton = $(this);
+    var $tr = $(this).closest('tr');
+    var privateTaskId = $tr.data('id');
+
+    asanaModal.onConnect = function(asanaData) {
+      // send private task id and asana task id to server
+      console.log('Asana data', asanaData);
+
+      $.post('/task/connect-asana', {
+        private_task_id: privateTaskId,
+        asana_task_id: asanaData.asana_id
+      }, function(data) {
+        var taskId = data.task_id;
+        var template = data.template;
+        // find rendered task with id, or append
+        reportedTable.updateOrAppendTask(taskId, template);
+
+        // close modal and remove "private task"
+        asanaModal.close();
+        $tr.remove();
+      });
+
+    };
+
+    asanaModal.show();
+  }
+
+},{"./draggable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/draggable.js","./timer":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/timer.js"}],"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/reportedTable.js":[function(require,module,exports){
 var draggable = require('./draggable');
 
 module.exports = function() {
+
 var reportedTable = {
 
   $el: $('#reported-tasks'),
@@ -189,6 +194,10 @@ var reportedTable = {
     });
 
     this.$el.on('change', '.subreport input', this.updateSubreport);
+    this.$el.on('click', '.timer', function() {
+      timer.handleTimer.call(this);
+    });
+
     this.$el.on('click', '.subreport span.remove-report', function() {
       var $subreportTr = $(this).closest('tr.subreport');
       self.removeSubreport( $subreportTr );
@@ -317,6 +326,12 @@ var reportedTable = {
 
 };
 
+var timer = require('./timer')({
+  el: 'input.time',
+  onStop: reportedTable.updateSubreport
+});
+
+
 function getFollowingSubreports($taskTr) {
   var $subreports = $([]);
 
@@ -409,4 +424,68 @@ $('tr.task').droppable( droppableOptions );
 return reportedTable;
 };
 
-},{"./draggable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/draggable.js"}]},{},["./js/timereport.js"]);
+},{"./draggable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/draggable.js","./timer":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/timer.js"}],"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/timer.js":[function(require,module,exports){
+function setLocalStorageFor(id, time) {
+  localStorage.setItem('time.' + id, millis);
+}
+
+function clearLocalStorageFor(id) {
+  localStorage.removeItem('time.' + id);
+}
+
+module.exports = function(config) {
+
+
+  function handleTimer() {
+    var $trParent = $(this).closest('tr')
+    , id = $trParent.data('id')
+    ;
+
+    var $timerBadge = $(this);
+    var stopwatch = $timerBadge.stopwatch();
+
+    var $timeWorkedInput = $timerBadge.closest('tr').find( config.el )
+    , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
+    , timerIsRunning = elapsedTimeInMs > 0
+    ;
+
+    if ( !timerIsRunning ) {
+      $timerBadge.stopwatch('start');
+      $timeWorkedInput.prop( 'disabled', true );
+
+      stopwatch.on('tick.stopwatch', function(e, millis) {
+        setLocalStorageFor(id, millis);
+      });
+
+      return;
+    }
+
+    // timer was running when we clicked "time"
+    $timerBadge.stopwatch('stop');
+    // convert to minutes, elapsedTime is number of ms
+    var minutesWorked = convertMillisToMinutes( elapsedTimeInMs );
+
+    // update input field
+    var timeAlreadyWorked = parseInt( $timeWorkedInput.val(), 10 );
+    $timeWorkedInput.val( timeAlreadyWorked + minutesWorked );
+
+    // report to server etc
+    config.onStop.call(this);
+
+    $timerBadge.stopwatch('reset');
+  }
+
+  return {
+    handleTimer: handleTimer
+  };
+};
+
+
+function convertMillisToMinutes(ms) {
+  var elapsedTimeInS = ms / 1000;
+  var minutesWorked = Math.round( elapsedTimeInS / 60 );
+  return minutesWorked;
+}
+
+
+},{}]},{},["./js/timereport.js"]);

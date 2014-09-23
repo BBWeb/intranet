@@ -1,17 +1,17 @@
 ;(function() {
 
   initTimeFromLocalStorage();
-  // we want 
+
   function initTimeFromLocalStorage() {
     var $addedTasks = $('#added-tasks-tbody tr');
 
     $addedTasks.each(function() {
       var $tr = $(this);
-      var taskId = $tr.data('id'); 
+      var taskId = $tr.data('id');
 
       var timeForRow = getLocalStorageFor( taskId );
 
-      if ( timeForRow === 0 ) return true; 
+      if ( timeForRow === 0 ) return true;
 
       var $timerBadge = $tr.find('.timer');
       $timerBadge.stopwatch({ initialTime: timeForRow });
@@ -39,12 +39,6 @@
 
   $('body').on('click', '.timer', handleTimer);
 
-  function convertMillisToMinutes(ms) {
-    var elapsedTimeInS = ms / 1000;
-    var minutesWorked = Math.round( elapsedTimeInS / 60 );
-    return minutesWorked;
-  }
-
   function getLocalStorageFor(id) {
     var time = +localStorage.getItem('time.' + id) || 0;
     return time;
@@ -55,7 +49,7 @@
   }
 
   function clearLocalStorageFor(id) {
-    localStorage.removeItem('time.' + id); 
+    localStorage.removeItem('time.' + id);
   }
 
   function handleTimer() {

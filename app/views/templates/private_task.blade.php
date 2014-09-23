@@ -6,9 +6,8 @@
     <input type="number" class="form-control report" value="{{ $privateTask->time_worked }}">
   </td>
   <td class="valign">
-   <a href="#">
-    <span class="connect glyphicon glyphicon-random"></span>
-  </a>
-  <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
-</td>
+    <div class="badge timer">00:00:00</div>
+    <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
+    <a style="margin-right: 10px" class="pull-right" href="#"><span class="connect glyphicon glyphicon-random"></span></a>
+    </td>
 </tr>

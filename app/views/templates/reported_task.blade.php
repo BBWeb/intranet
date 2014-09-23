@@ -15,7 +15,10 @@
 @else
    <td class="valign" colspan="2"><input type="text" class="form-control name" value="{{ $subreport->name }}"></td>
   <td><input type="number" class="form-control time" value="{{ $subreport->time }}"></td>
-  <td class="valign"><span class="remove-report glyphicon glyphicon-minus pull-right"></span></td>
+  <td class="valign">
+    <div class="badge timer">00:00:00</div>
+    <span class="remove-report glyphicon glyphicon-minus pull-right"></span>
+  </td>
   @endif
 </tr>
 @endforeach

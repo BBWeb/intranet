@@ -6,7 +6,7 @@
 
   <div class="row">
 
-    <div class="col-md-5">
+    <div class="col-md-6">
       <h1>Privata</h1>
 
       <table id="private-tasks" class="table">
@@ -25,7 +25,7 @@
         </table>
       </div>
 
-      <div class="col-md-6 col-md-offset-1">
+      <div class="col-md-6">
         <h1>Rapporterade</h1>
 
         <table id="reported-tasks" class="table">

@@ -1,6 +1,7 @@
 var draggable = require('./draggable');
 
 module.exports = function() {
+
 var reportedTable = {
 
   $el: $('#reported-tasks'),
@@ -15,6 +16,10 @@ var reportedTable = {
     });
 
     this.$el.on('change', '.subreport input', this.updateSubreport);
+    this.$el.on('click', '.timer', function() {
+      timer.handleTimer.call(this);
+    });
+
     this.$el.on('click', '.subreport span.remove-report', function() {
       var $subreportTr = $(this).closest('tr.subreport');
       self.removeSubreport( $subreportTr );
@@ -142,6 +147,12 @@ var reportedTable = {
   }
 
 };
+
+var timer = require('./timer')({
+  el: 'input.time',
+  onStop: reportedTable.updateSubreport
+});
+
 
 function getFollowingSubreports($taskTr) {
   var $subreports = $([]);

@@ -26,7 +26,7 @@ span.total-time {
 }
 
 .remove-salary-change {
-	cursor: pointer;	
+	cursor: pointer;
 }
 
 span.new-report {
@@ -44,15 +44,15 @@ span.remove-report {
 }
 
 #private-tasks th.name {
- width: 60%;
+ width: 40%;
 }
 
 #private-tasks th.report {
-  width: 25%;
+  width: 15%;
 }
 
 #private-tasks th.actions {
-  width: 15%;
+  width: 20%;
 }
 
 td.valign {
@@ -83,15 +83,15 @@ tr.second-level td:first-child {
 }
 
 #reported-tasks th.project {
-  width: 20%; 
+  width: 20%;
 }
 
 #reported-tasks th.name {
-  width: 40%; 
+  width: 40%;
 }
 
 #reported-tasks th.actions {
-  width: 15%; 
+  width: 20%;
 }
 
 #reported-tasks td.name {
