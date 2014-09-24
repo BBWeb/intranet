@@ -53,6 +53,30 @@ class TaskController extends BaseController {
       return Response::json(array('id' => $id));
    }
 
+   public function postCreateSubreport()
+   {
+      $user = Auth::user();
+
+      // get the task id
+      $reportedTaskId = Input::get('task_id');
+
+      $task = $this->task->find( $reportedTaskId );
+
+      $todaysDate = date('Y-m-d');
+
+      $subreport = $this->subreport->create([
+         'task_id' => $task->id,
+         'reported_date' => $todaysDate,
+         'name' => Input::get('name'),
+         'time' => Input::get('time_worked')
+      ]);
+
+      return Response::json([
+         'task_id' => $task->id,
+         'template' => View::make('templates.reported_task')->with('task', $task)->render()
+      ]);
+   }
+
    public function postAddPrivateToTask() {
       $user = Auth::user();
 

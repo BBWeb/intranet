@@ -4,6 +4,7 @@
   <td class="totaltime">{{ $task->totaltime() }}</td>
   <td>
     <span class="glyphicon glyphicon-chevron-right pull-right expand-task"></span>
+    <span style="margin-right: 7px" class="hide glyphicon glyphicon-plus pull-right add-subreport"></span>
   </td>
 </tr>
 @foreach($task->subreports as $subreport)

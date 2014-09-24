@@ -39,6 +39,11 @@ span.remove-report {
   color: rgb(250, 15, 15);
 }
 
+span.add-subreport {
+ cursor: pointer;
+ color: rgb(0, 190, 50);
+}
+
 #reported-tasks {
   table-layout: fixed;
 }

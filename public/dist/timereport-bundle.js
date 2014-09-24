@@ -198,9 +198,48 @@ var reportedTable = {
       timer.handleTimer.call(this);
     });
 
+    this.$el.on('click', '.add-subreport', this.addSubreport);
+    this.$el.on('change', '.newly-added input.name', this.createSubreport);
+
     this.$el.on('click', '.subreport span.remove-report', function() {
       var $subreportTr = $(this).closest('tr.subreport');
       self.removeSubreport( $subreportTr );
+    });
+  },
+
+  addSubreport: function() {
+    var $addButton = $(this);
+    var $tr = $addButton.closest('tr.task');
+
+
+    var $report = $( $('#subreport-template').html() );
+    $report.addClass('second-level');
+    console.log('Reporte', $report);
+    $tr.after( $report );
+    // get some kind of template
+
+    // prepend, then do same kind of stuff that we do on left side
+  },
+
+  createSubreport: function() {
+    var $changedInput = $(this);
+    var $tr = $changedInput.closest('tr');
+    var taskId = $tr.prev('tr.task').data('id');
+
+    // get the inputs values
+    var name = $tr.find('input.name').first().val();
+    var timeWorked = $tr.find('input.report').first().val();
+
+    setUpdateState( $tr );
+
+    $.post('/task/create-subreport', {
+      name: name,
+      time_worked: timeWorked,
+      task_id: taskId
+    }, function(data) {
+      var template = data.template;
+      // find rendered task with id, or append
+      reportedTable.updateOrAppendTask(taskId, template);
     });
   },
 
@@ -221,6 +260,7 @@ var reportedTable = {
 
   expandReport: function($tr) {
     var $expandButton = $tr.find('.expand-task').first();
+    var $addButton = $tr.find('.add-subreport').first();
     var $subreports = $tr.nextUntil('.task', '.subreport');
 
     var expanded = $tr.hasClass('expanded');
@@ -232,8 +272,12 @@ var reportedTable = {
       $subreports.addClass('hide');
       $tr.removeClass('expanded');
 
+      $addButton.addClass('hide');
+
       return;
     }
+
+    $addButton.removeClass('hide');
 
     $expandButton.removeClass('glyphicon-chevron-right');
     $expandButton.addClass('glyphicon-chevron-down');

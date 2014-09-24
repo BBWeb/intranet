@@ -151,6 +151,17 @@
   </tr>
 </script>
 
+<script type="text/template" id="subreport-template">
+  <tr class="second-level subreport newly-added">
+    <td colspan="2"><input type="text" class="form-control name" placeholder="Programmerat..."></td>
+    <td>
+      <input type="number" class="form-control report" value="0">
+    </td>
+    <td class="valign">
+    </td>
+  </tr>
+</script>
+
 <script type="text/template" id="task-template">
  <tr data-id="<%- id %>" data-project-name="<%- project_name %>" data-project-id="<%- project_id %>" data-name="<%- task %>">
   <td class="task-project"><%- project_name %></td>
@@ -171,24 +182,6 @@
    <button class="btn btn-danger remove-button">Ta bort</button>
  </td>
 </tr>
-</script>
-
-<script type="text/template" id="subreport-template">
-  <% _.each(subreports, function(subreport) { %>
-    <tr data-id="<%- subreport.id %>">
-      <td><%- subreport.reported_date %></td>
-      <td>
-        <input type="number" value="<%- subreport.time %>" style="width: 70px" <% if (subreport.payed == 1) { %> disabled <% } %> />
-      </td>
-      <td>
-        <% if (subreport.payed == 1) { %>
-          Redan betald
-          <% } else { %>
-            <button class="btn btn-danger remove-button">Ta bort</button>
-            <% } %>
-          </td>
-        </tr>
-        <% }); %>
 </script>
 
 @stop
