@@ -2,7 +2,7 @@
 
   var draggable = require('./timereport/draggable');
   var reportedTable = require('./timereport/reportedTable')();
-  var privateTable = require('./timereport/privateTable');
+  var privateTable = require('./timereport/privateTable')(reportedTable);
 
   // get the important data and return an object
   function extractTaskData(task) {
