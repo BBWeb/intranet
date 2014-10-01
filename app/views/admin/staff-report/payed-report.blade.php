@@ -17,14 +17,14 @@
         <tbody>
           @foreach($tasks as $task)
           <tr data-id="{{ $task->id }}">
-            <td>{{ $task->theproject->name }}</td>
-            <td>{{ $task->task }}</td>
+            <td>{{ $task->projectName }}</td>
+            <td>{{ $task->taskName }}</td>
             <td>{{ $task->totalPayedTime() }}</td>
             <td>
-              @if ($task->reported_date == '0000-00-00')
+              @if ($task->completionDate() == '0000-00-00')
                 Icke avslutad
               @else
-                {{$task->reported_date }}
+                {{$task->completionDate() }}
               @endif
             </td>
           </tr>
