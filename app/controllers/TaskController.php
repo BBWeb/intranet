@@ -39,6 +39,7 @@ class TaskController extends BaseController {
       // return json
       return Response::json(array(
          'id' => $asanaTask->id,
+         'completed' => (bool) $asanaTask->completed,
          'title' => $taskTitle,
          'date' => $taskDate
          )

@@ -16,7 +16,7 @@ class CreateModifiedDateTasksTable extends Migration {
 		{
 			$table->increments('id');
 
-			$table->integer('asana_task_id');
+			$table->bigInteger('asana_task_id');
 			$table->index('asana_task_id');
 
 			$table->date('modified_date');

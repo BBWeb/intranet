@@ -78,7 +78,7 @@
 
 	<script type="text/template" id="task-date-template">
 		<label for="customer-date">Kunddatum</label>
-		<% if (date == '0000-00-00') { %>
+		<% if (!completed) { %>
 			<p>Icke avslutad</p>
 			<button data-id="<%- id %>" class="btn btn-danger finish-task-btn">Avsluta</button>
 		<% } else { %>
