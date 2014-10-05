@@ -268,19 +268,4 @@ class TaskController extends BaseController {
       $subreport->restore();
    }
 
-   public function postPay()
-   {
-      $tasks = Input::get('tasks');
-
-      // // find unpayed subreports for these tasks and check them of as payed
-      foreach ($tasks as $taskId => $task) {
-         $subreports = $task['subreports'];
-
-         foreach ($subreports as $subreportId) {
-            $subreport = $this->subreport->find($subreportId);
-            $subreport->payed = true;
-            $subreport->save();
-         }
-      }
-   }
 }

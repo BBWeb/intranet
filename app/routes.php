@@ -98,6 +98,8 @@ Route::group(array('before' => 'admin'), function() {
    Route::get('staff-report/payed/{user}', 'AdminReportedTimeController@getPayedUser');
    // Route::get('staff-report/{user}/{from}/{to}/print', 'AdminReportedTimeController@printProjectOverview');
 
+   Route::post('/admin/pay-tasks', 'AdminPaymentController@payTasks');
+
 
    // CUSTOMER REPORT
    Route::get('customer-report','CustomerViewController@getIndex');

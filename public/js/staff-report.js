@@ -18,8 +18,30 @@ $('#pay-btn').click(function(e) {
     subreports.push(subreportId);
   });
 
+  var nothingToPay = Object.keys(toPay).length === 0;
+
+  if ( nothingToPay ) {
+    showNothingToPay();
+    return;
+  }
+
+  // if tasks to pay
+  payTasks(toPay);
+
+
+});
+
+function showNothingToPay() {
+  var n = noty({
+    text: 'Hittade inget att betala',
+    type: 'information',
+    layout: 'topCenter'
+  });
+}
+
+function payTasks(toPay) {
   // send the list with tasks to server
-  $.post('/task/pay', { tasks: toPay }, function(data, textStatus, jqXhr) {
+  $.post('/admin/pay-tasks', { tasks: toPay }, function(data, textStatus, jqXhr) {
     // TODO should display error?
     if ( textStatus !== 'success' ) return;
 
@@ -29,7 +51,7 @@ $('#pay-btn').click(function(e) {
       layout: 'topCenter'
     });
   });
-});
+}
 
 $('#user-tasks').on('click', '.toggle-subreports', function() {
   var $trParent = $(this).closest('tr');
