@@ -6,7 +6,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h2>{{ $project->name }} <small>{{ $from }} - {{ $to }}</small></h2>
-			<p>Total tid {{ $totalTime }} minuter</p>
+			<p>Total tid {{ $totalTimeHours }} timmar {{ $totalTimeMinutes }} minuter - ({{ $totalTime }} minuter)</p>
 		</div>
 	</div>
 
@@ -16,7 +16,7 @@
 				<thead>
 					<tr>
 						<th>Uppgift</th>
-						<th>Rapporterad tid (minuter)</th>
+						<th>Rapporterad tid</th>
 						<th>Tid (minuter)</th>
 						<th>Datum rapporterat</th>
 					</tr>
@@ -25,7 +25,7 @@
 					@foreach($tasks as $task)
 					<tr data-id="{{ $task->id }}">
 						<td>{{ $task->modifiedNameIfAny() }}</td>
-						<td>{{ $task->totaltime() }}</td>
+						<td>{{ $task->formattedTotalTime() }}</td>
 						<td><input type="number" min="0" name="adjusted-time" class="adjusted-time" value="{{ $task->adjustedTimeIfAny() }}" style="width: 60px"></td>
 						<td>{{ $task->modifiedDateIfAny() }}</td>
 					</tr>

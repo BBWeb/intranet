@@ -48,7 +48,6 @@ class CustomerViewController extends BaseController {
 		Session::flash('to', $toStr);
 		$to = date('Y-m-d', strtotime($toStr));
 
-	    // $projectTasks = $project->tasks()->whereBetween('reported_date', array($from, $to))->get();
 		$projectTasks = $project->tasksForCustomerBetween($from, $to);
 
 	    // return $tasks;
@@ -57,6 +56,9 @@ class CustomerViewController extends BaseController {
 			$totalTime += $task->totaltime();
 		}
 
+		$totalTimeHours = floor($totalTime / 60);
+		$totalTimeMinutes = $totalTime % 60;
+
 		return View::make('admin.customer-report.project',
 			array(
 				'from' => $from,
@@ -64,6 +66,8 @@ class CustomerViewController extends BaseController {
 				'projects' => $projects,
 				'project' => $project,
 				'totalTime' => $totalTime,
+				'totalTimeHours' => $totalTimeHours,
+				'totalTimeMinutes' => $totalTimeMinutes,
 				'tasks' => $projectTasks
 			)
 		);
@@ -83,11 +87,6 @@ class CustomerViewController extends BaseController {
 	    // go through all "adjusted time wich are not set"
 	    foreach ($projectTasks as $projectTask)
 	    {
-	    	Log::info("Project task");
-	    	Log::info($projectTask->id);
-	    	Log::info("Adjusted time");
-	    	Log::info($projectTask->adjusted_time);
-
 	    	if ( $projectTask->adjusted_time == 0) {
 	    		$projectTask->adjusted_time = $projectTask->totaltime();
 	    		$projectTask->save();
