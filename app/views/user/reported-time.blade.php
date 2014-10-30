@@ -35,7 +35,7 @@
             <th>Projekt</th>
             <th>Uppgift</th>
             <th>Obetald tid</th>
-            <th>Tid (minuter)</th>
+            <th>Tid (hh:mm)</th>
             <th>Datum (rapporterat)</th>
           </tr>
         </thead>
@@ -44,8 +44,8 @@
           <tr data-id="{{ $task->id }}">
             <td>{{ $task->projectName() }}</td>
             <td>{{ $task->taskName() }}</td>
-            <td>{{ $task->totalUnpayedTime() }}</td>
-            <td><span class="total-time" href="">{{ $task->totaltime() }}</span></td>
+            <td>{{ $task->formattedUnpayedTime() }}</td>
+            <td><span class="total-time" href="">{{ $task->formattedTotalTime() }}</span></td>
             <td>
               @if ($task->completionDate() == '0000-00-00')
               Icke avslutad
