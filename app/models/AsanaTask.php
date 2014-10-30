@@ -2,6 +2,9 @@
 
 class AsanaTask extends Eloquent {
 
+  public $presenter = 'Intranet\Presenters\AsanaTaskPresenter';
+
+
   protected $table = 'asana_tasks';
 
   protected $fillable = [
