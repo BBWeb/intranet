@@ -17,7 +17,8 @@
 					<tr>
 						<th>Uppgift</th>
 						<th>Rapporterad tid</th>
-						<th>Tid (minuter)</th>
+						<th>Rapporterad tid (min)</th>
+						<th>Tid (min)</th>
 						<th>Datum rapporterat</th>
 					</tr>
 				</thead>
@@ -26,6 +27,7 @@
 					<tr data-id="{{ $task->id }}">
 						<td>{{ $task->modifiedNameIfAny() }}</td>
 						<td>{{ $task->formattedTotalTime() }}</td>
+						<td>{{ $task->totaltime() }}</td>
 						<td><input type="number" min="0" name="adjusted-time" class="adjusted-time" value="{{ $task->adjustedTimeIfAny() }}" style="width: 60px"></td>
 						<td>{{ $task->modifiedDateIfAny() }}</td>
 					</tr>
