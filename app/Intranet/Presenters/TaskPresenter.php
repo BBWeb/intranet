@@ -68,7 +68,7 @@ class TaskPresenter extends BasePresenter {
     $hours = floor($time / 60);
     $minutes = $time % 60;
 
-    return ($hours < 9 ? '0' : '') . $hours . ':' . $minutes . ($minutes < 9 ? '0' : '');
+    return ($hours < 9 ? '0' : '') . $hours . ':' . ($minutes < 10 ? '0' : '') . $minutes;
   }
 
 }
