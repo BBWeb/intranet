@@ -15,6 +15,13 @@ class AsanaTaskPresenter extends BasePresenter {
     return $this->formatTime($totalUnpayedTime);
   }
 
+  public function formattedAdjustedTime()
+  {
+    $adjustedTime = $this->resource->adjustedTimeIfAny();
+
+    return $this->formatTime($adjustedTime);
+  }
+
   public function formattedTotalTime()
   {
     $totalTime = $this->resource->totaltime();
