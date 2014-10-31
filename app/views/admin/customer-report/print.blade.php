@@ -14,7 +14,7 @@
 				<thead>
 					<tr>
 						<th>Uppgift</th>
-						<th>Tid (minuter)</th>
+						<th>Tid</th>
 						<th>Datum rapporterat</th>
 					</tr>
 				</thead>
@@ -22,7 +22,7 @@
 					@foreach($tasks as $task)
 					<tr>
 						<td>{{ $task->modifiedNameIfAny() }}</td>
-						<td>{{ $task->adjusted_time }}</td>
+						<td>{{ $task->formattedAdjustedTime() }}</td>
 						<td>{{ $task->modifiedDateIfAny() }}</td>
 					</tr>
 					@endforeach
