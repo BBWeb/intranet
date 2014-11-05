@@ -104,6 +104,27 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
    }
 
    /**
+    * Gets Tasks tasks which belongs to this user, and has
+    * subreports between $dateFrom and $dateTo
+    * @param  String $dateFrom (format: YYYY-mm-dd eg 2014-04-16)
+    * @param  String $dateTo
+    * @return Eloquent Task
+    */
+   public function tasksWithSubreportsBetween($dateFrom, $dateTo)
+   {
+      $tasks = DB::table('tasks')
+         ->where('tasks.user_id', '=', $this->id)
+         ->whereExists(function($query) use (&$dateFrom, &$dateTo) {
+           $query->select(DB::raw(1))
+               ->from('subreports')
+               ->whereBetween('subreports.reported_date', [ $dateFrom, $dateTo ])
+               ->whereRaw('subreports.task_id = tasks.id');
+         });
+
+      return Task::hydrate( $tasks->get() );
+   }
+
+   /**
     * Get those Asana Tasks that are assigned to this user, and those that we have added as tasks which are non completed
     */
    public function allAsanaTasks()
