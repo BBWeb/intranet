@@ -33,9 +33,9 @@ Route::group(array('before' => 'auth', 'prefix' => 'reported-time'), function() 
       )
    );
 
-   Route::get('/{project}', array(
-      'as' => 'reported-time.showProject',
-      'uses' => 'ReportedTimeController@showProject'
+   Route::get('/{project}/{from}/{to}', array(
+      'as' => 'reported-time.showFilter',
+      'uses' => 'ReportedTimeController@showFilter'
       )
    );
 

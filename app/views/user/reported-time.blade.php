@@ -4,12 +4,28 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-6">
       {{ Form::open(array('route' => 'reported-time.filter', 'class' => 'form-inline')) }}
+      <div class="col-md-3">
         <div class="form-group">
           <label for="">Projekt</label>
           {{ Form::select('project', array('all' => 'Alla') + $projects, Session::get('project'), array('class' => 'form-control')) }}
         </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="input-group date">
+          <span class="input-group-addon">Från</span>
+          {{ Form::text('from', Session::get('from'), array('id' => 'from-date', 'class' => 'form-control')) }}
+        </div>
+      </div>
+
+
+      <div class="col-md-2">
+        <div class="input-group date">
+          <span class="input-group-addon">Till</span>
+          {{ Form::text('to', Session::get('to'), array('id' => 'to-date', 'class' => 'form-control')) }}
+        </div>
+      </div>
 
         {{ Form::submit('Filtrera', array('class' => 'btn btn-primary')) }}
       {{ Form::close() }}

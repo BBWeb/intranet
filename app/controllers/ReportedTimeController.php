@@ -14,21 +14,21 @@ class ReportedTimeController extends BaseController {
 		$user = Auth::user();
 
 		$projects =  $this->project->lists('name', 'id');
-		$tasks = $user->tasks()->with('subreports')->get();
 
-		$totalUnpayedInMinutes = $this->totalUnpayedFor( $tasks );
-		$totalUnpayed = $this->getTimeObj( $totalUnpayedInMinutes );
+		// define in helper functions
+		$lastMonthTimeStamp = mktime(0, 0, 0, date('m') - 1, 1, date('Y'));
 
-		$totalPayedInMinutes = $this->totalPayedFor( $tasks );
-		$totalPayed = $this->getTimeObj( $totalPayedInMinutes );
+		// first day of last month
+		$defaultFromDate =  date('d-m-Y', $lastMonthTimeStamp);
+		Session::flash('from', $defaultFromDate);
 
-		return View::make('user.reported-time', array(
-			'projects' => $projects,
-			'totalUnpayed' => $totalUnpayed,
-			'totalPayed' => $totalPayed,
-			'tasks' => $tasks
-			)
-		);
+		// last date in last month
+		$defaultToDate = date('t-m-Y', $lastMonthTimeStamp);
+		Session::flash('to', $defaultToDate);
+
+		// redirect to filter viewed // with all set
+		$url = route('reported-time.showFilter', [ 'all', $defaultFromDate, $defaultToDate ]);
+		return Redirect::to( $url );
 	}
 
 	/**
@@ -36,31 +36,48 @@ class ReportedTimeController extends BaseController {
 	 * @param  [Integer] $id The identifier of the project to display
 	 * @return [View]    View containing tasks
 	 */
-	public function showProject($id)
+	public function showFilter($projectId, $fromStr, $toStr)
 	{
 		$user = Auth::user();
 
-		Session::flash('project', $id);
+		Session::flash('project', $projectId);
+
+		Session::flash('from', $fromStr);
+		Session::flash('to', $toStr);
 
 		$projects =  $this->project->lists('name', 'id');
 
-		// get the selected project
-		$project = $this->project->find( $id );
-		// get all of this users task which is connected to the project through an asana task
-		$userTasksInProjectQuery = $project->tasks()->where('tasks.user_id', '=', $user->id); // collision with user id on asana table, therefore tasks.user_id
-		$userTasksInProject = $userTasksInProjectQuery->with('subreports')->get();
+		$fromDate = date('Y-m-d', strtotime($fromStr));
+		$toDate = date('Y-m-d', strtotime($toStr));
 
-		$totalUnpayedInMinutes = $this->totalUnpayedFor( $userTasksInProject );
+		if ($projectId == 'all')
+		{
+			$userTasks = $user->tasksWithSubreportsBetween($fromDate, $toDate);
+		}
+		else
+		{
+			$userTasks = $user->projectTasksWithSubreportsBetween($projectId, $fromDate, $toDate);
+		}
+
+
+		// get the selected project
+		// $project = $this->project->find( $id );
+
+		// get all of this users task which is connected to the project through an asana task
+		// $userTasksInProjectQuery = $project->tasks()->where('tasks.user_id', '=', $user->id); // collision with user id on asana table, therefore tasks.user_id
+		// $userTasksInProject = $userTasksInProjectQuery->with('subreports')->get();
+
+		$totalUnpayedInMinutes = $this->totalUnpayedFor( $userTasks );
 		$totalUnpayed = $this->getTimeObj( $totalUnpayedInMinutes );
 
-		$totalPayedInMinutes = $this->totalPayedFor( $userTasksInProject );
+		$totalPayedInMinutes = $this->totalPayedFor( $userTasks );
 		$totalPayed = $this->getTimeObj( $totalPayedInMinutes );
 
 		return View::make('user.reported-time', array(
 			'projects' => $projects,
 			'totalUnpayed' => $totalUnpayed,
 			'totalPayed' => $totalPayed,
-			'tasks' => $userTasksInProject
+			'tasks' => $userTasks
 			)
 		);
 	}
@@ -71,15 +88,9 @@ class ReportedTimeController extends BaseController {
 	 */
 	public function filter()
 	{
-		$project = Input::get('project');
-		if ( $project == 'all' )
-		{
-			return Redirect::route('reported-time.index');
-		}
+		$input = Input::only('project', 'from', 'to');
 
-		$input = Input::only('project');
-		$url = route('reported-time.showProject', $input);
-
+		$url = route('reported-time.showFilter', $input);
 		return Redirect::to( $url );
 	}
 
