@@ -124,6 +124,27 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
       return Task::hydrate( $tasks->get() );
    }
 
+   public function projectTasksWithSubreportsBetween($projectId, $dateFrom, $dateTo)
+   {
+      $tasks = DB::table('tasks')
+         ->where('tasks.user_id', '=', $this->id)
+         ->whereExists(function($query) use (&$projectId) {
+           $query->select(DB::raw(1))
+               ->from('asana_tasks')
+               ->where('asana_tasks.project_id', '=', $projectId)
+               ->whereRaw('tasks.asana_task_id = asana_tasks.id');
+
+         })
+         ->whereExists(function($query) use (&$dateFrom, &$dateTo) {
+           $query->select(DB::raw(1))
+               ->from('subreports')
+               ->whereBetween('subreports.reported_date', [ $dateFrom, $dateTo ])
+               ->whereRaw('subreports.task_id = tasks.id');
+         });
+
+      return Task::hydrate( $tasks->get() );
+   }
+
    /**
     * Get those Asana Tasks that are assigned to this user, and those that we have added as tasks which are non completed
     */
