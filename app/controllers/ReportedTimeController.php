@@ -20,11 +20,9 @@ class ReportedTimeController extends BaseController {
 
 		// first day of last month
 		$defaultFromDate =  date('d-m-Y', $lastMonthTimeStamp);
-		Session::flash('from', $defaultFromDate);
 
 		// last date in last month
 		$defaultToDate = date('t-m-Y', $lastMonthTimeStamp);
-		Session::flash('to', $defaultToDate);
 
 		// redirect to filter viewed // with all set
 		$url = route('reported-time.showFilter', [ 'all', $defaultFromDate, $defaultToDate ]);
