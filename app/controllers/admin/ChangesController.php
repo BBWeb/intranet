@@ -11,7 +11,7 @@ class ChangesController extends \BaseController {
 
 	public function getIndex()
 	{
-		$projects = $this->project->lists('name', 'id');
+		$projects = $this->project->where('archive', '=', false)->lists('name', 'id');
 		// we want a list of projects
 		return \View::make('admin.changes.base', array(
 			'projects' => $projects

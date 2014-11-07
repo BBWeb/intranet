@@ -11,7 +11,7 @@ class CustomerViewController extends BaseController {
 
 	public function getIndex()
 	{
-		$projects = $this->project->lists('name', 'id');
+		$projects = $this->project->where('archive', '=', false)->lists('name', 'id');
 
 		// define in helper functions
 		$lastMonthTimeStamp = mktime(0, 0, 0, date('m') - 1, 1, date('Y'));
