@@ -49,6 +49,9 @@ Route::group(array('before' => 'auth', 'prefix' => 'reported-time'), function() 
 Route::group(array('before' => 'admin'), function() {
    Route::resource('staff', 'AdminManageStaffController');
 
+   Route::get('/archive', 'ArchiveController@index');
+   Route::post('/archive', 'ArchiveController@updateArchivedProjects');
+
    Route::get('/staff/{id}/edit/personal', [
       'as' => 'staff.personal',
       'uses' => 'AdminManageStaffController@personal'

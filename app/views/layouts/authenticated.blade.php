@@ -40,6 +40,7 @@
             <li><a href="/customer-report">Kundvy</a></li>
 
             <li class="@if (Request::is('changes*')) active @endif"><a href="/changes">Förändringar</a></li>
+            <li class="@if (Request::is('archive')) active @endif"><a  href="/archive">Arkivera projekt</a></li>
             @endif
 
           </ul>
