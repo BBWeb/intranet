@@ -34,12 +34,18 @@
 
   <div class="row" style="margin-top: 15px">
     <div class="col-md-6">
-     <!-- unpayed time in hours and minutes  -->
-      <ul class="list-unstyled">
+       <h2>För period</h2>
+       <ul class="list-unstyled list-inline">
+        <li>Obetald tid {{ $periodTotalUnpayed->hours }} timmar {{ $periodTotalUnpayed->minutes }} minuter</li>
+        <li>Betald tid {{ $periodTotalPayed->hours }} timmar {{ $periodTotalPayed->minutes }} minuter</li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+     <h2>Totalt</h2>
+      <ul class="list-unstyled list-inline">
         <li>Obetald tid {{ $totalUnpayed->hours }} timmar {{ $totalUnpayed->minutes }} minuter</li>
         <li>Betald tid {{ $totalPayed->hours }} timmar {{ $totalPayed->minutes }} minuter</li>
       </ul>
-     <!-- payed time in hours and minutes -->
     </div>
   </div>
 
@@ -50,8 +56,8 @@
           <tr>
             <th>Projekt</th>
             <th>Uppgift</th>
-            <th>Obetald tid</th>
-            <th>Tid (hh:mm)</th>
+            <th>Period - Total tid / Obetald tid</th>
+            <th>Total tid / Obetald tid</th>
             <th>Datum (rapporterat)</th>
           </tr>
         </thead>
@@ -60,8 +66,8 @@
           <tr data-id="{{ $task->id }}">
             <td>{{ $task->projectName() }}</td>
             <td>{{ $task->taskName() }}</td>
-            <td>{{ $task->formattedUnpayedTime() }}</td>
-            <td><span class="total-time" href="">{{ $task->formattedTotalTime() }}</span></td>
+            <td>{{ $task->formattedTotalTimeForPeriod($fromDate, $toDate) }} / {{ $task->formattedUnpayedTimeForPeriod($fromDate, $toDate) }}</td>
+            <td><span class="total-time" href="">{{ $task->formattedTotalTime() }}</span> / {{ $task->formattedUnpayedTime() }}</td>
             <td>
               @if ($task->completionDate() == '0000-00-00')
               Icke avslutad

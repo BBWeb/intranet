@@ -65,17 +65,27 @@ class ReportedTimeController extends BaseController {
 		// $userTasksInProjectQuery = $project->tasks()->where('tasks.user_id', '=', $user->id); // collision with user id on asana table, therefore tasks.user_id
 		// $userTasksInProject = $userTasksInProjectQuery->with('subreports')->get();
 
-		$totalUnpayedInMinutes = $this->totalUnpayedFor( $userTasks );
+		$periodTotalUnpayedInMinutes = $this->totalUnpayedForTasksBetween( $userTasks, $fromDate, $toDate );
+		$periodTotalUnpayed = $this->getTimeObj( $periodTotalUnpayedInMinutes );
+
+		$periodTotalPayedInMinutes = $this->totalPayedForTasksBetween( $userTasks, $fromDate, $toDate );
+		$periodTotalPayed = $this->getTimeObj( $periodTotalPayedInMinutes );
+
+		$totalUnpayedInMinutes = $this->totalUnpayedForTasks( $userTasks );
 		$totalUnpayed = $this->getTimeObj( $totalUnpayedInMinutes );
 
-		$totalPayedInMinutes = $this->totalPayedFor( $userTasks );
+		$totalPayedInMinutes = $this->totalPayedForTasks( $userTasks );
 		$totalPayed = $this->getTimeObj( $totalPayedInMinutes );
 
 		return View::make('user.reported-time', array(
 			'projects' => $projects,
-			'totalUnpayed' => $totalUnpayed,
+			'periodTotalUnpayed' => $periodTotalUnpayed,
+			'periodTotalPayed' => $periodTotalPayed,
 			'totalPayed' => $totalPayed,
-			'tasks' => $userTasks
+			'totalUnpayed' => $totalUnpayed,
+			'tasks' => $userTasks,
+			'fromDate' => $fromDate,
+			'toDate' => $toDate
 			)
 		);
 	}
@@ -92,7 +102,7 @@ class ReportedTimeController extends BaseController {
 		return Redirect::to( $url );
 	}
 
-	private function totalUnpayedFor($tasks)
+	private function totalUnpayedForTasks($tasks)
 	{
 		$unpayed = 0;
 
@@ -101,15 +111,37 @@ class ReportedTimeController extends BaseController {
 		}
 
 		return $unpayed;
+
 	}
 
-	public function totalPayedFor($tasks)
+	private function totalUnpayedForTasksBetween($tasks, $fromDate, $toDate)
+	{
+		$unpayed = 0;
+
+		foreach ($tasks as $task) {
+			$unpayed += $task->totalUnpayedTimeBetween($fromDate, $toDate);
+		}
+
+		return $unpayed;
+	}
+
+	private function totalPayedForTasks($tasks)
+	{
+		$payed = 0;
+
+		foreach ($tasks as $task) {
+			$payed += $task->totalPayedTime();
+		}
+
+	}
+
+	public function totalPayedForTasksBetween($tasks, $fromDate, $toDate)
 	{
 		$payed = 0;
 
 		foreach ($tasks as $task)
 		{
-			$payed += $task->totalPayedTime();
+			$payed += $task->totalPayedTimeBetween($fromDate, $toDate);
 		}
 
 		return $payed;

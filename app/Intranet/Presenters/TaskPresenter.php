@@ -44,6 +44,20 @@ class TaskPresenter extends BasePresenter {
     return $asanaTask->project->name;
   }
 
+  public function formattedUnpayedTimeForPeriod($fromDate, $toDate)
+  {
+    $totalUnpayedTime = $this->resource->totalUnpayedTimeBetween($fromDate, $toDate);
+
+    return $this->formatTime($totalUnpayedTime);
+  }
+
+  public function formattedTotalTimeForPeriod($fromDate, $toDate)
+  {
+    $totalTime = $this->resource->totaltimeBetween($fromDate, $toDate);
+
+    return $this->formatTime($totalTime);
+  }
+
   public function formattedUnpayedTime()
   {
     $totalUnpayedTime = $this->resource->totalUnpayedTime();
