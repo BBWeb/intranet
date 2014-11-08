@@ -1,5 +1,10 @@
 ;(function() {
 
+  $('.input-group.date').datepicker({
+    format: 'dd-mm-yyyy'
+  });
+
+
   var $allSubreportsModal = $('#all-subreports-modal');
   var subreportTemplate = _.template( $('#subreport-template').html() );
 
