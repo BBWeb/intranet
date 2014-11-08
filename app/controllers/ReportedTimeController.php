@@ -133,6 +133,7 @@ class ReportedTimeController extends BaseController {
 			$payed += $task->totalPayedTime();
 		}
 
+		return $payed;
 	}
 
 	public function totalPayedForTasksBetween($tasks, $fromDate, $toDate)
