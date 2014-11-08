@@ -191,5 +191,4 @@
 <script src="js/timereport/utils.js"></script>
 <script src="js/timereport/asanaModal.js"></script>
 <script src="dist/timereport-bundle.js"></script>
-<script src="js/libs/jquery.noty.packaged.min.js"></script>
 @stop

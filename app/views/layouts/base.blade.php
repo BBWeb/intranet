@@ -19,6 +19,8 @@
   {{ HTML::script('/js/libs/bootstrap-datepicker.js') }}
   {{ HTML::script('/js/libs/jquery.stopwatch.js') }}
   {{ HTML::script('/js/jquery-ui.min.js') }}
+  {{ HTML::script('/js/libs/jquery.noty.packaged.min.js') }}
+  {{ HTML::script('/js/error-handling.js') }}
    @yield('footer-scripts')
 </body>
 </html>

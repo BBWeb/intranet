@@ -48,21 +48,21 @@
         <table class="table">
           <thead>
              <tr>
-              <th>Gällande från</th> 
-              <th>Timlön</th> 
-              <th>Avdragen inkomstskatt</th> 
-              <th>Arbetsgivaravgift</th> 
+              <th>Gällande från</th>
+              <th>Timlön</th>
+              <th>Avdragen inkomstskatt</th>
+              <th>Arbetsgivaravgift</th>
              </tr>
-           </thead> 
+           </thead>
            <tbody>
-            @foreach ($staff->getOldPaymentInfo() as $paymentInfo) 
+            @foreach ($staff->getOldPaymentInfo() as $paymentInfo)
             <tr>
-              <td>{{ $paymentInfo->start_date }}</td>              
-              <td>{{ $paymentInfo->hourly_salary }} kr</td>              
-              <td>{{ $paymentInfo->income_tax }} %</td>              
-              <td>{{ $paymentInfo->employer_fee }} %</td>              
+              <td>{{ $paymentInfo->start_date }}</td>
+              <td>{{ $paymentInfo->hourly_salary }} kr</td>
+              <td>{{ $paymentInfo->income_tax }} %</td>
+              <td>{{ $paymentInfo->employer_fee }} %</td>
             </tr>
-            @endforeach 
+            @endforeach
            </tbody>
         </table>
       </div>
@@ -85,25 +85,25 @@
         <table class="table">
           <thead>
              <tr>
-              <th>Gällande från</th> 
-              <th>Timlön</th> 
-              <th>Avdragen inkomstskatt</th> 
-              <th>Arbetsgivaravgift</th> 
+              <th>Gällande från</th>
+              <th>Timlön</th>
+              <th>Avdragen inkomstskatt</th>
+              <th>Arbetsgivaravgift</th>
               <th></th>
              </tr>
-           </thead> 
+           </thead>
            <tbody>
-            @foreach ($staff->getFuturePaymentInfo() as $paymentInfo) 
+            @foreach ($staff->getFuturePaymentInfo() as $paymentInfo)
             <tr>
-              <td>{{ $paymentInfo->start_date }}</td>              
-              <td>{{ $paymentInfo->hourly_salary }} kr</td>              
-              <td>{{ $paymentInfo->income_tax }} %</td>              
-              <td>{{ $paymentInfo->employer_fee }} %</td>              
+              <td>{{ $paymentInfo->start_date }}</td>
+              <td>{{ $paymentInfo->hourly_salary }} kr</td>
+              <td>{{ $paymentInfo->income_tax }} %</td>
+              <td>{{ $paymentInfo->employer_fee }} %</td>
               <td>
                 <span data-id="{{ $paymentInfo->id }}" data-staff-id="{{ $staff->id }}" class="remove-salary-change glyphicon glyphicon-remove"></span>
               </td>
             </tr>
-            @endforeach 
+            @endforeach
            </tbody>
         </table>
       </div>
@@ -131,13 +131,13 @@
                 <label for="income-tax">Avdrag inkomstskatt (%)</label>
                 <input type="number" id="income-tax" value="30" data-default="30" class="form-control" placeholder="30">
                 <span id="income-tax-error" class="text-danger hidden"></span>
-              </div> 
+              </div>
 
               <div class="form-group">
                 <label for="hourly-salary">Timlön</label>
                 <input type="number" id="hourly-salary" class="form-control" placeholder="200">
                 <span id="hourly-salary-error" class="text-danger hidden"></span>
-              </div> 
+              </div>
 
               <div class="form-group">
                 <label for="">Arbetsgivaravgift (%)</label>
@@ -166,6 +166,5 @@
 @stop
 
 @section('footer-scripts')
-  <script src="/js/libs/jquery.noty.packaged.min.js"></script>
   <script src="/js/payment.js"></script>
 @stop

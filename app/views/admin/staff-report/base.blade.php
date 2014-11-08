@@ -32,6 +32,4 @@
 
 @section('footer-scripts')
 	<script src="/js/staff-report.js"></script>
-	<script src="/js/libs/jquery.noty.packaged.min.js"></script>
-
 @stop
