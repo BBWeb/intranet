@@ -4,11 +4,13 @@ use Intranet\Api\AsanaApi;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\DB;
 
 use \DateTime;
 use \DateInterval;
 use \AsanaTask;
 use \Project;
+use \LastQueryCache;
 
 class AsanaHandler {
 
@@ -166,22 +168,31 @@ class AsanaHandler {
 
    private function getLastQueryTime()
    {
-      $lastQueryTime = Cache::get('users:' . $this->user->id . ':lastquery');
+      $lastQueryCache = DB::table('lastquery_cache')->where('user_id', $this->user->id)->first();
 
-      if (!$lastQueryTime) {
+      if ($lastQueryCache) {
+         return $lastQueryCache->time;
+      }
+      else
+      {
          $queryTime = new DateTime();
          $queryTime->sub(new DateInterval('PT1H'));
+
          return $queryTime->format(DateTime::ISO8601);
       }
-
-      return $lastQueryTime;
    }
 
    private function saveQueryTime()
    {
       $currentDateTime = new DateTime();
 
-      Cache::forever('users:' . $this->user->id . ':lastquery', $currentDateTime->format(DateTime::ISO8601));
+      $lastQueryCache = LastQueryCache::firstOrCreate([
+         'user_id' => $this->user->id
+      ]);
+
+      $lastQueryCache->time = $currentDateTime->format(DateTime::ISO8601);
+
+      $lastQueryCache->update();
    }
 
    private function updateOrCreateAsanaTask($taskId, $taskData)
