@@ -10,7 +10,7 @@
           <tr>
             <th>Projekt</th>
             <th>Uppgift</th>
-            <th>Betald tid (minuter)</th>
+            <th>Betald tid (hh:mm)</th>
             <th>Datum rapporterat</th>
           </tr>
         </thead>
@@ -19,7 +19,7 @@
           <tr data-id="{{ $task->id }}">
             <td>{{ $task->projectName }}</td>
             <td>{{ $task->taskName }}</td>
-            <td>{{ $task->totalPayedTime() }}</td>
+            <td>{{ $task->formattedPayedTime() }}</td>
             <td>
               @if ($task->completionDate() == '0000-00-00')
                 Icke avslutad
