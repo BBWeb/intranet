@@ -33,7 +33,7 @@
             <tr>
               <th class="project">Projekt</th>
               <th class="name">Namn</th>
-              <th>Total tid (min)</th>
+              <th>Total tid</th>
               <th class="actions"></th>
             </tr>
           </thead>

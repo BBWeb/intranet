@@ -362,9 +362,20 @@ var reportedTable = {
       totaltime += Number( $subreport.find('input.time').val() );
     });
 
-    $taskTr.find('td.totaltime').text( totaltime );
+    // change format to hh:mm
+    var formattedTime = formatTotalTime( totaltime );
+
+    $taskTr.find('td.totaltime').text( formattedTime );
   }
 
+};
+
+// return time in format hh:mm
+var formatTotalTime = function(totaltime) {
+  var hours = Math.floor(totaltime / 60);
+  var minutes = totaltime % 60;
+
+  return (hours < 9 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
 };
 
 var timer = require('./timer')({

@@ -1,7 +1,7 @@
 <tr data-id="{{ $task->id }}" class="first-level task">
   <td>{{ $task->projectName }}</td>
   <td class="name">{{ $task->taskName }}</td>
-  <td class="totaltime">{{ $task->totaltime() }}</td>
+  <td class="totaltime">{{ $task->formattedTotalTime() }}</td>
   <td>
     <span class="glyphicon glyphicon-chevron-right pull-right expand-task"></span>
     <span style="margin-right: 7px" class="hide glyphicon glyphicon-plus pull-right add-subreport"></span>
