@@ -65,6 +65,13 @@ class TaskPresenter extends BasePresenter {
     return $this->formatTime($totalUnpayedTime);
   }
 
+  public function formattedPayedTime()
+  {
+    $totalPayedTime = $this->resource->totalPayedTime();
+
+    return $this->formatTime($totalPayedTime);
+  }
+
   public function formattedTotalTime()
   {
     $totalTime = $this->resource->totaltime();
