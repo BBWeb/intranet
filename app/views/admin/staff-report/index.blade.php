@@ -5,7 +5,7 @@
 
   <div class="row" style="margin-top: 10px; margin-bottom: 10px">
     <div class="col-md-12">
-      <span>Total tid: {{ $totaltime }} minuter</span>
+      <span>Total tid: {{ $totaltime }} (hh:mm)</span>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
           <tr>
             <th>Projekt</th>
             <th>Uppgift</th>
-            <th>Obetald tid (minuter)</th>
+            <th>Obetald tid (hh:mm)</th>
             <th>Datum avklarad</th>
             <th><input type="checkbox" id="payall-checkbox">Markera för lön</th>
             <th></th>
@@ -27,7 +27,7 @@
           <tr data-id="{{ $task->id }}">
             <td>{{ $task->projectName() }}</td>
             <td>{{ $task->taskName() }}</td>
-            <td>{{ $task->totalUnpayedTimeBetween($from, $to) }}</td>
+            <td>{{ $task->formattedUnpayedTimeForPeriod($from, $to) }}</td>
             <td>
               @if ($task->completionDate() == '0000-00-00')
                 Icke avklarad

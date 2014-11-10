@@ -55,11 +55,11 @@ class AdminReportedTimeController extends BaseController {
 
 		return View::make('admin.staff-report.index',
 			array(
-        		'users' => $users,
+        'users' => $users,
 				'tasks' => $unpayedTasks,
 				'from' => $from,
 				'to' => $to,
-				'totaltime' => $totalTime
+				'totaltime' => $this->formatTime($totalTime)
 			)
 		);
 	}
@@ -93,6 +93,14 @@ class AdminReportedTimeController extends BaseController {
     	'users' => $users,
       'tasks' => $payedTasks
   	));
+  }
+
+  private function formatTime($time)
+  {
+    $hours = floor($time / 60);
+    $minutes = $time % 60;
+
+    return ($hours < 9 ? '0' : '') . $hours . ':' . ($minutes < 10 ? '0' : '') . $minutes;
   }
 
 }
