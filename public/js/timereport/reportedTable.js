@@ -16,9 +16,6 @@ var reportedTable = {
     });
 
     this.$el.on('change', '.subreport input', this.updateSubreport);
-    this.$el.on('click', '.timer', function() {
-      timer.handleTimer.call(this);
-    });
 
     this.$el.on('click', '.add-subreport', this.addSubreport);
     this.$el.on('change', '.newly-added input.name', this.createSubreport);
@@ -206,12 +203,6 @@ var formatTotalTime = function(totaltime) {
 
   return (hours < 9 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
 };
-
-var timer = require('./timer')({
-  el: 'input.time',
-  onStop: reportedTable.updateSubreport
-});
-
 
 function getFollowingSubreports($taskTr) {
   var $subreports = $([]);
