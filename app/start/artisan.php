@@ -17,4 +17,4 @@ Artisan::add(new MoveReportedTimeAndDateToTimeReport);
 Artisan::add(new UpdateAsanaTasks);
 Artisan::add(new RemoveDeletedAsanaTasks);
 Artisan::add(new MigrateToNewDb);
-Artisan::add(new MigrateLastQueryCacheToDb);
+Artisan::add(new MigrateLastqueryCacheToDb);
