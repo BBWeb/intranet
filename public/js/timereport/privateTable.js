@@ -2,14 +2,19 @@ module.exports = function(reportedTable) {
 
   var draggable = require('./draggable');
   var timer = require('./timer')({
-    el: 'input.report',
+    name: 'privateTable',
+    tableId: '#private-tasks',
+    rowClass: '.private-task',
+    inputEl: 'input.report',
     onStop: updatePrivateTask
   });
+
+  timer.initTimers();
 
   var $privateTasks = $('#private-tasks-tbody');
 
   $privateTasks.on('click', '.connect', connectToAsanaTaskModal);
-  $privateTasks.on('click', '.remove-report', removePrivateReport)
+  $privateTasks.on('click', '.remove-report', removePrivateReport);
 
   // we want to save a new private task when name is changed
   $privateTasks.on('change', '.newly-added input.name', createPrivateTask);
@@ -22,7 +27,7 @@ module.exports = function(reportedTable) {
   var $newReportAction = $('#new-report');
 
   // Event handlers
-  $newReportAction.click(createNewReport)
+  $newReportAction.click(createNewReport);
 
   $privateTasks.on('click', '.timer', handleTimer);
 
@@ -66,7 +71,7 @@ module.exports = function(reportedTable) {
       success: function(data) {
         if ( data.deleted ) $tr.remove();
       }
-    })
+    });
   }
 
   function updatePrivateTask() {
@@ -88,6 +93,8 @@ module.exports = function(reportedTable) {
           time_worked: timeWorked
         },
         success: function() {
+          timer.clearTaskTimer(taskId);
+
           removeUpdateState( $tr );
         }
       });

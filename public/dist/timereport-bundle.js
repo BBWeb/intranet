@@ -34,14 +34,19 @@ module.exports = function(reportedTable) {
 
   var draggable = require('./draggable');
   var timer = require('./timer')({
-    el: 'input.report',
+    name: 'privateTable',
+    tableId: '#private-tasks',
+    rowClass: '.private-task',
+    inputEl: 'input.report',
     onStop: updatePrivateTask
   });
+
+  timer.initTimers();
 
   var $privateTasks = $('#private-tasks-tbody');
 
   $privateTasks.on('click', '.connect', connectToAsanaTaskModal);
-  $privateTasks.on('click', '.remove-report', removePrivateReport)
+  $privateTasks.on('click', '.remove-report', removePrivateReport);
 
   // we want to save a new private task when name is changed
   $privateTasks.on('change', '.newly-added input.name', createPrivateTask);
@@ -54,7 +59,7 @@ module.exports = function(reportedTable) {
   var $newReportAction = $('#new-report');
 
   // Event handlers
-  $newReportAction.click(createNewReport)
+  $newReportAction.click(createNewReport);
 
   $privateTasks.on('click', '.timer', handleTimer);
 
@@ -98,7 +103,7 @@ module.exports = function(reportedTable) {
       success: function(data) {
         if ( data.deleted ) $tr.remove();
       }
-    })
+    });
   }
 
   function updatePrivateTask() {
@@ -120,6 +125,8 @@ module.exports = function(reportedTable) {
           time_worked: timeWorked
         },
         success: function() {
+          timer.clearTaskTimer(taskId);
+
           removeUpdateState( $tr );
         }
       });
@@ -477,15 +484,45 @@ return reportedTable;
 };
 
 },{"./draggable":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/draggable.js","./timer":"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/timer.js"}],"/Users/nandreasson/Code/bbweb/intranet/public/js/timereport/timer.js":[function(require,module,exports){
-function setLocalStorageFor(id, time) {
-  localStorage.setItem('time.' + id, millis);
-}
-
-function clearLocalStorageFor(id) {
-  localStorage.removeItem('time.' + id);
-}
 
 module.exports = function(config) {
+
+  // local storage functions
+  function setLocalStorageFor(id, time) {
+    var storagePrefix = config.name;
+    localStorage.setItem(storagePrefix + '.' + id, millis);
+  }
+
+  function clearLocalStorageFor(id) {
+    var storagePrefix = config.name;
+    localStorage.removeItem(storagePrefix + '.' + id);
+  }
+
+  function getLocalStorageFor(id) {
+    var storagePrefix = config.name;
+
+    var timeStr = localStorage.getItem(storagePrefix + '.' + id);
+    return Number( timeStr );
+
+  }
+
+  var $table = $(config.tableId);
+
+  function initTimers() {
+    var $taskRows = $table.find(config.rowClass) ;
+
+    $taskRows.each(function() {
+      var $tr = $(this);
+      var taskId = $tr.data('id');
+
+      var timeForRow = getLocalStorageFor( taskId );
+
+      if ( timeForRow === 0 ) return true;
+
+      var $timerBadge = $tr.find('.timer');
+      $timerBadge.stopwatch({ initialTime: timeForRow });
+    });
+  }
 
 
   function handleTimer() {
@@ -496,7 +533,7 @@ module.exports = function(config) {
     var $timerBadge = $(this);
     var stopwatch = $timerBadge.stopwatch();
 
-    var $timeWorkedInput = $timerBadge.closest('tr').find( config.el )
+    var $timeWorkedInput = $timerBadge.closest('tr').find( config.inputEl )
     , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
     , timerIsRunning = elapsedTimeInMs > 0
     ;
@@ -528,7 +565,9 @@ module.exports = function(config) {
   }
 
   return {
-    handleTimer: handleTimer
+    handleTimer: handleTimer,
+    initTimers: initTimers,
+    clearTaskTimer: clearLocalStorageFor
   };
 };
 

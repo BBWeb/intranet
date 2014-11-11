@@ -1,12 +1,42 @@
-function setLocalStorageFor(id, time) {
-  localStorage.setItem('time.' + id, millis);
-}
-
-function clearLocalStorageFor(id) {
-  localStorage.removeItem('time.' + id);
-}
 
 module.exports = function(config) {
+
+  // local storage functions
+  function setLocalStorageFor(id, time) {
+    var storagePrefix = config.name;
+    localStorage.setItem(storagePrefix + '.' + id, millis);
+  }
+
+  function clearLocalStorageFor(id) {
+    var storagePrefix = config.name;
+    localStorage.removeItem(storagePrefix + '.' + id);
+  }
+
+  function getLocalStorageFor(id) {
+    var storagePrefix = config.name;
+
+    var timeStr = localStorage.getItem(storagePrefix + '.' + id);
+    return Number( timeStr );
+
+  }
+
+  var $table = $(config.tableId);
+
+  function initTimers() {
+    var $taskRows = $table.find(config.rowClass) ;
+
+    $taskRows.each(function() {
+      var $tr = $(this);
+      var taskId = $tr.data('id');
+
+      var timeForRow = getLocalStorageFor( taskId );
+
+      if ( timeForRow === 0 ) return true;
+
+      var $timerBadge = $tr.find('.timer');
+      $timerBadge.stopwatch({ initialTime: timeForRow });
+    });
+  }
 
 
   function handleTimer() {
@@ -17,7 +47,7 @@ module.exports = function(config) {
     var $timerBadge = $(this);
     var stopwatch = $timerBadge.stopwatch();
 
-    var $timeWorkedInput = $timerBadge.closest('tr').find( config.el )
+    var $timeWorkedInput = $timerBadge.closest('tr').find( config.inputEl )
     , elapsedTimeInMs = $timerBadge.stopwatch('getTime')
     , timerIsRunning = elapsedTimeInMs > 0
     ;
@@ -49,7 +79,9 @@ module.exports = function(config) {
   }
 
   return {
-    handleTimer: handleTimer
+    handleTimer: handleTimer,
+    initTimers: initTimers,
+    clearTaskTimer: clearLocalStorageFor
   };
 };
 
