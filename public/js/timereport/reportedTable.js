@@ -119,6 +119,8 @@ var reportedTable = {
 
       // the task which the subreport belongs to
       var $task = $tr.prevAll('tr.task').first();
+
+      reportedTable.updateFormattedTimeSubreport( $tr );
       reportedTable.sumTotalTaskTime( $task );
 
       removeUpdateState( $tr );
@@ -169,6 +171,14 @@ var reportedTable = {
     });
 
     return $foundTaskTr;
+  },
+
+  updateFormattedTimeSubreport: function($subreportTr) {
+    var newTime = $subreportTr.find('input.time').val();
+
+    var formattedTime = formatTotalTime( newTime );
+
+    $subreportTr.find('span.formatted-time').text( formattedTime );
   },
 
   sumTotalTaskTime: function($taskTr) {

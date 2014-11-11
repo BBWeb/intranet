@@ -17,7 +17,7 @@ class ProjectsController extends BaseController {
 
 		$privateTasks = $user->privateTasks;
 
-		$tasks = $user->nonCompletedTasks;
+		$tasks = $user->nonCompletedTasks()->with('subreports')->get();
 
 		$asanaTasks = $user->allAsanaTasks();
 
