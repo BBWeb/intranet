@@ -23,7 +23,7 @@
 </div>
 <div class="checkbox">
 	<label>
-		<input type="checkbox" name="admin" value="admin"> Admin
+		{{ Form::checkbox('admin', 'admin', $staff->admin) }} Admin
 	</label>
 </div>
 <button type="submit" class="btn btn-default">Ändra</button>
