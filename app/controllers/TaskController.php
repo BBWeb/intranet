@@ -99,6 +99,8 @@ class TaskController extends BaseController {
 
       $privateTask->delete();
 
+      $task->load('subreports');
+
       return Response::json([
          'task_id' => $task->id,
          'template' => View::make('templates.reported_task')->with('task', $task)->render()
@@ -250,6 +252,8 @@ class TaskController extends BaseController {
          $subreport->save();
 
          $task = $subreport->task;
+
+         $task->load('subreports');
          // return new view
          $response = Response::json([
             'task_id' => $task->id,

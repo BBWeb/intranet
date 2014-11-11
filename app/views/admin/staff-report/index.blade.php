@@ -55,7 +55,7 @@
                   <tr data-id="{{ $subreport->id }}">
                     <td></td>
                     <td></td>
-                    <td style="width: 17%;">{{ $subreport->time }}</td>
+                    <td style="width: 17%;">{{ $subreport->formattedTime() }}</td>
                     <td style="width: 14%;">{{ $subreport->reported_date }}</td>
                     <td style="width: 30%"><input type="checkbox" class="subreport-checkbox"></input></td>
                   </tr>
