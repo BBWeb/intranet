@@ -2,6 +2,8 @@
 
 class Subreport extends Eloquent {
 
+  public $presenter = 'Intranet\Presenters\SubreportPresenter';
+
 	protected $table = 'subreports';
 
 	protected $fillable = array(
