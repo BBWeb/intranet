@@ -12,3 +12,6 @@ Thumbs.db
 app/tests/_log
 
 node_modules/
+
+drive_credentials.php
+*.p12
