@@ -18,3 +18,4 @@ Artisan::add(new UpdateAsanaTasks);
 Artisan::add(new RemoveDeletedAsanaTasks);
 Artisan::add(new MigrateToNewDb);
 Artisan::add(new MigrateLastqueryCacheToDb);
+Artisan::add(new CheckAsanaCompleteness);
