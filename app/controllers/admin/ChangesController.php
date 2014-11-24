@@ -30,7 +30,7 @@ class ChangesController extends \BaseController {
 
 	public function getProject($id)
 	{
-		$projects = $this->project->lists('name', 'id');
+		$projects = $this->project->where('archive', '=', false)->lists('name', 'id');
 
 		Session::flash('projectId', $id);
 		$project = $this->project->find( $id );
